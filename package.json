@@ -1,0 +1,35 @@
+{
+  "name": "storyline",
+  "version": "1.0.0",
+  "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist/",
+    "test": "mocha --compilers js:babel-core/register './test/test-example.js'",
+    "init": "mkdir dist/",
+    "server": "http-server ./dist -c-1",
+    "build": "babel ./src/main.js -o ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NUKnightLab/storyline.git"
+  },
+  "author": "Divya Sasidharan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NUKnightLab/storyline/issues"
+  },
+  "homepage": "https://github.com/NUKnightLab/storyline#readme",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "chai": "^3.5.0",
+    "csv-parse": "^1.1.9",
+    "eslint": "^3.13.1",
+    "graceful-fs": "^4.1.11",
+    "gulp": "^3.9.1",
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.1",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-json": "^2.1.0"
+  }
+}
