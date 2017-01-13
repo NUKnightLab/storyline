@@ -1,7 +1,7 @@
-export function data() {
-  var parse = require('csv-parse');  
-  var fs = require('graceful-fs');
+var parse = require('csv-parse');  
+var fs = require('graceful-fs');
 
+function data() {
   function readCSV(file) {
     var parser = parse({'columns':true}, function(err, data) {
       grabNode(data, 'DOY');
@@ -25,3 +25,6 @@ export function data() {
 
 }
 
+module.exports = {
+  data
+}
