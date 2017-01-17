@@ -30,7 +30,9 @@
     "json-loader": "^0.5.4",
     "rimraf": "^2.5.3",
     "shelljs": "^0.7.0",
-    "tiny-lr": "^0.2.1"
+    "stream-transform": "^0.1.1",
+    "tiny-lr": "^0.2.1",
+    "xhr-stream": "^1.1.0"
   },
   "scripts": {
     "start": "parallelshell 'webpack --watch' 'npm run watch' 'npm run server'",
@@ -40,8 +42,8 @@
     "watch": "node tasks/watch.js",
     "server": "http-server ./dist -c-1",
     "compile": "npm run copy && npm run sass",
-    "copy": "ncp src/index.html dist/index.html --stopOnErr",
+    "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
-    "test": "mocha --compilers js:babel-core/register './test/test-example.js'"
+    "test": "mocha --compilers js:babel-core/register './test/example-test.js'"
   }
 }

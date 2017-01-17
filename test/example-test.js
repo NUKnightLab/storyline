@@ -13,5 +13,12 @@ describe('Data File Parser', function() {
         {'DOY': '3', 'Temperature': '0.7'}], 'DOY')
       expect(result).to.eql(['1', '2', '3'], 'DOY')
     })
+    it('should print result as k/v pair', function() {
+      var input = '"key_1","key_2"\n"value 1","value 2"';
+      parse(input, function(err, output) {
+        console.log(output)
+        expect(output).to.eql([{ key_1: 'value 1', key_2: 'value 2' }]);
+      });
+    })
   })
 })

@@ -1,1 +1,3 @@
-require('./example')
+var thing = require('./example')
+
+thing.data().init()
