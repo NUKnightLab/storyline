@@ -1,3 +1,7 @@
-var thing = require('./example')
+var example = require('./example')
+var thing = require('./graph')
 
-thing.data().init()
+window.onload = function() {
+example.data().init()
+thing.graph().init()
+}
