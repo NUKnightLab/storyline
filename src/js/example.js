@@ -1,6 +1,5 @@
 function data() {
 var parse = require('csv-parse');  
-var XhrStream = require('xhr-stream')
 
   function grabNode(data, key) {
     var output = []
@@ -12,13 +11,14 @@ var XhrStream = require('xhr-stream')
   }
 
   function init() {
-    var parser = parse({'columns':true}, function(err, data){
-      grabNode(data, 'DOY')
-    });
     var req = new XMLHttpRequest();
+    req.addEventListener('load', function() {
+      parse(this.responseText, {'columns': true}, function(err, data) {
+        grabNode(data, 'DOY')
+      })
+    })
     req.open("GET", './assets/averageWeather2016.csv', true)
-    var stream = new XhrStream(req)
-    stream.pipe(parser)
+    req.send();
   }
 
   return {
