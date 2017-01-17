@@ -1,9 +1,5 @@
 {
   "presets": [
-    "es2015",
-    "es2015-rollup",
-  ],
-  "plugins": [
-    "external-helpers"
+    "es2015"
   ]
 }

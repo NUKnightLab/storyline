@@ -23,11 +23,11 @@
   "devDependencies": {
     "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
+    "csv-parse": "^1.1.9",
     "exit-hook": "^1.1.1",
     "fs-extra": "^0.30.0",
     "globby": "^5.0.0",
     "json-loader": "^0.5.4",
-    "lodash": "^4.13.1",
     "rimraf": "^2.5.3",
     "shelljs": "^0.7.0",
     "tiny-lr": "^0.2.1"
@@ -42,6 +42,6 @@
     "compile": "npm run copy && npm run sass",
     "copy": "ncp src/index.html dist/index.html --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers js:babel-core/register './test/test-example.js'"
   }
 }
