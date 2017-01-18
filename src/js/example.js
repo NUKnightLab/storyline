@@ -21,7 +21,6 @@ function data() {
 	  bounds.maxY = checkMax(y, bounds.maxY)
       output.push([x, y]);
     }
-    console.log(bounds)
 	console.log(output)
     return output;
   }

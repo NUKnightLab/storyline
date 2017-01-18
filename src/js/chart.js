@@ -7,6 +7,9 @@ function Chart() {
     this.data = data;
     this.bounds = bounds;
   }
+  this.draw = function(data) {
+   console.log(data);
+  }
 }
 
 module.exports = {

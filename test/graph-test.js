@@ -1,4 +1,4 @@
-import { Chart } from'../src/js/graph.js';
+import { Chart } from'../src/js/chart.js';
 import { expect, assert } from 'chai'
 
 describe('Create new graph', function() {

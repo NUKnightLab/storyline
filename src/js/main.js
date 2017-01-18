@@ -1,5 +1,5 @@
 var example = require('./example')
-var thing = require('./graph')
+var thing = require('./chart')
 
 window.onload = function() {
 example.data().init()

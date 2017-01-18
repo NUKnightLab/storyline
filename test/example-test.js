@@ -9,8 +9,8 @@ describe('Data File Parser', function() {
       var result = data().grabNode([
         {'DOY': '1', 'Temperature': '9'},
         {'DOY': '2', 'Temperature': '3'},
-        {'DOY': '3', 'Temperature': '0.7'}], 'DOY')
-      expect(result).to.eql(['1', '2', '3'], 'DOY')
+        {'DOY': '3', 'Temperature': '0.7'}], ['DOY', 'Temperature'])
+      expect(result).to.eql([[1, 9],[2, 3], [3, 0.7]])
     })
     it('should print result as k/v pair', function() {
       var input = '"key_1","key_2"\n"value 1","value 2"';
