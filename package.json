@@ -21,6 +21,7 @@
     "webpack": "^1.13.1"
   },
   "devDependencies": {
+    "babel-loader": "^6.2.10",
     "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
     "csv-parse": "^1.1.9",
