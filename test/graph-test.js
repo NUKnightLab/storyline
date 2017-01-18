@@ -5,8 +5,7 @@ describe('Create new graph', function() {
   describe('create a new graph', function() {
     var Chart1;
     beforeEach(function() {
-      Chart1 = new Chart();
-      Chart1.dimensions(500, 600, null, null);
+      Chart1 = new Chart.dimensions(500, 600, null, null);
     })
     it('should return the height of a new chart', function() {
       expect(Chart1.h).to.eql(600);

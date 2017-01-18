@@ -1,10 +1,11 @@
 var example = require('./data')
-var thing = require('./chart')
+import { Chart } from './chart';
 
 window.onload = function() {
-  var Chart1 = new thing.Chart()
+  var Chart1;
 
   example.data().init().then(function(someVal) {
-    Chart1.dimensions(500, 600, someVal, null);
+    Chart1 = new Chart.dimensions(500, 600, someVal, null);
+    console.log(Chart1);
   })
 }
