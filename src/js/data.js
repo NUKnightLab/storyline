@@ -59,9 +59,11 @@ function data() {
   }
 
   function init() {
-    _get('./assets/averageWeather2016.csv').then(function(response) {
-      parse(response, {'columns': true}, function(err, data) {
-        grabNode(data, ['DOY', 'AT'])
+    return new Promise(function(resolve, reject) {
+      _get('./assets/averageWeather2016.csv').then(function(response) {
+        parse(response, {'columns': true}, function(err, data) {
+          resolve(grabNode(data, ['DOY', 'AT']))
+        })
       })
     })
   }
