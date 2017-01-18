@@ -1,5 +1,6 @@
 function data() {
 	var parse = require('csv-parse');
+    var Promise = require('es6-promise').Promise;
 
   function grabNode(data, keyArray) {
     var output = [],
@@ -39,15 +40,30 @@ function data() {
 	return Math.max(var1, var2)
   }
 
+  function _get(file) {
+    return new Promise(function(resolve, reject) {
+      var req = new XMLHttpRequest();
+      req.open("GET", file, true)
+      req.onload = function() {
+        if(req.status == 200) {
+          resolve(req.response);
+        } else {
+          reject(Error(req.statusText));
+        }
+      }
+      req.onerror = function() {
+        reject(Error("Network Error"));
+      };
+      req.send();
+    });
+  }
+
   function init() {
-    var req = new XMLHttpRequest();
-    req.addEventListener('load', function() {
-      parse(this.responseText, {'columns': true}, function(err, data) {
+    _get('./assets/averageWeather2016.csv').then(function(response) {
+      parse(response, {'columns': true}, function(err, data) {
         grabNode(data, ['DOY', 'AT'])
       })
     })
-    req.open("GET", './assets/averageWeather2016.csv', true)
-    req.send();
   }
 
   return {

@@ -1,6 +1,6 @@
 var parse = require('csv-parse');
 
-import { data } from'../src/js/example.js';
+import { data } from'../src/js/data.js';
 import { expect, assert } from 'chai'
 
 describe('Data File Parser', function() {

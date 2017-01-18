@@ -1,5 +1,3 @@
-var readCSV = require('./example.js');
-
 function Chart() {
   this.dimensions = function(w, h, data, bounds) {
     this.w = w;
