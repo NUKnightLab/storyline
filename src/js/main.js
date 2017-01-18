@@ -1,12 +1,10 @@
 var example = require('./data')
 var thing = require('./chart')
-var Promise = require('es6-promise').Promise;
 
 window.onload = function() {
-  //promise?
-  var thing = example.data().init();
+  var Chart1 = new thing.Chart()
+
   example.data().init().then(function(someVal) {
-    console.log(someVal);
+    Chart1.dimensions(500, 600, someVal, null);
   })
-  //var Chart1 = new thing.Chart().dimensions(500, 600, data, null)
 }
