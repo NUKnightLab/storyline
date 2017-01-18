@@ -1,17 +1,18 @@
-import { graph } from'../src/js/graph.js';
+import { Chart } from'../src/js/graph.js';
 import { expect, assert } from 'chai'
 
 describe('Create new graph', function() {
   describe('create a new graph', function() {
-    var chart;
+    var Chart1;
     beforeEach(function() {
-      chart = new graph.Chart(500, 600, null, null) 
+      Chart1 = new Chart();
+      Chart1.dimensions(500, 600, null, null);
     })
     it('should return the height of a new chart', function() {
-      expect(chart.h).to.eql(600);
+      expect(Chart1.h).to.eql(600);
     })
     it('should return the width of a new chart', function() {
-      expect(chart.w).to.eql(500);
+      expect(Chart1.w).to.eql(500);
     })
   })
 })
