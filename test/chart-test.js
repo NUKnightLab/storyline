@@ -13,5 +13,8 @@ describe('Create new graph', function() {
     it('should return the width of a new chart', function() {
       expect(Chart1.w).to.eql(500);
     })
+    afterEach(function() {
+      delete Chart1.dimensions;
+    })
   })
 })
