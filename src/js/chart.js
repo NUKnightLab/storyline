@@ -5,13 +5,13 @@ var Chart = {
     this.data = data;
     this.bounds = bounds;
   },
-  createLine: function(x1, y1, x2, y2, color, w) {
+  createLine: function(x1, y1, x2, y2, color, w, bufferX, bufferY, scale) {
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     //scale line
-    x1 = x1*10;
-    x2 = x2*10;
-    y1 = y1*10;
-    y2 = y2*10;
+    x1 = ((x1 + bufferX) * scale).toFixed(2);
+    x2 = ((x2+bufferX) * scale).toFixed(2);
+    y1 = ((y1+bufferY) * scale).toFixed(2);
+    y2 = ((y2+bufferY) * scale).toFixed(2);
     line.setAttribute('x1', x1);
     line.setAttribute('y1', y1);
     line.setAttribute('x2', x2);
