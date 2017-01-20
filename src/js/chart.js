@@ -1,15 +1,16 @@
-var Chart = function(w, h, data, bounds) {
+var Chart = function(w, h, data, bounds, highlightRows) {
     this.w = w;
     this.h = h;
     this.data = data;
     this.bounds = bounds;
     this.elem = this.createCanvas(w, h);
+    this.createMarkers(highlightRows);
     this.drawLine();
 };
 
 Chart.prototype = {
- //create a single line
- createLine: function(firstCoord, secondCoord, color, w, bufferX, bufferY, scale) {
+  //create a single line
+  createLine: function(firstCoord, secondCoord, color, w, bufferX, bufferY, scale) {
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     //scale line using translate function//
     var firstNode = this.translateLine(firstCoord, bufferX, bufferY, scale);
@@ -29,6 +30,9 @@ Chart.prototype = {
       "x": xLine,
       "y": yLine
     }
+  },
+  createMarkers: function(rows) {
+    console.log(rows)
   },
   drawLine: function() {
     var bufferX = 0, bufferY = 0;

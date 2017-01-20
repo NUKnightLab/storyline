@@ -10,17 +10,17 @@
     {
       "title": "Example Title One",
       "text": "Some Text Here",
-      "correspRowNum": 5 
+      "rowNum": 5
     },
     {
       "title": "Example Title Two",
       "text": "Some Text Here",
-      "CorrespRowNum": 15
+      "rowNum": 15
     },
     {
       "title": "Example Title Three",
       "text": "Some Text Here",
-      "CorrespRowNum": 21
+      "rowNum": 21
     }
   ]
 }
