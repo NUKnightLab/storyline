@@ -2,16 +2,14 @@ function data() {
 	var parse = require('csv-parse');
     var Promise = require('es6-promise').Promise;
 
-  function grabNode(data, keyArray) {
+  function grabNode(data, xcol, ycol) {
     var output = [],
 		bounds = {
 		  minX: null,
 		  maxX: null,
 		  minY: null,
 		  maxY: null
-		},
-    	xcol = keyArray[0],
-		ycol = keyArray[1];
+		};
     for(var i=0; i<data.length;i++) {
      //TODO: parse strings, collect bounds//	  
 	  var x = parseFloat(data[i][xcol]);
@@ -58,11 +56,11 @@ function data() {
     });
   }
 
-  function init() {
+  function init(config) {
     return new Promise(function(resolve, reject) {
-      _get('./assets/averageWeather2016.csv').then(function(response) {
+      _get(config.data).then(function(response) {
         parse(response, {'columns': true}, function(err, data) {
-          resolve(grabNode(data, ['DOY', 'AT']))
+          resolve(grabNode(data, config.xAxis, config.yAxis))
         })
       })
     })

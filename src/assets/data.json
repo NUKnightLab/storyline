@@ -1,0 +1,26 @@
+{
+  "data": "./assets/averageWeather2016.csv",
+  "xAxis": "DOY",
+  "yAxis": "AT",
+  "xLabel": "Day of Year",
+  "yLabel": "Average Temp",
+  "xTickInterval": null,
+  "yTickInterval": null,
+  "slides": [
+    {
+      "title": "Example Title One",
+      "text": "Some Text Here",
+      "correspRowNum": 5 
+    },
+    {
+      "title": "Example Title Two",
+      "text": "Some Text Here",
+      "CorrespRowNum": 15
+    },
+    {
+      "title": "Example Title Three",
+      "text": "Some Text Here",
+      "CorrespRowNum": 21
+    }
+  ]
+}
