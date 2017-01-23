@@ -1,6 +1,6 @@
 import { Chart } from './chart';
-var config = require('../assets/data.json');
 import {Storyline} from './storyline';
+var config = require('../assets/data.json');
 
 window.onload = function() {
   var Chart1, Canvas;

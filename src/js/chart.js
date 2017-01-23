@@ -1,9 +1,8 @@
-var Chart = function(w, h, data, bounds, highlightRows) {
-    this.w = w;
-    this.h = h;
+var Chart = function(data, bounds, intervals, highlightRows) {
     this.data = data;
     this.bounds = bounds;
-    this.elem = this.createCanvas(w, h);
+    this.intervals = intervals
+    this.elem = this.createCanvas(bounds);
     this.createMarkers(highlightRows);
     this.drawLine();
 };
@@ -31,6 +30,22 @@ Chart.prototype = {
       "y": yLine
     }
   },
+  createTicks: function(intervals, endBound) {
+    var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    for(var i=0; i<= endBound; i++) {
+      var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      var tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+      tickStroke.setAttribute('x2', 0);
+      tickStroke.setAttribute('y2', 6);
+      tickStroke.setAttribute('stroke', 'black');
+
+      tick.setAttribute("transform", `translate(${i*10}, 300)`);
+      tick.append(tickStroke);
+      totalTick.append(tick);
+    }
+    return totalTick;
+  },
   createMarkers: function(rows) {
     console.log(rows)
   },
@@ -49,12 +64,25 @@ Chart.prototype = {
       var line = this.createLine(val1, val2, 'red', 1, bufferX, bufferY, 10);
       this.elem.appendChild(line);
     }
+    var tick = this.createTicks(this.intervals, this.bounds.maxX, 10);
+    this.elem.appendChild(tick);
   },
-  createCanvas : function(w, h){
+  createCanvas : function(bounds){
+    //find range//
+    var minX;
+    var maxX;
+    var minY;
+    var maxY;
+
+    bounds.minX < 0 ? (minX = -bounds.minX) : (minX = bounds.minX)
+    bounds.maxX < 0 ? (maxX = -bounds.maxX) : (maxX = bounds.maxX)
+    bounds.minY < 0 ? (minY = -bounds.minY) : (minY = bounds.minY)
+    bounds.maxY < 0 ? (maxY = -bounds.maxY) : (maxY = bounds.maxY)
+    var rangeX = maxX + minX;
+	var rangeY = maxY + minY;
     var canvasOuter = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    canvasOuter.setAttribute('width', w);
-    canvasOuter.setAttribute('height', h);
-    canvasOuter.setAttribute('viewbox', '0 0 800 600')
+    canvasOuter.setAttribute('width', (rangeX*10));
+    canvasOuter.setAttribute('height', (rangeY*10));
     canvasOuter.setAttribute('class', 'outer')
     return canvasOuter;
   },

@@ -1,14 +1,18 @@
 var parse = require('csv-parse');
 var Promise = require('es6-promise').Promise;
 
-function grabNode(data, xcol, ycol) {
+function grabNode(data, xcol, ycol, xTick, yTick) {
   var output = [],
 	  bounds = {
-	  minX: null,
-	  maxX: null,
-	  minY: null,
-	  maxY: null
-  };
+	    minX: null,
+	    maxX: null,
+	    minY: null,
+	    maxY: null
+      },
+      intervals = {
+        xTick: null,
+        yTick: null
+      }
 
   for(var i=0; i<data.length;i++) {
     var x = parseFloat(data[i][xcol]);
@@ -18,8 +22,10 @@ function grabNode(data, xcol, ycol) {
     bounds.minY = checkMin(y, bounds.minY)
     bounds.maxY = checkMax(y, bounds.maxY)
     output.push([x, y]);
+    intervals.xTick = xTick;
+    intervals.yTick = yTick;
   }
-  var obj = { 'data': output, 'bounds': bounds}
+  var obj = { 'data': output, 'bounds': bounds, 'intervals': intervals };
   return obj;
 }
 
@@ -59,7 +65,7 @@ function fetchData(config) {
   return new Promise(function(resolve, reject) {
     get(config.data).then(function(response) {
       parse(response, {'columns': true}, function(err, data) {
-        resolve(grabNode(data, config.xAxis, config.yAxis))
+        resolve(grabNode(data, config.xAxis, config.yAxis, config.xTickInterval, config.yTickInterval))
       })
     })
   })
