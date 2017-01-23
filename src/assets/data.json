@@ -4,7 +4,7 @@
   "yAxis": "AT",
   "xLabel": "Day of Year",
   "yLabel": "Average Temp",
-  "xTickInterval": 1,
+  "xTickInterval": 30,
   "yTickInterval": null,
   "slides": [
     {

@@ -31,16 +31,19 @@ Chart.prototype = {
     }
   },
   createTicks: function(intervals, endBound) {
-    var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    for(var i=0; i<= endBound; i++) {
+    var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+        numTicks = Math.round(endBound/intervals.xTick);
+
+    for(var i=0; i<= numTicks; i++) {
       var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      var mark = i*intervals.xTick;
 
       tickStroke.setAttribute('x2', 0);
       tickStroke.setAttribute('y2', 6);
       tickStroke.setAttribute('stroke', 'black');
 
-      tick.setAttribute("transform", `translate(${i*10}, 300)`);
+      tick.setAttribute("transform", `translate(${mark*10}, 300)`);
       tick.append(tickStroke);
       totalTick.append(tick);
     }
