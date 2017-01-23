@@ -4,7 +4,7 @@ var Promise = require('es6-promise').Promise;
 function grabNode(data, xcol, ycol, xTick, yTick) {
   var output = [],
 	  bounds = {
-	    minX: null,
+	    minX: 0,
 	    maxX: null,
 	    minY: null,
 	    maxY: null
@@ -15,12 +15,11 @@ function grabNode(data, xcol, ycol, xTick, yTick) {
       }
 
   for(var i=0; i<data.length;i++) {
-    var x = parseFloat(data[i][xcol]);
+    var x = data[i][xcol];
     var y = parseFloat(data[i][ycol]);
-    bounds.minX = checkMin(x, bounds.minX)
-    bounds.maxX = checkMax(x, bounds.maxX)
     bounds.minY = checkMin(y, bounds.minY)
     bounds.maxY = checkMax(y, bounds.maxY)
+    bounds.maxX = data.length;
     output.push([x, y]);
     intervals.xTick = xTick;
     intervals.yTick = yTick;

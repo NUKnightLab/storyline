@@ -9,11 +9,11 @@ var Chart = function(data, bounds, intervals, highlightRows) {
 
 Chart.prototype = {
   //create a single line
-  createLine: function(firstCoord, secondCoord, color, w, bufferX, bufferY, scale) {
+  createLine: function(count, firstCoord, secondCoord, color, w, bufferX, bufferY, scale) {
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     //scale line using translate function//
-    var firstNode = this.translateLine(firstCoord, bufferX, bufferY, scale);
-	var secondNode = this.translateLine(secondCoord, bufferX, bufferY, scale);
+    var firstNode = this.translateLine(count, firstCoord, bufferX, bufferY, scale);
+	var secondNode = this.translateLine(count+1, secondCoord, bufferX, bufferY, scale);
     line.setAttribute('x1', firstNode.x);
     line.setAttribute('y1', firstNode.y);
     line.setAttribute('x2', secondNode.x);
@@ -22,8 +22,8 @@ Chart.prototype = {
     line.setAttribute('stroke-width', w);
     return line;
   },
-  translateLine: function(coord, bufferX, bufferY, scale) {
-    var xLine = ((coord[0] + bufferX) * scale).toFixed(2);
+  translateLine: function(count, coord, bufferX, bufferY, scale) {
+    var xLine = ((count + bufferX) * scale);
     var yLine = ((coord[1] + bufferY) * scale).toFixed(2);
     return {
       "x": xLine,
@@ -32,39 +32,49 @@ Chart.prototype = {
   },
   createTicks: function(intervals, endBound) {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-        numTicks = Math.round(endBound/intervals.xTick);
+        numTicks = Math.round(endBound/intervals.xTick),
+        g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
+        SCALE=10,
+        TRANSLATEY=300,
+        maxRange;
+   
+    maxRange = numTicks*intervals.xTick * SCALE 
+    g.setAttribute('fill', 'none');
 
     for(var i=0; i<= numTicks; i++) {
-      var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      var tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      var mark = i*intervals.xTick;
+      var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
+          tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
+          mark = i*intervals.xTick;
 
       tickStroke.setAttribute('x2', 0);
       tickStroke.setAttribute('y2', 6);
       tickStroke.setAttribute('stroke', 'black');
 
-      tick.setAttribute("transform", `translate(${mark*10}, 300)`);
+      tick.setAttribute("transform", `translate(${mark*SCALE}, ${TRANSLATEY})`);
       tick.append(tickStroke);
-      totalTick.append(tick);
+      g.append(tick);
     }
+
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('stroke', '#000');
+    path.setAttribute('d', `M0,${TRANSLATEY}V${TRANSLATEY}H${maxRange}V${TRANSLATEY}`)
+    g.append(path)
+    totalTick.append(g);
     return totalTick;
   },
   createMarkers: function(rows) {
-    console.log(rows)
+    
   },
   drawLine: function() {
     var bufferX = 0, bufferY = 0;
 
     //account for negatives by shifting axes over in the positive direction//
-    if(this.bounds.minX < 0) {
-      bufferX = - this.bounds.minX;
-    } else if(this.bounds.minY < 0) {
-      bufferY = - this.bounds.minY;
-    }
+    bufferX = this.bounds.minX < 0 ? -this.bounds.minX : 0;
+    bufferY = this.bounds.minY < 0 ? -this.bounds.minY : 0;
     for(var i=1; i < this.data.length; i++) {
       var val2 = this.data[i];
       var val1 = this.data[i-1];
-      var line = this.createLine(val1, val2, 'red', 1, bufferX, bufferY, 10);
+      var line = this.createLine(i, val1, val2, 'red', 1, bufferX, bufferY, 10);
       this.elem.appendChild(line);
     }
     var tick = this.createTicks(this.intervals, this.bounds.maxX, 10);
