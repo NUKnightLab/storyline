@@ -93,22 +93,13 @@ Chart.prototype = {
     this.elem.appendChild(tick);
   },
   createCanvas : function(bounds){
-    //find range//
-    var minX;
-    var maxX;
-    var minY;
-    var maxY;
+    var w = window.innerWidth;
+    var h = window.innerHeight;
 
-    bounds.minX < 0 ? (minX = -bounds.minX) : (minX = bounds.minX)
-    bounds.maxX < 0 ? (maxX = -bounds.maxX) : (maxX = bounds.maxX)
-    bounds.minY < 0 ? (minY = -bounds.minY) : (minY = bounds.minY)
-    bounds.maxY < 0 ? (maxY = -bounds.maxY) : (maxY = bounds.maxY)
-    var rangeX = maxX + minX;
-	var rangeY = maxY + minY;
     var canvasOuter = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    canvasOuter.setAttribute('width', (rangeX*10));
-    canvasOuter.setAttribute('height', (rangeY*10));
-    canvasOuter.setAttribute('class', 'outer')
+    canvasOuter.setAttribute('width', w);
+    canvasOuter.setAttribute('height', h);
+    canvasOuter.setAttribute('class', 'canvas')
     return canvasOuter;
   },
 }
