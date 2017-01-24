@@ -1,9 +1,9 @@
-var Chart = function(data, bounds, intervals, highlightRows) {
-    this.data = data;
-    this.bounds = bounds;
-    this.intervals = intervals
-    this.elem = this.createCanvas(bounds);
-    this.createMarkers(highlightRows);
+var Chart = function(dataObj, highlightRows) {
+    this.data = dataObj.data;
+    this.bounds = dataObj.bounds;
+    this.intervals = dataObj.intervals;
+    this.markers = highlightRows;
+    this.elem = this.createCanvas(this.bounds);
     this.drawLine();
 };
 
@@ -75,24 +75,47 @@ Chart.prototype = {
     totalTick.append(g);
     return totalTick;
   },
-  createMarkers: function(rows) {
+  createMarkers: function(count, bufferX, bufferY, scale, rows) {
+    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', ((count+1) + bufferX)*scale);
+    circle.setAttribute('cy', (rows[1] + bufferY)*scale);
+    circle.setAttribute('r', 6);
+    circle.setAttribute('stroke', '#000');
+    return circle
   },
+  /**
+   * Draws the line graph and moves it based on the range so that the graph is within view
+   * TODO: line graph probably shouldn't move the graph into view, canvas should have a transform that does that
+   *
+   * @returns {undefined}
+   */
   drawLine: function() {
-    var bufferX = 0, bufferY = 0;
+    var bufferX = 0, bufferY = 0,
+        SCALE=10;
 
     //account for negatives by shifting axes over in the positive direction//
     bufferX = this.bounds.minX < 0 ? -this.bounds.minX : 0;
     bufferY = this.bounds.minY < 0 ? -this.bounds.minY : 0;
     for(var i=1; i < this.data.length; i++) {
+      var mark;
+      if(this.markers.indexOf(i) >=0) {
+        mark = this.createMarkers(i, bufferX, bufferY, SCALE, this.data[i])
+        this.elem.appendChild(mark);
+      }
       var val2 = this.data[i];
       var val1 = this.data[i-1];
-      var line = this.createLine(i, val1, val2, 'red', 1, bufferX, bufferY, 10);
+      var line = this.createLine(i, val1, val2, 'red', 1, bufferX, bufferY, SCALE);
       this.elem.appendChild(line);
     }
-    var tick = this.createTicks(this.data, this.intervals, this.bounds.maxX, 10);
+    var tick = this.createTicks(this.data, this.intervals, this.bounds.maxX, SCALE);
     this.elem.appendChild(tick);
   },
-  createCanvas : function(bounds){
+  /**
+   * create an empty svg object "canvas" where line graph will be drawn
+   *
+   * @returns {undefined}
+   */
+  createCanvas : function(){
     var w = window.innerWidth;
     var h = window.innerHeight;
 

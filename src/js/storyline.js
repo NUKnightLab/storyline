@@ -11,12 +11,9 @@ var Storyline = function(targetId, config) {
   this.container = document.getElementById(targetId);
 
   (fetchData(config)).then(function(dataObj) {
-    var data = dataObj.data,
-        bounds = dataObj.bounds,
-        intervals = dataObj.intervals,
-        highlightedRows = slider.highlightRows();
+    var highlightedRows = slider.highlightRows(),
+        chart = new Chart(dataObj, highlightedRows);
 
-    var chart = new Chart(data, bounds, intervals, highlightedRows);
     self.appendChart(chart);
     self.appendSlider(slider.createSlider());
   });
