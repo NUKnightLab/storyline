@@ -37,11 +37,11 @@ Chart.prototype = {
         SCALE=10,
         TRANSLATEY=300,
         maxRange,
-        xLabels=[];
+        xLabels=[0];
    
     maxRange = numTicks*intervals.xTick * SCALE;
     for(var j=0;j<numTicks;j++) {
-      var interval = j*30
+      var interval = j*intervals.xTick
       xLabels.push(data[interval][0])
     }
 
