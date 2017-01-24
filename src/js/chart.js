@@ -30,28 +30,41 @@ Chart.prototype = {
       "y": yLine
     }
   },
-  createTicks: function(intervals, endBound) {
+  createTicks: function(data, intervals, endBound) {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
         numTicks = Math.round(endBound/intervals.xTick),
         g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
         SCALE=10,
         TRANSLATEY=300,
-        maxRange;
+        maxRange,
+        xLabels=[];
    
-    maxRange = numTicks*intervals.xTick * SCALE 
-    g.setAttribute('fill', 'none');
+    maxRange = numTicks*intervals.xTick * SCALE;
+    for(var j=0;j<numTicks;j++) {
+      var interval = j*30
+      xLabels.push(data[interval][0])
+    }
+
+    g.setAttribute('fill', 'none')
 
     for(var i=0; i<= numTicks; i++) {
       var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
           tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
+          tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
           mark = i*intervals.xTick;
 
       tickStroke.setAttribute('x2', 0);
       tickStroke.setAttribute('y2', 6);
       tickStroke.setAttribute('stroke', 'black');
-
       tick.setAttribute("transform", `translate(${mark*SCALE}, ${TRANSLATEY})`);
+      tickLabel.setAttribute("fill", "#000");
+      tickLabel.setAttribute('x', 0.5);
+      tickLabel.setAttribute('y', 9);
+      tickLabel.setAttribute('dy', '0.71em');
+
+      tickLabel.innerHTML = (xLabels[i]);
       tick.append(tickStroke);
+      tick.append(tickLabel);
       g.append(tick);
     }
 
@@ -63,7 +76,6 @@ Chart.prototype = {
     return totalTick;
   },
   createMarkers: function(rows) {
-    
   },
   drawLine: function() {
     var bufferX = 0, bufferY = 0;
@@ -77,7 +89,7 @@ Chart.prototype = {
       var line = this.createLine(i, val1, val2, 'red', 1, bufferX, bufferY, 10);
       this.elem.appendChild(line);
     }
-    var tick = this.createTicks(this.intervals, this.bounds.maxX, 10);
+    var tick = this.createTicks(this.data, this.intervals, this.bounds.maxX, 10);
     this.elem.appendChild(tick);
   },
   createCanvas : function(bounds){
