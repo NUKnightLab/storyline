@@ -1,0 +1,30 @@
+.slider-view {
+  margin: 0 auto;
+  position: relative;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.slider-card {
+  float: left;
+  display: block;
+  max-width: 500px;
+  text-align: center;
+}
+
+.slider-cards {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 200px;
+}
+
+.slider-content {
+  border: 1px solid black;
+  border-radius: 7px;
+  padding: 0.75em;
+
+  & p {
+    text-align: left;
+  }
+}

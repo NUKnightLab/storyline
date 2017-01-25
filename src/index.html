@@ -4,9 +4,19 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="./js/main.js"></script>
-  <link href="./css/main.css">
+  <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
   <div id="storyline"></div>
+  <script id="slider-template" type="text/x-tmpl-mustache">
+      {{#slides}}
+      <div class="slider-card">
+        <div class="slider-content">
+          <h3>{{ title }}</h3>
+          <p>{{ text }}<p>
+        </div>
+      </div>
+      {{/slides}}
+  </script>
 </body>
 </html>

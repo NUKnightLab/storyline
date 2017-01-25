@@ -8,19 +8,29 @@
   "yTickInterval": null,
   "slides": [
     {
-      "title": "Example Title One",
-      "text": "Some Text Here",
+      "title": "Pentagon Militarizes Local Police Departments",
+      "text": "The pentagon has calculated that the equipment received in 2006 cost around $5 million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 5
     },
     {
-      "title": "Example Title Two",
-      "text": "Some Text Here",
+      "title": "Some More Important Text Will Go Here",
+      "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 15
     },
     {
       "title": "Example Title Three",
-      "text": "Some Text Here",
+      "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 21
+    },
+    {
+      "title": "Example Title Four",
+      "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
+      "rowNum": 40
+    },
+    {
+      "title": "Example Title Four",
+      "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
+      "rowNum": 55
     }
   ]
 }

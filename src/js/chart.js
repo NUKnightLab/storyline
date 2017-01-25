@@ -120,7 +120,7 @@ Chart.prototype = {
    */
   createCanvas : function(){
     var w = window.innerWidth;
-    var h = window.innerHeight;
+    var h = 400;
 
     var canvasOuter = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     canvasOuter.setAttribute('width', w);
