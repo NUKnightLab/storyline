@@ -30,11 +30,11 @@ Chart.prototype = {
       "y": yLine
     }
   },
-  createTicks: function(data, intervals, endBound) {
+  createTicks: function(data, intervals, endBound, scale) {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
         numTicks = Math.round(endBound/intervals.xTick),
         g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-        SCALE=10,
+        SCALE=scale,
         TRANSLATEY=300,
         maxRange,
         xLabels=[0];
@@ -76,9 +76,10 @@ Chart.prototype = {
     return totalTick;
   },
   createMarkers: function(count, bufferX, bufferY, scale, rows) {
+    var SCALE=scale;
     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', ((count+1) + bufferX)*scale);
-    circle.setAttribute('cy', (rows[1] + bufferY)*scale);
+    circle.setAttribute('cx', ((count+1) + bufferX)*SCALE);
+    circle.setAttribute('cy', (rows[1] + bufferY)*SCALE);
     circle.setAttribute('r', 5);
     circle.setAttribute('fill', 'grey');
     circle.setAttribute('class', 'markers');
@@ -92,12 +93,13 @@ Chart.prototype = {
    */
   drawLine: function() {
     var bufferX = 0, bufferY = 0,
-        SCALE=10;
+        dataSize = this.data.length,
+        SCALE = Math.round((window.innerWidth/dataSize)*100)/100
 
     //account for negatives by shifting axes over in the positive direction//
     bufferX = this.bounds.minX < 0 ? -this.bounds.minX : 0;
     bufferY = this.bounds.minY < 0 ? -this.bounds.minY : 0;
-    for(var i=1; i < this.data.length; i++) {
+    for(var i=1; i<dataSize; i++) {
       var mark;
       if(this.markers.indexOf(i) >=0) {
         mark = this.createMarkers(i, bufferX, bufferY, SCALE, this.data[i])
