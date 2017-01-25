@@ -79,8 +79,9 @@ Chart.prototype = {
     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', ((count+1) + bufferX)*scale);
     circle.setAttribute('cy', (rows[1] + bufferY)*scale);
-    circle.setAttribute('r', 6);
-    circle.setAttribute('stroke', '#000');
+    circle.setAttribute('r', 5);
+    circle.setAttribute('fill', 'grey');
+    circle.setAttribute('class', 'markers');
     return circle
   },
   /**
@@ -104,7 +105,7 @@ Chart.prototype = {
       }
       var val2 = this.data[i];
       var val1 = this.data[i-1];
-      var line = this.createLine(i, val1, val2, 'red', 1, bufferX, bufferY, SCALE);
+      var line = this.createLine(i, val1, val2, 'grey', 1, bufferX, bufferY, SCALE);
       this.elem.appendChild(line);
     }
     var tick = this.createTicks(this.data, this.intervals, this.bounds.maxX, SCALE);
