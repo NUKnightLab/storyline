@@ -1,7 +1,7 @@
 var parse = require('csv-parse');
 var Promise = require('es6-promise').Promise;
 
-function grabNode(data, xcol, ycol, xTick, yTick) {
+function grabNode(data, config) {
   var output = [],
 	  bounds = {
 	    minX: 0,
@@ -15,14 +15,14 @@ function grabNode(data, xcol, ycol, xTick, yTick) {
       }
 
   for(var i=0; i<data.length;i++) {
-    var x = data[i][xcol];
-    var y = parseFloat(data[i][ycol]);
+    var x = data[i][config.xAxis];
+    var y = parseFloat(data[i][config.yAxis]);
     bounds.minY = checkMin(y, bounds.minY)
     bounds.maxY = checkMax(y, bounds.maxY)
     bounds.maxX = data.length;
     output.push([x, y]);
-    intervals.xTick = xTick;
-    intervals.yTick = yTick;
+    intervals.xTick = config.xTickInterval;
+    intervals.yTick = config.yTickInterval;
   }
   var obj = { 'data': output, 'bounds': bounds, 'intervals': intervals };
   return obj;
@@ -64,7 +64,7 @@ function fetchData(config) {
   return new Promise(function(resolve, reject) {
     get(config.data).then(function(response) {
       parse(response, {'columns': true}, function(err, data) {
-        resolve(grabNode(data, config.xAxis, config.yAxis, config.xTickInterval, config.yTickInterval))
+        resolve(grabNode(data, config))
       })
     })
   })
