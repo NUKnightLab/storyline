@@ -1,5 +1,4 @@
 var mustache = require('mustache');
-//import {mustache} from 'mustache';
 
 var Slider = function(slides) {
     //passing module to slider context//
@@ -14,7 +13,7 @@ Slider.prototype = {
         rendered = this.mustache.render(templateContent, {slides: this.slides});
 
     div.setAttribute('class', 'slider-cards');
-    div.innerHTML = rendered
+    div.innerHTML = rendered;
     return div;
   }, 
   highlightRows: function() {
@@ -23,9 +22,15 @@ Slider.prototype = {
       rows.push(slide.rowNum);
     })
     return rows;
+  },
+  getSlide: function() {
+    var slideWidth = document.getElementsByClassName('slider-card')[0].style.width
+
+    document.getElementsByClassName('slider-cards')[0].style.marginLeft = "-" + slideWidth
+    return 'hello'
   }
 }
 
 module.exports = {
-  Slider
+  Slider: Slider
 }
