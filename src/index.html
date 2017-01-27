@@ -9,15 +9,24 @@
 </head>
 <body>
   <div id="storyline"></div>
-  <script id="slider-template" type="text/x-tmpl-mustache">
-      {{#slides}}
-      <div class="slider-card">
-        <div class="slider-content">
-          <h3>{{ title }}</h3>
-          <p>{{ text }}<p>
-        </div>
+  <script id="slider-cards-template" type="text/x-tmpl-mustache">
+    {{#slides}}
+    <div class="slider-card {{class}}">
+      <div class="slider-content">
+        <h3>{{ title }}</h3>
+        <p>{{ text }}<p>
       </div>
+    </div>
+    {{/slides}}
+  </script>
+  <script id="nav-template" type="text/x-tmpl-mustache">
+    <ol>
+      {{#slides}}
+        <li class="nav">
+          <a href="#"></a>
+        </li>
       {{/slides}}
+    </ol>
   </script>
 </body>
 </html>

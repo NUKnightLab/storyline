@@ -14,6 +14,8 @@ var Storyline = function(targetId, config) {
 
     self.appendChart(chart);
     self.appendSlider(slider.createSlider());
+    slider.attachClickHandler();
+    slider.moveSlide();
   });
 }
 Storyline.prototype = { 
@@ -24,27 +26,22 @@ Storyline.prototype = {
     this.container.appendChild(chart.elem); 
   },
   appendSlider: function(sliderContent) {
-    var slideWrapper = document.createElement('div'),
-        WIDTH =document.getElementsByClassName('canvas')[0].clientWidth,
-        MARGIN = 10;
+    var WIDTH = document.getElementsByClassName('canvas')[0].clientWidth,
+        MARGIN = 10,
+        numSlides;
 
-    slideWrapper.setAttribute('class', 'slider-view');
-    //slideWrapper.style.width = WIDTH + "px";
-    slideWrapper.appendChild(sliderContent);
+    this.container.appendChild(sliderContent);
+    numSlides = sliderContent.children[0].children.length;
 
-    this.container.appendChild(slideWrapper);
-    //position//
-    var numSlides = sliderContent.children.length;
-
-    slideWrapper.style.width = WIDTH + "px";
-    slideWrapper.childNodes[0].style.width = WIDTH * numSlides + "px";
+    sliderContent.style.width = WIDTH + "px";
+    sliderContent.childNodes[0].style.width = WIDTH * numSlides + "px";
     //set slide width//
-    for(var i = 0; i < sliderContent.children.length; i++) {
+    for(var i = 0; i < sliderContent.children[0].children.length-1; i++) {
       var realWidth = WIDTH - (MARGIN*2);
-      sliderContent.children[i].style.width = realWidth + "px";
-      sliderContent.children[i].style.border = MARGIN + "px solid white"; 
+      sliderContent.children[0].children[i].style.width = realWidth + "px";
+      sliderContent.children[0].children[i].style.border = MARGIN + "px solid white";
     }
-    slideWrapper.style.opacity = 1;
+    sliderContent.style.opacity = 1;
   }
 }
 

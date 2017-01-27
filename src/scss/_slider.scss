@@ -1,14 +1,16 @@
 .slider-view {
+  max-width: 540px;
   margin: 0 auto;
   position: relative;
   opacity: 0;
   overflow: hidden;
+  height: 210px;
 }
 
 .slider-card {
   float: left;
   display: block;
-  max-width: 500px;
+  max-width: 480px;
   text-align: center;
 }
 
@@ -26,5 +28,39 @@
 
   & p {
     text-align: left;
+  }
+}
+
+.nav {
+  width: 100%;
+  bottom: 9px;
+  height: 16px;
+  display: block;
+  position: absolute;
+  text-align: center;
+  top: 12em;
+
+  & ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  & li {
+  top: -5px;
+  width: 11px;
+  height: 11px;
+  margin: 0 4px;
+  position: relative;
+  border-radius: 100%;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.6);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  & .active {
+    background-color: red;
   }
 }
