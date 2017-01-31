@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="./js/main.js"></script>
-  <script src="./js/slider.js"></script>
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
@@ -27,6 +26,17 @@
         </li>
       {{/slides}}
     </ol>
+  </script>
+  <script type="text/javascript">
+
+    var req = new XMLHttpRequest;
+    req.addEventListener("load", function() {
+      var config = JSON.parse(this.responseText);
+      window.storyline = new Storyline('storyline', config)
+    });
+    req.open("GET", "/assets/data.json");
+    req.send();
+
   </script>
 </body>
 </html>

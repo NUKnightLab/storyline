@@ -28,24 +28,16 @@ Slider.prototype = {
 
       sliderView.appendChild(div);
     });
-    var a = Array.from(sliderView.children);
 
-    //trying to preserve node lists//
-    //nvm, ttly unnecessary
-    for(var i=a.length; i>0; i--) {
-      var className = a[0].className.split('-')[0];
-      if(a.length == 1) {
-        this.el[className] = a;
-      } else {
-        this.el[className] = a.splice(0, a.length-1);
-      }
+    for(var i=0; i<sliderView.children.length; i++) {
+      var className = sliderView.children[i].className.split('-')[0];
+      this.el[className] = sliderView.children[i];
     }
     return sliderView;
   },
   attachClickHandler() {
     this.el.nav[0].addEventListener('click', function(event) {
-      debugger;
-      console.log('hello')
+      console.log(event.target)
     })
   },
   /**
@@ -64,6 +56,7 @@ Slider.prototype = {
   setActiveSlide: function() {
     this.activeSlide.slide['class'] = 'active';
   },
+  //move to storyline, rename to identify marker rows//
   highlightRows: function() {
     var rows = []
     this.slides.map(function(slide) {
@@ -71,11 +64,13 @@ Slider.prototype = {
     })
     return rows;
   },
-  moveSlide: function() {
-    var slideWidth = this.el.slider[0].children[0].clientWidth;
+  moveSlide: function(index) {
+    //TODO: animate, set 'active' class, also change visual style of corresponding nav element //
+    var slide = this.el.slider.children[index],
+        margin = slide.offsetWidth - slide.clientWidth;
 
-    this.el.slider[0].style.marginLeft = - slideWidth + "px";
-    return 'hello'
+    this.el.slider.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
+    return this.el.slider.style.marginLeft;
   }
 }
 

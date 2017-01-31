@@ -5,7 +5,8 @@ import { Slider } from './slider';
 var Storyline = function(targetId, config) {
   //Chart
   var self = this;
-  var slider = new Slider(config.slides);
+  this.slider = new Slider(config.slides);
+  var slider = this.slider;
   this.container = document.getElementById(targetId);
 
   (fetchData(config)).then(function(dataObj) {
@@ -15,7 +16,6 @@ var Storyline = function(targetId, config) {
     self.appendChart(chart);
     self.appendSlider(slider.createSlider());
     slider.attachClickHandler();
-    slider.moveSlide();
   });
 }
 Storyline.prototype = { 
@@ -34,9 +34,10 @@ Storyline.prototype = {
     numSlides = sliderContent.children[0].children.length;
 
     sliderContent.style.width = WIDTH + "px";
+    sliderContent.childNodes[0].style.marginLeft = 10 + "px"
     sliderContent.childNodes[0].style.width = WIDTH * numSlides + "px";
     //set slide width//
-    for(var i = 0; i < sliderContent.children[0].children.length-1; i++) {
+    for(var i = 0; i < sliderContent.children[0].children.length; i++) {
       var realWidth = WIDTH - (MARGIN*2);
       sliderContent.children[0].children[i].style.width = realWidth + "px";
       sliderContent.children[0].children[i].style.border = MARGIN + "px solid white";

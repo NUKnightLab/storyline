@@ -4,7 +4,10 @@
   position: relative;
   opacity: 0;
   overflow: hidden;
-  height: 210px;
+  @media(max-width: 20em) {
+    max-width: none;
+    width: 90%;
+  }
 }
 
 .slider-card {
@@ -12,6 +15,10 @@
   display: block;
   max-width: 480px;
   text-align: center;
+  @media(max-width: 20em) {
+    width: 980px;
+    max-width: none;
+  }
 }
 
 .slider-cards {
@@ -38,7 +45,6 @@
   display: block;
   position: absolute;
   text-align: center;
-  top: 12em;
 
   & ol {
     margin: 0;

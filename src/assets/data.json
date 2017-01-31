@@ -8,31 +8,31 @@
   "yTickInterval": null,
   "slides": [
     {
-      "title": "Pentagon Militarizes Local Police Departments",
+      "title": "0: Pentagon Militarizes Local Police Departments",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5 million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 5,
       "isActive": false
     },
     {
-      "title": "Some More Important Text Will Go Here",
+      "title": "1: Some More Important Text Will Go Here",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 15,
       "isActive": true
     },
     {
-      "title": "Example Title Three",
+      "title": "2: Example Title Three",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 21,
       "isActive": false
     },
     {
-      "title": "Example Title Four",
+      "title": "3: Example Title Four",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 40,
       "isActive": false
     },
     {
-      "title": "Example Title Four",
+      "title": "4: Example Title Five",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
       "rowNum": 55,
       "isActive": false
