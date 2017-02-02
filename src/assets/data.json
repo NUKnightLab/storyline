@@ -6,6 +6,7 @@
   "yLabel": "Average Temp",
   "xTickInterval": 30,
   "yTickInterval": null,
+  "startIndex": 2,
   "slides": [
     {
       "title": "0: Pentagon Militarizes Local Police Departments",

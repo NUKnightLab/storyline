@@ -1,57 +1,37 @@
-var mustache = require('mustache');
-
-var Slider = function(slides) {
-  this.mustache = mustache;
+var Slider = function(slides, startIndex) {
   this.slides = slides;
-  this.activeSlide = this.getActiveSlide();
-  this.setActiveSlide();
-  this.el = {};
+  this.elem = this.createSlider();
+  this.activeSlide = startIndex;
+  this.moveSlide(startIndex);
 }
 
 Slider.prototype = {
   createSlider: function() {
-    var templates = ['slider-cards-template', 'nav-template'],
-        sliderView = document.createElement("div"),
-        mustache = this.mustache,
-        slides = this.slides;
+    var sliderView = document.createElement("div");
+        sliderView.setAttribute('class', 'slider-view');
 
-    sliderView.setAttribute('class', 'slider-view');
+    this.cards = this.evalTemplate('slider-cards-template', this)
+    this.nav = this.evalTemplate('nav-template', this)
+    sliderView.appendChild(this.cards);
+    sliderView.appendChild(this.nav);
 
-    templates.map(function(template) {
-      var div = document.createElement("div"),
-          templ = template.replace('-template', ''),
-          templateContent = document.getElementById(template).innerHTML,
-          rendered = mustache.render(templateContent, {slides: slides});
-
-      div.setAttribute('class', templ);
-      div.innerHTML = rendered;
-
-      sliderView.appendChild(div);
-    });
-
-    for(var i=0; i<sliderView.children.length; i++) {
-      var className = sliderView.children[i].className.split('-')[0];
-      this.el[className] = sliderView.children[i];
-    }
     return sliderView;
   },
+  evalTemplate: function(templateId, context) {
+    var mustache = require('mustache'),
+
+    templateContent = document.getElementById(templateId).innerHTML,
+    rendered = mustache.render(templateContent, context);
+
+    var parser = new DOMParser(),
+        doc = parser.parseFromString(rendered, "text/html");
+
+    return doc.body.children[0];
+  },
   attachClickHandler() {
-    this.el.nav[0].addEventListener('click', function(event) {
+    this.el.addEventListener('click', function(event) {
       console.log(event.target)
     })
-  },
-  /**
-   * iterates through slides and sets pointer to activeslide
-   *
-   * @returns currentSlide
-   */
-  getActiveSlide: function() {
-    for(var i=0; i<this.slides.length; i++) {
-      if(this.slides[i].isActive) {
-        this.currentSlide = i;
-        return {"slide": this.slides[i], "number": i};
-      }
-    }
   },
   setActiveSlide: function() {
     this.activeSlide.slide['class'] = 'active';
@@ -66,11 +46,27 @@ Slider.prototype = {
   },
   moveSlide: function(index) {
     //TODO: animate, set 'active' class, also change visual style of corresponding nav element //
-    var slide = this.el.slider.children[index],
+    var slide = this.cards.children[index],
         margin = slide.offsetWidth - slide.clientWidth;
 
-    this.el.slider.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
-    return this.el.slider.style.marginLeft;
+    this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
+    //change active slide as it moves//
+    this.activeSlide = index;
+    return this.cards.style.marginLeft;
+  },
+  setWidth: function(w) {
+    var MARGIN = 10,
+        numSlides = this.slides.length;
+
+    this.cards.style.width = w * numSlides + "px";
+    this.cards.style.marginLeft = 10 + "px"
+    //set slide w//
+    for(var i = 0; i < this.cards.children.length; i++) {
+      var realWidth = w - (MARGIN*2);
+      this.cards.children[i].style.width = realWidth + "px";
+      this.cards.children[i].style.border = MARGIN + "px solid white";
+    }
+    this.cards.style.opacity = 1;
   }
 }
 

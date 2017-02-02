@@ -1,13 +1,10 @@
 .slider-view {
-  max-width: 540px;
   margin: 0 auto;
   position: relative;
   opacity: 0;
   overflow: hidden;
-  @media(max-width: 20em) {
-    max-width: none;
-    width: 90%;
-  }
+  width: 100%;
+  height: 216px;
 }
 
 .slider-card {
@@ -15,6 +12,7 @@
   display: block;
   max-width: 480px;
   text-align: center;
+  height: 200px;
   @media(max-width: 20em) {
     width: 980px;
     max-width: none;
@@ -40,7 +38,6 @@
 
 .nav {
   width: 100%;
-  bottom: 9px;
   height: 16px;
   display: block;
   position: absolute;

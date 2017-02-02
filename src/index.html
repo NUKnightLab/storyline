@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <div id="storyline"></div>
+  <div id="storyline" style="width: 540px"></div>
   <script id="slider-cards-template" type="text/x-tmpl-mustache">
+   <div class="slider-cards">
     {{#slides}}
     <div class="slider-card {{class}}">
       <div class="slider-content">
@@ -17,8 +18,10 @@
       </div>
     </div>
     {{/slides}}
+    </div>
   </script>
   <script id="nav-template" type="text/x-tmpl-mustache">
+   <div class="nav">
     <ol>
       {{#slides}}
         <li class="nav">
@@ -26,6 +29,7 @@
         </li>
       {{/slides}}
     </ol>
+    </div>
   </script>
   <script type="text/javascript">
 
