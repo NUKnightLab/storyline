@@ -17,7 +17,6 @@ var Storyline = function(targetId, config) {
 
     self.appendChart(chart);
     self.appendSlider(slider);
-    slider.attachClickHandler();
   });
 }
 Storyline.prototype = { 

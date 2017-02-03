@@ -64,13 +64,13 @@ Chart.prototype = {
     totalTick.append(g);
     return totalTick;
   },
-  createMarkers: function(index, bufferX, bufferY, scalex, scaley, rows) {
+  createMarkers: function(index, counter, bufferX, bufferY, scalex, scaley, rows) {
     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', ((index+1) + bufferX)*scalex);
+    circle.setAttribute('cx', ((index) + bufferX)*scalex);
     circle.setAttribute('cy', (rows[1] + bufferY)*scaley);
     circle.setAttribute('r', 5);
     circle.setAttribute('fill', 'grey');
-    circle.setAttribute('class', 'markers');
+    circle.setAttribute('class', 'marker-' + counter);
     return circle
   },
   /**
@@ -82,7 +82,8 @@ Chart.prototype = {
    var bufferX = this.bounds.minX < 0 ? -this.bounds.minX : 0,
        bufferY = this.bounds.minY < 0 ? -this.bounds.minY : 0,
        line = "",
-       marks;
+       marks = [],
+       counter = 0;
 
    for(var i=0; i < this.data.length; i++) {
      var x = (parseFloat(this.data[i][0]) + bufferX) * this.SCALEX;
@@ -95,10 +96,15 @@ Chart.prototype = {
      }
 
      if(this.markers.indexOf(i) >=0) {
-       var mark = this.createMarkers(i, bufferX, bufferY, this.SCALEX, this.SCALEY, this.data[i]);
+       var mark = this.createMarkers(i, counter, bufferX, bufferY, this.SCALEX, this.SCALEY, this.data[i]);
+       counter++;
+       marks.push(mark);
        this.elem.appendChild(mark);
      }
    }
+
+   //reassign markers to dom nodes//
+   this.markers = marks;
    var lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
 
    lineEl.setAttribute('points', line);
