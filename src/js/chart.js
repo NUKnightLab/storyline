@@ -17,18 +17,20 @@ Chart.prototype = {
         positiveMin = this.bounds.minY < 0 ? -this.bounds.minY : 0;
 
     this.SCALEX = (Math.round((this.width/this.data.length)*100)/100);
-    this.SCALEY = (Math.round(this.height/(this.bounds.maxY - this.bounds.minY)*100))/100;
+    this.SCALEY = (Math.round((this.height-25)/(this.bounds.maxY - this.bounds.minY)*100))/100;
   },
-  createTicks: function(data, intervals, endBound, scale) {
+  createTicks: function() {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-        numTicks = Math.round(endBound/intervals.xTick),
         g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-        SCALE=scale,
-        TRANSLATEY=300,
+        data = this.data,
+        intervals = this.intervals,
+        endBound = this.bounds.maxX,
+        numTicks = Math.round(endBound/intervals.xTick),
+        TRANSLATEY= (this.bounds.maxY + Math.abs(this.bounds.minY)) * this.SCALEY,
         maxRange,
         xLabels=[0];
    
-    maxRange = numTicks*intervals.xTick * SCALE;
+    maxRange = numTicks*intervals.xTick * this.SCALEX;
     for(var j=0;j<numTicks;j++) {
       var interval = j*intervals.xTick
       xLabels.push(data[interval][0])
@@ -45,7 +47,7 @@ Chart.prototype = {
       tickStroke.setAttribute('x2', 0);
       tickStroke.setAttribute('y2', 6);
       tickStroke.setAttribute('stroke', 'black');
-      tick.setAttribute("transform", `translate(${mark*SCALE}, ${TRANSLATEY})`);
+      tick.setAttribute("transform", `translate(${mark*this.SCALEX}, ${TRANSLATEY})`);
       tickLabel.setAttribute("fill", "#000");
       tickLabel.setAttribute('x', 0.5);
       tickLabel.setAttribute('y', 9);
@@ -112,7 +114,7 @@ Chart.prototype = {
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var tick = this.createTicks(this.data, this.intervals, this.bounds.maxX, this.SCALEX, this.SCALEY);
+   var tick = this.createTicks();
    this.elem.appendChild(tick);
   },
   /**

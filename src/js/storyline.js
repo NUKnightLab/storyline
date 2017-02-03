@@ -6,8 +6,6 @@ var Storyline = function(targetId, config) {
   //Chart
   var self = this;
   this.container = document.getElementById(targetId);
-  //this should not be zero//
-  this.width = this.container.clientWidth;
   this.slider = new Slider(config.slides, config.startIndex);
   var slider = this.slider;
 
@@ -17,9 +15,19 @@ var Storyline = function(targetId, config) {
 
     self.appendChart(chart);
     self.appendSlider(slider);
+    slider.attachClickHandler(chart.markers);
   });
 }
 Storyline.prototype = { 
+  attr: function(dimension, value) {
+    if(dimension == "height") {
+      this.height = value;
+      this.container.style.height = value + "px";
+    } else if(dimension == "width") {
+      this.width = value;
+      this.container.style.width = value + "px";
+    }
+  },
   buildSlides: function(config, targetId) {
     config 
   },

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <div id="storyline" style="width: 540px"></div>
+  <div id="storyline"></div>
   <script id="slider-cards-template" type="text/x-tmpl-mustache">
    <div class="slider-cards">
     {{#slides}}
@@ -37,10 +37,10 @@
     req.addEventListener("load", function() {
       var config = JSON.parse(this.responseText);
       window.storyline = new Storyline('storyline', config)
+      storyline.attr("width", 540)
     });
     req.open("GET", "/assets/data.json");
     req.send();
-
   </script>
 </body>
 </html>

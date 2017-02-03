@@ -18,7 +18,7 @@ Slider.prototype = {
     this.nav = this.evalTemplate('nav-template', this)
     sliderView.appendChild(this.cards);
     sliderView.appendChild(this.nav);
-    this.attachClickHandler();
+    this.attachClickHandler(this.nav.children[0].children);
 
     return sliderView;
   },
@@ -33,20 +33,19 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
-  attachClickHandler() {
-    for(var i=0; i < this.nav.children[0].children.length; i++) {
-      this.nav.children[0].children[i].onclick = function(event, self) {
+  attachClickHandler(div) {
+    for(var i=0; i < div.length; i++) {
+      div[i].onclick = function(event, self) {
         var classes = event.target.classList;
         
         for(var i in classes) {
-          if(classes[i].indexOf("nav-") != -1) {
+          if(classes[i].indexOf("-") != -1) {
             var activeSlide = classes[i].split("-")[1];
             storyline.slider.activeSlide = activeSlide;
             storyline.slider.moveSlide(activeSlide)
             return false;
           }
         }
-        event.target.className
       }
     }
   },

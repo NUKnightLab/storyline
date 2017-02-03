@@ -2,7 +2,7 @@ line {
   z-index: 3;
 }
 
-.markers {
+circle[class^="marker-"] {
   z-index: 100;
-  fill: grey;
+  cursor: pointer;
 }
