@@ -10,10 +10,15 @@ Slider.prototype = {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
 
+    //create index key in slides for use in class naming by index in nav//
+    for(var i in this.slides) {
+      this.slides[i].index = i
+    }
     this.cards = this.evalTemplate('slider-cards-template', this)
     this.nav = this.evalTemplate('nav-template', this)
     sliderView.appendChild(this.cards);
     sliderView.appendChild(this.nav);
+    this.attachClickHandler();
 
     return sliderView;
   },
@@ -29,9 +34,21 @@ Slider.prototype = {
     return doc.body.children[0];
   },
   attachClickHandler() {
-    this.el.addEventListener('click', function(event) {
-      console.log(event.target)
-    })
+    for(var i=0; i < this.nav.children[0].children.length; i++) {
+      this.nav.children[0].children[i].onclick = function(event, self) {
+        var classes = event.target.classList;
+        
+        for(var i in classes) {
+          if(classes[i].indexOf("nav-") != -1) {
+            var activeSlide = classes[i].split("-")[1];
+            storyline.slider.activeSlide = activeSlide;
+            storyline.slider.moveSlide(activeSlide)
+            return false;
+          }
+        }
+        event.target.className
+      }
+    }
   },
   setActiveSlide: function() {
     this.activeSlide.slide['class'] = 'active';
