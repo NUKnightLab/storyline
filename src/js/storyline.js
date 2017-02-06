@@ -15,6 +15,7 @@ var Storyline = function(targetId, config) {
 
     self.appendChart(chart);
     self.appendSlider(slider);
+    slider.moveSlide();
     slider.attachClickHandler(chart.markers);
   });
 }

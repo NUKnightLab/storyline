@@ -1,8 +1,7 @@
 var Slider = function(slides, startIndex) {
   this.slides = slides;
-  this.elem = this.createSlider();
   this.activeSlide = startIndex;
-  this.moveSlide(startIndex);
+  this.elem = this.createSlider();
 }
 
 Slider.prototype = {
@@ -33,24 +32,31 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
-  attachClickHandler(div) {
+    attachClickHandler: function(div) {
+    var pastActiveSlide = this.activeSlide;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event, self) {
         var classes = event.target.classList;
-        
+
         for(var i in classes) {
           if(classes[i].indexOf("-") != -1) {
-            var activeSlide = classes[i].split("-")[1];
-            storyline.slider.activeSlide = activeSlide;
-            storyline.slider.moveSlide(activeSlide)
+            var currentActiveSlide = parseFloat(classes[i].split("-")[1]);
+            var pastActiveSlide = storyline.slider.activeSlide
+            storyline.slider.moveSlide(currentActiveSlide, pastActiveSlide)
             return false;
           }
         }
       }
     }
   },
-  setActiveSlide: function() {
-    this.activeSlide.slide['class'] = 'active';
+  setActiveSlide: function(currentActiveSlide, pastActiveSlide) {
+    this.activeSlide = currentActiveSlide;
+    if(this.cards.children[pastActiveSlide].classList.contains('active')) {
+      this.cards.children[pastActiveSlide].classList.remove('active');
+      this.nav.children[0].children[pastActiveSlide].classList.remove('active');
+    }
+    this.cards.children[currentActiveSlide].classList.add('active');
+    this.nav.children[0].children[currentActiveSlide].classList.add('active');
   },
   //move to storyline, rename to identify marker rows//
   highlightRows: function() {
@@ -60,14 +66,16 @@ Slider.prototype = {
     })
     return rows;
   },
-  moveSlide: function(index) {
-    //TODO: animate, set 'active' class, also change visual style of corresponding nav element //
+  moveSlide: function(index, pastIndex) {
+      index = index ? index : this.activeSlide;
+      pastIndex = pastIndex | 0;
+    //TODO: animate //
     var slide = this.cards.children[index],
         margin = slide.offsetWidth - slide.clientWidth;
 
     this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
     //change active slide as it moves//
-    this.activeSlide = index;
+    this.setActiveSlide(index, pastIndex)
     return this.cards.style.marginLeft;
   },
   setWidth: function(w) {
