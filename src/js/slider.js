@@ -54,9 +54,11 @@ Slider.prototype = {
     if(this.cards.children[pastActiveSlide].classList.contains('active')) {
       this.cards.children[pastActiveSlide].classList.remove('active');
       this.nav.children[0].children[pastActiveSlide].classList.remove('active');
+      storyline.chart.markers[pastActiveSlide].classList.remove('active')
     }
     this.cards.children[currentActiveSlide].classList.add('active');
     this.nav.children[0].children[currentActiveSlide].classList.add('active');
+    storyline.chart.markers[currentActiveSlide].classList.add('active')
   },
   //move to storyline, rename to identify marker rows//
   highlightRows: function() {
@@ -67,14 +69,13 @@ Slider.prototype = {
     return rows;
   },
   moveSlide: function(index, pastIndex) {
-      index = index ? index : this.activeSlide;
+      index = index!=undefined ? index : this.activeSlide;
       pastIndex = pastIndex | 0;
     //TODO: animate //
     var slide = this.cards.children[index],
         margin = slide.offsetWidth - slide.clientWidth;
 
     this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
-    //change active slide as it moves//
     this.setActiveSlide(index, pastIndex)
     return this.cards.style.marginLeft;
   },
@@ -84,7 +85,6 @@ Slider.prototype = {
 
     this.cards.style.width = w * numSlides + "px";
     this.cards.style.marginLeft = 10 + "px"
-    //set slide w//
     for(var i = 0; i < this.cards.children.length; i++) {
       var realWidth = w - (MARGIN*2);
       this.cards.children[i].style.width = realWidth + "px";

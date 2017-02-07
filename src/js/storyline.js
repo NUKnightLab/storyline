@@ -10,8 +10,8 @@ var Storyline = function(targetId, config) {
   var slider = this.slider;
 
   (fetchData(config)).then(function(dataObj) {
-    var highlightedRows = slider.highlightRows(),
-        chart = new Chart(dataObj, highlightedRows, storyline.width);
+    storyline.chart = new Chart(dataObj, slider.highlightRows(), storyline.width);
+    var chart = storyline.chart;
 
     self.appendChart(chart);
     self.appendSlider(slider);

@@ -5,4 +5,7 @@ line {
 circle[class^="marker-"] {
   z-index: 100;
   cursor: pointer;
+  &.active {
+    fill: red;
+  }
 }
