@@ -47,7 +47,7 @@
     "watch": "node tasks/watch.js",
     "server": "http-server ./dist -c-1",
     "compile": "npm run copy && npm run sass",
-    "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
+    "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr && ncp src/templates dist/templates --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
     "test": "mocha --compilers js:babel-core/register './test/example-test.js'"
   }
