@@ -13,7 +13,8 @@ function grabNode(data, config) {
       intervals = {
         xTick: null,
         yTick: null
-      }
+      },
+      markers = [];
 
   for(var i=0; i<data.length;i++) {
     //find all keys in Object//
@@ -27,7 +28,9 @@ function grabNode(data, config) {
     intervals.xTick = config.xTickInterval;
     intervals.yTick = config.yTickInterval;
   }
-  var obj = { 'data': output, 'bounds': bounds, 'intervals': intervals };
+  markers = getSlideMarkers(config.slides);
+
+  var obj = { 'data': output, 'bounds': bounds, 'intervals': intervals, 'markers': markers };
   return obj;
 }
 
@@ -51,6 +54,14 @@ function checkMax(var1, var2) {
   } else {
     return var2
   }
+}
+
+function getSlideMarkers(slides) {
+  var markers = [];
+  slides.map(function(slide) {
+    markers.push(slide.rowNum)
+  })
+  return markers;
 }
 
 function get(file) {

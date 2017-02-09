@@ -1,18 +1,20 @@
-var Chart = function(dataObj, highlightRows, width) {
+var Chart = function(dataObj, width) {
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.intervals = dataObj.intervals;
-    this.markers = highlightRows;
+    this.markers = dataObj.markers;
     this.width = width;
-    this.height = (2/3) * width
-    this.getScale()
-    this.elem = this.createCanvas(this.bounds);
-    this.drawLine();
+    this.height = (2/3) * width;
+    this.init();
 };
 
 Chart.prototype = {
-
-  getScale: function() {
+  init: function() {
+    this.setScale()
+    this.elem = this.createCanvas(this.bounds);
+    this.drawLine();
+  },
+  setScale: function() {
     var SCALE = 10,
         AXIS_HEIGHT = 25;
 
