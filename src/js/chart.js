@@ -14,10 +14,14 @@ Chart.prototype = {
 
   getScale: function() {
     var SCALE = 10,
-        positiveMin = this.bounds.minY < 0 ? -this.bounds.minY : 0;
+        AXIS_HEIGHT = 25;
 
-    this.SCALEX = (Math.round((this.width/this.data.length)*100)/100);
-    this.SCALEY = (Math.round((this.height-25)/(this.bounds.maxY - this.bounds.minY)*100))/100;
+    //assume bounds are moment objects//
+    var rangeX = Math.abs(this.bounds.maxX.valueOf() - this.bounds.minX.valueOf());    
+    var rangeY = Math.abs(this.bounds.maxY - this.bounds.minY);
+
+    this.SCALEX = (this.width/rangeX);
+    this.SCALEY = (this.height-AXIS_HEIGHT)/(rangeY);
   },
   createTicks: function() {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
@@ -66,10 +70,12 @@ Chart.prototype = {
     totalTick.append(g);
     return totalTick;
   },
-  createMarkers: function(index, counter, bufferX, bufferY, scalex, scaley, rows) {
+  createMarkers: function(index, counter, translateX, translateY, rows) {
     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', ((index) + bufferX)*scalex);
-    circle.setAttribute('cy', (rows[1] + bufferY)*scaley);
+    var x = ((rows[0].valueOf() * this.SCALEX) + translateX);
+    var y = this.height - ((rows[1]*this.SCALEY) + translateY);
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
     circle.setAttribute('r', 5);
     circle.setAttribute('fill', 'grey');
     circle.setAttribute('class', 'marker-' + counter);
@@ -81,15 +87,15 @@ Chart.prototype = {
    * @returns {undefined}
    */
   drawLine: function() {
-   var bufferX = this.bounds.minX < 0 ? -this.bounds.minX : 0,
-       bufferY = this.bounds.minY < 0 ? -this.bounds.minY : 0,
+   var translateX = -1 * this.bounds.minX.valueOf() * this.SCALEX,
+       translateY = -1 * (this.bounds.minY * this.SCALEY),
        line = "",
        marks = [],
        counter = 0;
 
    for(var i=0; i < this.data.length; i++) {
-     var x = (parseFloat(this.data[i][0]) + bufferX) * this.SCALEX;
-     var y = (parseFloat(this.data[i][1]) + bufferY) * this.SCALEY;
+     var x = ((this.data[i][0].valueOf() * this.SCALEX) + translateX);
+     var y = this.height - (((this.data[i][1] * this.SCALEY)) + translateY);
 
      line += x + " " + y;
 
@@ -98,7 +104,7 @@ Chart.prototype = {
      }
 
      if(this.markers.indexOf(i) >=0) {
-       var mark = this.createMarkers(i, counter, bufferX, bufferY, this.SCALEX, this.SCALEY, this.data[i]);
+       var mark = this.createMarkers(i, counter, translateX, translateY, this.data[i]);
        counter++;
        marks.push(mark);
        this.elem.appendChild(mark);
@@ -114,8 +120,8 @@ Chart.prototype = {
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var tick = this.createTicks();
-   this.elem.appendChild(tick);
+   //var tick = this.createTicks();
+   //this.elem.appendChild(tick);
   },
   /**
    * create an empty svg object "canvas" where line graph will be drawn

@@ -2,9 +2,10 @@ var parse = require('csv-parse');
 var Promise = require('es6-promise').Promise;
 
 function grabNode(data, config) {
+  var moment = require('moment');
   var output = [],
 	  bounds = {
-	    minX: 0,
+	    minX: null,
 	    maxX: null,
 	    minY: null,
 	    maxY: null
@@ -15,11 +16,13 @@ function grabNode(data, config) {
       }
 
   for(var i=0; i<data.length;i++) {
-    var x = data[i][config.xAxis];
+    //find all keys in Object//
+    var x = moment(data[i][config.xAxis], config.dateFormat);
     var y = parseFloat(data[i][config.yAxis]);
     bounds.minY = checkMin(y, bounds.minY)
     bounds.maxY = checkMax(y, bounds.maxY)
-    bounds.maxX = data.length;
+    bounds.minX = checkMin(x, bounds.minX)
+    bounds.maxX = checkMax(x, bounds.maxX)
     output.push([x, y]);
     intervals.xTick = config.xTickInterval;
     intervals.yTick = config.yTickInterval;
@@ -32,14 +35,22 @@ function checkMin(var1, var2) {
   if(var1 == null && var2 == null) { throw "Only one value can be null" }
   if(var1 == null) {return var2}
   if(var2 == null) {return var1}
-  return Math.min(var1, var2)
+  if(var1 < var2) {
+    return var1
+  } else {
+    return var2
+  }
 }
   
 function checkMax(var1, var2) {
   if(var1 == null && var2 == null) { throw "Only one value can be null" }
   if(var1 == null) {return var2}
   if(var2 == null) {return var1}
-  return Math.max(var1, var2)
+  if(var1 > var2) {
+    return var1
+  } else {
+    return var2
+  }
 }
 
 function get(file) {
@@ -70,4 +81,4 @@ function fetchData(config) {
   })
 }
 
-export {fetchData}
+export { grabNode, fetchData}
