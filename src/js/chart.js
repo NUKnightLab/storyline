@@ -10,20 +10,21 @@ var Chart = function(dataObj, width) {
 
 Chart.prototype = {
   init: function() {
-    this.setScale()
-    this.elem = this.createCanvas(this.bounds);
+    this.setRange();
+    this.setScale();
+    this.elem = this.createCanvas();
     this.drawLine();
   },
-  setScale: function() {
-    var SCALE = 10,
-        AXIS_HEIGHT = 25;
-
+  setRange: function() {
     //assume bounds are moment objects//
-    var rangeX = Math.abs(this.bounds.maxX.valueOf() - this.bounds.minX.valueOf());    
-    var rangeY = Math.abs(this.bounds.maxY - this.bounds.minY);
+    this.rangeX = Math.abs(this.bounds.maxX.valueOf() - this.bounds.minX.valueOf());
+    this.rangeY = Math.abs(this.bounds.maxY - this.bounds.minY);
+  },
+  setScale: function() {
+    var AXIS_HEIGHT = 25;
 
-    this.SCALEX = (this.width/rangeX);
-    this.SCALEY = (this.height-AXIS_HEIGHT)/(rangeY);
+    this.SCALEX = (this.width/this.rangeX);
+    this.SCALEY = (this.height-AXIS_HEIGHT)/(this.rangeY);
   },
   createTicks: function() {
     var totalTick = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
