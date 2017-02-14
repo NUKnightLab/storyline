@@ -12,6 +12,7 @@ var Storyline = function(targetId, config) {
   (fetchData(config)).then(function(dataObj) {
     storyline.chart = new Chart(dataObj, storyline.width, storyline.height);
     var chart = storyline.chart;
+    debugger;
 
     self.appendChart(chart);
     self.appendSlider(slider);
@@ -33,7 +34,7 @@ Storyline.prototype = {
     config 
   },
   appendChart: function(chart) {
-    this.container.appendChild(chart.elem); 
+    this.container.appendChild(chart.canvas);
     //chart.setWidth(this.width)
   },
   appendSlider: function(slider) {
