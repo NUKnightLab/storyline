@@ -75,7 +75,7 @@ Slider.prototype = {
     var slide = this.cards.children[index],
         margin = slide.offsetWidth - slide.clientWidth;
 
-    this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin) + "px"
+    this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin - 20) + "px"
     this.setActiveSlide(index, pastIndex)
     return this.cards.style.marginLeft;
   },

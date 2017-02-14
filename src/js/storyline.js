@@ -6,13 +6,16 @@ var Storyline = function(targetId, config) {
   //Chart
   var self = this;
   this.container = document.getElementById(targetId);
+  this.height = this.container.getAttribute('height');
+  this.container.style.height = this.height + "px";
+  this.width = this.container.getAttribute('width');
+  this.container.style.width = this.width + "px";
   this.slider = new Slider(config.slides, config.startIndex);
   var slider = this.slider;
 
   (fetchData(config)).then(function(dataObj) {
     storyline.chart = new Chart(dataObj, storyline.width, storyline.height);
     var chart = storyline.chart;
-    debugger;
 
     self.appendChart(chart);
     self.appendSlider(slider);

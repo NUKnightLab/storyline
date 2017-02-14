@@ -1,12 +1,18 @@
 var moment = require('moment');
 
 var Chart = function(dataObj, width, height) {
+    this.MARGIN = {
+      top: 30,
+      right: 50,
+      bottom: 30,
+      left: 20
+    }
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.intervals = dataObj.intervals;
     this.markers = dataObj.markers;
-    this.width = width;
-    this.height = height || (2/3) * width;
+    this.width = width - this.MARGIN.right - this.MARGIN.left;
+    this.height = height - this.MARGIN.top - this.MARGIN.bottom ;
     this.init();
 };
 
@@ -14,7 +20,7 @@ Chart.prototype = {
   init: function() {
     this.setRange();
     this.setScale();
-    var xAxis = this.domain("year", 10);
+    var xAxis = this.domain("year", 5);
     var yAxis = this.range();
     this.setTranslation();
     this.createCanvas();
@@ -34,36 +40,44 @@ Chart.prototype = {
     this.translateX = -1 * this.bounds.minX.valueOf() * this.SCALEX
     this.translateY = -1 * (this.bounds.minY * this.SCALEY)
   },
-  domain: function(timeDenominations, intervals) {
-    var ticks,
-        xAxisRange = this.bounds.maxX[timeDenominations]() - this.bounds.minX[timeDenominations]();
+  domain: function(timeDenomination, intervals) {
+    var ticks = [],
+        start = this.bounds.minX[timeDenomination](),
+        end = this.bounds.maxX[timeDenomination]();
     if(intervals != undefined) {
-      ticks = xAxisRange/intervals
+      for(var i=start;i<=end;i+=intervals){
+        ticks.push(i)
+      }
     } else {
-      ticks = xAxisRange
+      for(var i=start;i<=end;i+=1){
+        ticks.push(i)
+      }
     }
     return ticks;
   },
   range: function(intervals) {
-    var ticks;
+    var ticks = [],
+        start = this.bounds.minY,
+        end = this.bounds.maxY;
     if(intervals != undefined) {
-      ticks = this.rangeY/intervals
+      for(var i=start;i<=end;i+=intervals){
+        ticks.push(i)
+      }
     } else {
-      ticks = this.rangeY
+      for(var i=start;i<=end;i+=1){
+        ticks.push(i)
+      }
     }
     return ticks;
   },
-  addTicks: function(ticks, axis, timeDenomination, intervals) {
-    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-        labels=[];
+  addTicks: function(ticks, axis) {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('stroke', '#000');
    
-    //var xdistBetweenTicks = this.width/ticks
-
     g.setAttribute('fill', 'none')
 
-    for(var i=0; i<=ticks; i++) {
+    for(var i=0; i<ticks.length; i++) {
       var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
           tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
           tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
@@ -71,34 +85,32 @@ Chart.prototype = {
           max = `max${axis.toUpperCase()}`;
 
       if(axis === 'x') {
-        var distBetweenTicks = this.width/ticks,
-            TRANSLATE = this.height,
-            start = this.bounds[min][timeDenomination](),
-            end = this.bounds[max][timeDenomination]();
-        tickStroke.setAttribute('x1', 16);
-        tickStroke.setAttribute('x2', 16);
+        var distBetweenTicks = this.width/(ticks.length-1),
+            TRANSLATE = this.height;
+        tickStroke.setAttribute('x1', 0);
+        tickStroke.setAttribute('x2', 0);
         tickStroke.setAttribute('y2', 6);
         tick.setAttribute("transform", `translate(${distBetweenTicks*i}, ${TRANSLATE})`);
-        tickLabel.setAttribute('x', 0.5);
+        tickLabel.setAttribute('x', '-1em');
         tickLabel.setAttribute('y', 9);
         tickLabel.setAttribute('dy', '0.71em');
-        tickLabel.innerHTML = (start + i*intervals);
+        tickLabel.innerHTML = (ticks[i]);
         path.setAttribute('d', `M0,${TRANSLATE}h${this.width}`)
       } else {
-        var distBetweenTicks = this.height/ticks,
+        var distBetweenTicks = (this.height-25)/(ticks.length-1),
             TRANSLATE = 0,
             start = this.bounds[min],
             end = this.bounds[max];
         tickStroke.setAttribute('y1', 0.5);
         tickStroke.setAttribute('y2', 0.5);
         tickStroke.setAttribute('x2', -6);
-        tick.setAttribute("transform", `translate(${TRANSLATE}, ${distBetweenTicks*i})`);
+        tick.setAttribute("transform", `translate(${TRANSLATE}, ${this.height - (distBetweenTicks*i)})`);
         tickLabel.setAttribute('x', -10);
         tickLabel.setAttribute('y', 0.5);
         tickLabel.setAttribute('dy', '0.31em');
         tickLabel.setAttribute('text-anchor', 'end')
-        tickLabel.innerHTML = (start + i*intervals);
-        path.setAttribute('d', `M0,${TRANSLATE}v${this.height}`)
+        tickLabel.innerHTML = (ticks[i]);
+        path.setAttribute('d', `M0,${25}v${this.height-25}`)
       }
       tickStroke.setAttribute('stroke', 'black');
       tickLabel.setAttribute("fill", "#000");
@@ -132,13 +144,10 @@ Chart.prototype = {
 
    for(var i=0; i < this.data.length; i++) {
      var x = ((this.data[i][0].valueOf() * this.SCALEX) + this.translateX);
-     var y = this.height - (((this.data[i][1] * this.SCALEY)) + this.translateY);
+     var y = this.height - ((this.data[i][1] * this.SCALEY) + this.translateY);
 
      line += x + "," + y;
      if(i < this.data.length-1) {
-       if(i === this.data.length-1) {
-         debugger;
-       }
        line += "L";
      }
 
@@ -154,15 +163,13 @@ Chart.prototype = {
    this.markers = marks;
    var lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-   debugger;
    lineEl.setAttribute('d', line);
    lineEl.setAttribute('stroke', 'grey');
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var tick = this.addTicks(xAxis, 'x', "year", 10);
-   debugger;
-   var tick2 = this.addTicks(yAxis, 'y', 10);
+   var tick = this.addTicks(xAxis, 'x');
+   var tick2 = this.addTicks(yAxis, 'y');
    this.elem.appendChild(tick);
    this.elem.appendChild(tick2);
   },
@@ -174,10 +181,10 @@ Chart.prototype = {
   createCanvas : function(){
     var canvasOuter = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     var canvasInner = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    canvasOuter.setAttribute('width', this.width);
-    canvasOuter.setAttribute('height', this.height);
+    canvasOuter.setAttribute('width', (this.width + this.MARGIN.left + this.MARGIN.right));
+    canvasOuter.setAttribute('height', (this.height + this.MARGIN.top + this.MARGIN.bottom));
     canvasOuter.setAttribute('class', 'canvas');
-    debugger;
+    canvasInner.setAttribute('transform', `translate(${this.MARGIN.right} ${this.MARGIN.top})`)
     canvasOuter.append(canvasInner);
     this.canvas = canvasOuter;
     this.elem = canvasInner;
