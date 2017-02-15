@@ -10,9 +10,11 @@ function grabNode(data, config) {
 	    minY: null,
 	    maxY: null
       },
-      intervals = {
+      axes = {
         xTick: null,
-        yTick: null
+        yTick: null,
+        xAxis: null,
+        yAxis: null
       },
       markers = [];
 
@@ -25,12 +27,14 @@ function grabNode(data, config) {
     bounds.minX = checkMin(x, bounds.minX)
     bounds.maxX = checkMax(x, bounds.maxX)
     output.push([x, y]);
-    intervals.xTick = config.xTickInterval;
-    intervals.yTick = config.yTickInterval;
+    axes.xTick = config.xTickInterval;
+    axes.yTick = config.yTickInterval;
+    axes.xLabel = config.xLabel;
+    axes.yLabel = config.yLabel;
   }
   markers = getSlideMarkers(config.slides);
 
-  var obj = { 'data': output, 'bounds': bounds, 'intervals': intervals, 'markers': markers };
+  var obj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
   return obj;
 }
 

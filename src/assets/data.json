@@ -3,9 +3,9 @@
   "dateFormat": "MM/DD/YY",
   "xAxis": "Date",
   "yAxis": "US unemployment rate",
-  "xLabel": "Day of Year",
-  "yLabel": "Average Temp",
-  "xTickInterval": 30,
+  "xLabel": "Year",
+  "yLabel": "US unemployment rate",
+  "xTickInterval": 10,
   "yTickInterval": null,
   "startIndex": 2,
   "slides": [

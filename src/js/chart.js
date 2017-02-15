@@ -9,7 +9,7 @@ var Chart = function(dataObj, width, height) {
     }
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
-    this.intervals = dataObj.intervals;
+    this.axes = dataObj.axes;
     this.markers = dataObj.markers;
     this.width = width - this.MARGIN.right - this.MARGIN.left;
     this.height = height - this.MARGIN.top - this.MARGIN.bottom ;
@@ -20,11 +20,9 @@ Chart.prototype = {
   init: function() {
     this.setRange();
     this.setScale();
-    var xAxis = this.domain("year", 5);
-    var yAxis = this.range();
     this.setTranslation();
     this.createCanvas();
-    this.drawLine(xAxis, yAxis);
+    this.drawLine();
   },
   setRange: function() {
     this.rangeX = Math.abs(this.bounds.maxX.valueOf() - this.bounds.minX.valueOf());
@@ -42,8 +40,9 @@ Chart.prototype = {
   },
   domain: function(timeDenomination, intervals) {
     var ticks = [],
-        start = this.bounds.minX[timeDenomination](),
-        end = this.bounds.maxX[timeDenomination]();
+        tickDist = null,
+        start = this.bounds.minX[timeDenomination.toLowerCase()](),
+        end = this.bounds.maxX[timeDenomination.toLowerCase()]();
     if(intervals != undefined) {
       for(var i=start;i<=end;i+=intervals){
         ticks.push(i)
@@ -53,9 +52,12 @@ Chart.prototype = {
         ticks.push(i)
       }
     }
-    return ticks;
+    tickDist = (end - start)/intervals
+    return { "ticks": ticks,
+             "distance": tickDist
+           };
   },
-  range: function(intervals) {
+  range: function(denomination, intervals) {
     var ticks = [],
         start = this.bounds.minY,
         end = this.bounds.maxY;
@@ -68,7 +70,9 @@ Chart.prototype = {
         ticks.push(i)
       }
     }
-    return ticks;
+    return { "ticks": ticks,
+             "distance": null
+           };
   },
   addTicks: function(ticks, axis) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -77,7 +81,7 @@ Chart.prototype = {
    
     g.setAttribute('fill', 'none')
 
-    for(var i=0; i<ticks.length; i++) {
+    for(var i=0; i<ticks.ticks.length; i++) {
       var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
           tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
           tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
@@ -85,7 +89,7 @@ Chart.prototype = {
           max = `max${axis.toUpperCase()}`;
 
       if(axis === 'x') {
-        var distBetweenTicks = this.width/(ticks.length-1),
+        var distBetweenTicks = this.width/ticks.distance,
             TRANSLATE = this.height;
         tickStroke.setAttribute('x1', 0);
         tickStroke.setAttribute('x2', 0);
@@ -94,10 +98,10 @@ Chart.prototype = {
         tickLabel.setAttribute('x', '-1em');
         tickLabel.setAttribute('y', 9);
         tickLabel.setAttribute('dy', '0.71em');
-        tickLabel.innerHTML = (ticks[i]);
+        tickLabel.innerHTML = (ticks.ticks[i]);
         path.setAttribute('d', `M0,${TRANSLATE}h${this.width}`)
       } else {
-        var distBetweenTicks = (this.height-25)/(ticks.length-1),
+        var distBetweenTicks = (this.height-25)/(ticks.ticks.length-1),
             TRANSLATE = 0,
             start = this.bounds[min],
             end = this.bounds[max];
@@ -109,7 +113,7 @@ Chart.prototype = {
         tickLabel.setAttribute('y', 0.5);
         tickLabel.setAttribute('dy', '0.31em');
         tickLabel.setAttribute('text-anchor', 'end')
-        tickLabel.innerHTML = (ticks[i]);
+        tickLabel.innerHTML = (ticks.ticks[i]);
         path.setAttribute('d', `M0,${25}v${this.height-25}`)
       }
       tickStroke.setAttribute('stroke', 'black');
@@ -137,7 +141,7 @@ Chart.prototype = {
    *
    * @returns {undefined}
    */
-  drawLine: function(xAxis, yAxis) {
+  drawLine: function() {
    var line = "M",
        marks = [],
        counter = 0;
@@ -168,6 +172,8 @@ Chart.prototype = {
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
+   var xAxis = this.domain(this.axes.xLabel, this.axes.xTick);
+   var yAxis = this.range(this.axes.yLabel, this.axes.yTick);
    var tick = this.addTicks(xAxis, 'x');
    var tick2 = this.addTicks(yAxis, 'y');
    this.elem.appendChild(tick);
