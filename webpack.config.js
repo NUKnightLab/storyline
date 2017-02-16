@@ -4,7 +4,7 @@ var webpack = require('webpack'),
     componentPath = path.resolve('./src/js');
 
 module.exports = {
-  context: path.join(__dirname), 
+  context: path.join(__dirname),
   entry: {
     main: "./src/js/main.js",
     slider: ["./src/js/slider.js"]

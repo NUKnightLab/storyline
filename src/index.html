@@ -36,8 +36,8 @@
     var req = new XMLHttpRequest;
     req.addEventListener("load", function() {
       var config = JSON.parse(this.responseText);
-      window.storyline = new Storyline('storyline', config)
-      //storyline.attr("width", 540)
+      window.storyline = new Storyline('storyline', config);
+      storyline.attr("margin", { top: 20, right: 30, bottom: 20, left: 30 })
     });
     req.open("GET", "/assets/data.json");
     req.send();

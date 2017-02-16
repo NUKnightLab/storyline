@@ -3,19 +3,19 @@ import { expect, assert } from 'chai'
 import sinon from 'sinon'
 import moment from 'moment'
 
-describe('Checking chart functions', function() {
-  var Chart1
-  describe('create a new graph', function() {
-    var init;
-    beforeEach(function() {
+describe('ChartJS', () => {
+  let Chart1;
+  describe('Instantiate a new chart', () => {
+    let init;
+    beforeEach(() => {
       init = sinon.stub(Chart.prototype, 'init');
-      var data = [
+      let data = [
                    [moment("01/21/80", "MM/DD/YY"), 1],
                    [moment("02/29/80", "MM/DD/YY"), 3],
                    [moment("03/31/80", "MM/DD/YY"), 2],
                    [moment("04/30/80", "MM/DD/YY"), 3],
                    [moment("05/30/80", "MM/DD/YY"), 2],
-                  ]
+                 ]
       Chart1 = new Chart(
                  {
                    data: data,
@@ -29,39 +29,69 @@ describe('Checking chart functions', function() {
                    markers: null
                  }, 500, 600)
     })
-    it('should return the height of a new chart', function() {
-      expect(Chart1.height).to.eql(600);
+    it('should set a margin to default if given no input', () => {
+      expect(Chart1.margin).to.eql({ 'top': 30, 'right': 50, 'bottom': 30, 'left': 20 })
     })
-    it('should return the width of a new chart', function() {
-      expect(Chart1.width).to.eql(500);
+    it('should return the height of a new chart with margins accounted for', () => {
+      expect(Chart1.height).to.eql(540);
+    })
+    it('should return the width of a new chart with margins accounted for', () => {
+      expect(Chart1.width).to.eql(430);
     })
     afterEach(function() {
       init.restore();
     })
   })
-  describe('create a logical tick mark', function() {
-    var range;
+  describe('Create the domain', () => {
     beforeEach(function() {
-      range = sinon.stub(Chart1, 'setRange').returns(Chart1.rangeX = 1117494000000, Chart1.rangeY = 30)
+      //range = sinon.stub(Chart1, 'setRange').returns(Chart1.rangeX = 1117494000000, Chart1.rangeY = 30)
+      Chart1.axes = {
+                      xAxis: null,
+                      xLabel: "month",
+                      xTick: 1,
+                    }
     })
-    it('should set the rangeX and rangeY of a chart', function() {
-      expect(Chart1.rangeX).to.eql(1117494000000)
-      expect(Chart1.rangeY).to.eql(30)
+    it('should create an array of ticks with the start year as the first item and last year not included', () => {
+      var result = Chart1.createTicks(1980, 2015, 10)
+      expect(result.length).to.eq(4);
+      assert.deepEqual(result, [ 1980, 1990, 2000, 2010 ]);
     })
-    it('should provide xAxisRange when given an interval in a time denomination', function(){
-      expect(Chart1.domain("month", 1)).to.eq(4);
+    it('should create an array of ticks with the start year as first item and last year included', () => {
+      var result = Chart1.createTicks(1980, 2015, 5)
+      expect(result.length).to.eq(8);
+      assert.deepEqual(result, [ 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015 ]);
     })
-    it('shoulds provide yAxisRange if given an interval', function() {
-      expect(Chart1.range()).to.eq(30)
+    it('should create an object of domain attributes', () => {
+      var result = Chart1.makeDomain()
+      expect(result.distance).to.eq(4);
+      assert.deepEqual(result.ticks, [0,1,2,3,4]);
+      expect(result.label).to.eq("month");
     })
-    xit('should return rangeX when given x as an input', function() {
-      expect(Chart1.addTicks('x', 'years')).to.eq(10)
+    //afterEach(() =>
+      //range.restore()
+    //)
+  })
+  describe('Create the range', () => {
+    beforeEach(() => {
+      Chart1.axes = {
+                      yAxis: null,
+                      yLabel: "Number of Flights",
+                      yTick: 1,
+                    }
+      Chart1.bounds = {
+        minY: 1,
+        maxY: 5
+      }
     })
-    xit('should return rangeY when given y as an input', function() {
-      expect(Chart1.addTicks('y', 'seconds')).to.eq(10)
+    it('should create an array of ticks with start as first item in the list', () => {
+      var result = Chart1.createTicks(1,5)
+      expect(result.length).to.eq(5);
+      assert.deepEqual(result, [1,2,3,4,5]);
     })
-    afterEach(function() {
-      range.restore();
+    it('should create an object of range attributes', () => {
+      const result = Chart1.makeRange();
+      assert.deepEqual(result.ticks, [1,2,3,4,5])
+      expect(result.label).to.eq("Number of Flights")
     })
   })
 })

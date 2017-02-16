@@ -1,5 +1,5 @@
 import { Chart } from './chart';
-import { fetchData } from './data';
+import { DataFactoryFunc } from './data';
 import { Slider } from './slider';
 
 var Storyline = function(targetId, config) {
@@ -13,8 +13,10 @@ var Storyline = function(targetId, config) {
   this.slider = new Slider(config.slides, config.startIndex);
   var slider = this.slider;
 
-  (fetchData(config)).then(function(dataObj) {
-    storyline.chart = new Chart(dataObj, storyline.width, storyline.height);
+  var data = new DataFactoryFunc;
+
+  (data.fetchData(config)).then(function(dataObj) {
+    storyline.chart = new Chart(dataObj, storyline.width, storyline.height, storyline.margin);
     var chart = storyline.chart;
 
     self.appendChart(chart);
@@ -23,7 +25,7 @@ var Storyline = function(targetId, config) {
     slider.attachClickHandler(chart.markers);
   });
 }
-Storyline.prototype = { 
+Storyline.prototype = {
   attr: function(dimension, value) {
     if(dimension == "height") {
       this.height = value;
@@ -31,10 +33,12 @@ Storyline.prototype = {
     } else if(dimension == "width") {
       this.width = value;
       this.container.style.width = value + "px";
+    } else if(dimension == "margin") {
+      this.margin = value;
     }
   },
   buildSlides: function(config, targetId) {
-    config 
+    config
   },
   appendChart: function(chart) {
     this.container.appendChild(chart.canvas);

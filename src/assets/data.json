@@ -1,5 +1,5 @@
 {
-  "data": "./assets/dates_unemployment_copy.csv",
+  "filename": "./assets/dates_unemployment_copy.csv",
   "dateFormat": "MM/DD/YY",
   "xAxis": "Date",
   "yAxis": "US unemployment rate",

@@ -1,18 +1,13 @@
 var moment = require('moment');
 
-var Chart = function(dataObj, width, height) {
-    this.MARGIN = {
-      top: 30,
-      right: 50,
-      bottom: 30,
-      left: 20
-    }
+var Chart = function(dataObj, width, height, margin) {
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
     this.markers = dataObj.markers;
-    this.width = width - this.MARGIN.right - this.MARGIN.left;
-    this.height = height - this.MARGIN.top - this.MARGIN.bottom ;
+    this.margin = margin || { 'top': 30, 'right': 50, 'bottom': 30, 'left': 20 };
+    this.width = width - this.margin.right - this.margin.left;
+    this.height = height - this.margin.top - this.margin.bottom ;
     this.init();
 };
 
@@ -38,11 +33,8 @@ Chart.prototype = {
     this.translateX = -1 * this.bounds.minX.valueOf() * this.SCALEX
     this.translateY = -1 * (this.bounds.minY * this.SCALEY)
   },
-  domain: function(timeDenomination, intervals) {
-    var ticks = [],
-        tickDist = null,
-        start = this.bounds.minX[timeDenomination.toLowerCase()](),
-        end = this.bounds.maxX[timeDenomination.toLowerCase()]();
+  createTicks: function(start, end, intervals) {
+    var ticks = [];
     if(intervals != undefined) {
       for(var i=start;i<=end;i+=intervals){
         ticks.push(i)
@@ -52,33 +44,47 @@ Chart.prototype = {
         ticks.push(i)
       }
     }
-    tickDist = (end - start)/intervals
+    return ticks;
+  },
+  /**
+   * Creates an object of the range including ticks, distance between ticks and x axis label
+   *
+   * @returns {object}
+   */
+  makeDomain: function() {
+    var xLabel = this.axes.xLabel,
+        intervals = this.axes.xTick,
+        start = this.bounds.minX[xLabel.toLowerCase()](),
+        end = this.bounds.maxX[xLabel.toLowerCase()](),
+        tickDist = (end - start)/intervals,
+        ticks = this.createTicks(start, end, intervals);
+
     return { "ticks": ticks,
-             "distance": tickDist
+             "distance": tickDist,
+             "label": xLabel
            };
   },
-  range: function(denomination, intervals) {
-    var ticks = [],
+  /**
+   * Creates an object of the range, including array of ticks, and y axis label
+   *
+   * @returns {object}
+   */
+  makeRange: function() {
+    var yLabel = this.axes.yLabel,
+        intervals = this.axes.yTick,
         start = this.bounds.minY,
-        end = this.bounds.maxY;
-    if(intervals != undefined) {
-      for(var i=start;i<=end;i+=intervals){
-        ticks.push(i)
-      }
-    } else {
-      for(var i=start;i<=end;i+=1){
-        ticks.push(i)
-      }
+        end = this.bounds.maxY,
+        ticks = this.createTicks(start, end, intervals);
+
+    return {
+      "ticks": ticks,
+      "label": yLabel
     }
-    return { "ticks": ticks,
-             "distance": null
-           };
   },
   addTicks: function(ticks, axis) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('stroke', '#000');
-   
     g.setAttribute('fill', 'none')
 
     for(var i=0; i<ticks.ticks.length; i++) {
@@ -172,8 +178,8 @@ Chart.prototype = {
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var xAxis = this.domain(this.axes.xLabel, this.axes.xTick);
-   var yAxis = this.range(this.axes.yLabel, this.axes.yTick);
+   var xAxis = this.makeDomain();
+   var yAxis = this.makeRange();
    var tick = this.addTicks(xAxis, 'x');
    var tick2 = this.addTicks(yAxis, 'y');
    this.elem.appendChild(tick);
@@ -187,10 +193,10 @@ Chart.prototype = {
   createCanvas : function(){
     var canvasOuter = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     var canvasInner = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    canvasOuter.setAttribute('width', (this.width + this.MARGIN.left + this.MARGIN.right));
-    canvasOuter.setAttribute('height', (this.height + this.MARGIN.top + this.MARGIN.bottom));
+    canvasOuter.setAttribute('width', (this.width + this.margin.left + this.margin.right));
+    canvasOuter.setAttribute('height', (this.height + this.margin.top + this.margin.bottom));
     canvasOuter.setAttribute('class', 'canvas');
-    canvasInner.setAttribute('transform', `translate(${this.MARGIN.right} ${this.MARGIN.top})`)
+    canvasInner.setAttribute('transform', `translate(${this.margin.right} ${this.margin.top})`)
     canvasOuter.append(canvasInner);
     this.canvas = canvasOuter;
     this.elem = canvasInner;
