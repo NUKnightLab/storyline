@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/NUKnightLab/storyline#readme",
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "http-server": "^0.9.0",
     "ncp": "^2.0.0",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
+    "chai-as-promised": "^6.0.0",
     "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
     "csv-parse": "^1.1.9",
@@ -38,6 +40,7 @@
     "rimraf": "^2.5.3",
     "shelljs": "^0.7.0",
     "sinon": "^1.17.7",
+    "sinon-chai": "^2.8.0",
     "stream-transform": "^0.1.1",
     "tiny-lr": "^0.2.1",
     "xhr-stream": "^1.1.0"
@@ -52,6 +55,6 @@
     "compile": "npm run copy && npm run sass",
     "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
-    "test": "mocha --compilers js:babel-core/register './test/chart-test.js'"
+    "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/data-test.js'"
   }
 }

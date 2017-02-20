@@ -3,7 +3,6 @@ import { DataFactoryFunc } from './data';
 import { Slider } from './slider';
 
 var Storyline = function(targetId, config) {
-  //Chart
   var self = this;
   this.container = document.getElementById(targetId);
   this.height = this.container.getAttribute('height');

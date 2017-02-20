@@ -5,6 +5,13 @@ var DataFactoryFunc = function() {
 }
 
 DataFactoryFunc.prototype = {
+  /**
+   * runs through data and grabs significant values for drawing line
+   *
+   * @param {array} data - x and y axis data points
+   * @param {object} config -  data object from config file
+   * @returns {object} dataObj - data needed for creating a new chart
+   */
   grabData: function(data, config) {
     var moment = require('moment');
     var output = [],
@@ -25,10 +32,10 @@ DataFactoryFunc.prototype = {
     for(var i=0; i<data.length;i++) {
       var x = moment(data[i][config.xAxis], config.dateFormat);
       var y = parseFloat(data[i][config.yAxis]);
-      bounds.minY = this.checkMin(y, bounds.minY)
-      bounds.maxY = this.checkMax(y, bounds.maxY)
-      bounds.minX = this.checkMin(x, bounds.minX)
-      bounds.maxX = this.checkMax(x, bounds.maxX)
+      bounds.minY = this.getMin(y, bounds.minY)
+      bounds.maxY = this.getMax(y, bounds.maxY)
+      bounds.minX = this.getMin(x, bounds.minX)
+      bounds.maxX = this.getMax(x, bounds.maxX)
       output.push([x, y]);
       axes.xTick = config.xTickInterval;
       axes.yTick = config.yTickInterval;
@@ -37,11 +44,18 @@ DataFactoryFunc.prototype = {
     }
     markers = this.getSlideMarkers(config.slides);
 
-    var obj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
-    return obj;
+    var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
+    return dataObj;
   },
 
-  checkMin: function(var1, var2) {
+  /**
+   * compares two values and returns the minimum
+   *
+   * @param {num} var1
+   * @param {num} var2
+   * @returns {num} smallest num of 2 given numbers
+   */
+  getMin: function(var1, var2) {
     if(var1 == null && var2 == null) { throw "Only one value can be null" }
     if(var1 == null) {return var2}
     if(var2 == null) {return var1}
@@ -52,7 +66,14 @@ DataFactoryFunc.prototype = {
     }
   },
 
-  checkMax: function(var1, var2) {
+  /**
+   * compares two values and returns the maximum
+   *
+   * @param var1
+   * @param var2
+   * @returns {undefined}
+   */
+  getMax: function(var1, var2) {
     if(var1 == null && var2 == null) { throw "Only one value can be null" }
     if(var1 == null) {return var2}
     if(var2 == null) {return var1}
@@ -63,6 +84,12 @@ DataFactoryFunc.prototype = {
     }
   },
 
+  /**
+   * gets significant row numbers from the slides object in the dataset
+   *
+   * @param {object} slides - slides from config object
+   * @returns {array} markers - a list of row numbers
+   */
   getSlideMarkers: function(slides) {
     var markers = [];
     slides.map(function(slide) {
@@ -71,6 +98,12 @@ DataFactoryFunc.prototype = {
     return markers;
   },
 
+  /**
+   * requests contents from a given csv file
+   *
+   * @param {string} file - name of the csv file to read
+   * @returns {undefined}
+   */
   get: function(file) {
     return new Promise(function(resolve, reject) {
       var req = new XMLHttpRequest();
@@ -89,10 +122,16 @@ DataFactoryFunc.prototype = {
     });
   },
 
+  /**
+   * fetch data from the csv data using given config parameters
+   *
+   * @param {object} config - configuration object from json
+   * @returns {undefined}
+   */
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      self.get(config.data).then(function(response) {
+      self.get(config.filename).then(function(response) {
         parse(response, {'columns': true}, function(err, data) {
           resolve(self.grabData(data, config))
         })
