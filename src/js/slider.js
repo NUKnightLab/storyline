@@ -1,36 +1,55 @@
 var Slider = function(slides, startIndex) {
+  var Promise = require('es6-promise').Promise;
   this.slides = slides;
   this.activeSlide = startIndex;
-  this.elem = this.createSlider();
+  this.createSlider();
 }
 
 Slider.prototype = {
   createSlider: function() {
-    var sliderView = document.createElement("div");
-        sliderView.setAttribute('class', 'slider-view');
-
     //create index key in slides for use in class naming by index in nav//
     for(var i in this.slides) {
       this.slides[i].index = i
     }
-    this.cards = this.evalTemplate('slider-cards-template', this)
-    this.nav = this.evalTemplate('nav-template', this)
-    sliderView.appendChild(this.cards);
-    sliderView.appendChild(this.nav);
-    this.attachClickHandler(this.nav.children[0].children);
 
-    return sliderView;
+    this.evalTemplate('cards-template', this)
+    this.evalTemplate('nav-template', this).then(function(response){
+    var self = storyline.slider,
+        sliderView = document.createElement("div");
+    sliderView.setAttribute('class', 'slider-view');
+
+    sliderView.appendChild(self.cards);
+    sliderView.appendChild(self.nav);
+    self.attachClickHandler(self.nav.children[0].children);
+    self.elem = sliderView;
+    })
   },
   evalTemplate: function(templateId, context) {
+      debugger;
     var mustache = require('mustache'),
-
-    templateContent = document.getElementById(templateId).innerHTML,
-    rendered = mustache.render(templateContent, context);
-
-    var parser = new DOMParser(),
-        doc = parser.parseFromString(rendered, "text/html");
-
-    return doc.body.children[0];
+        parser = new DOMParser();
+    
+    return new Promise(function(resolve, reject) {
+      var req = new XMLHttpRequest;
+      
+      req.open("GET", "/templates/template.html");
+      req.onload = function() {
+        if(req.status == 200) {
+         var tempDom = parser.parseFromString(req.response, "text/html"),
+             templateContent = tempDom.getElementById(templateId).innerHTML,
+             rendered = mustache.render(templateContent, context),
+             doc = parser.parseFromString(rendered, "text/html");
+        
+          resolve(req.response);
+          //grab class//
+          var className = templateId.split("-")[0];
+          storyline.slider[className] = doc.body.children[0];
+        } else {
+          reject(Error(req.statusText));
+        }
+      }
+      req.send();
+    })
   },
     attachClickHandler: function(div) {
     var pastActiveSlide = this.activeSlide;

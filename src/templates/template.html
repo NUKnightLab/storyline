@@ -1,0 +1,23 @@
+<script id="cards-template" type="text/x-tmpl-mustache">
+  <div class="slider-cards">
+    {{#slides}}
+      <div class="slider-card {{class}}">
+        <div class="slider-content">
+          <h3>{{ title }}</h3>
+          <p>{{ text }}<p>
+        </div>
+      </div>
+    {{/slides}}
+  </div>
+</script>
+<script id="nav-template" type="text/x-tmpl-mustache">
+  <div class="nav">
+    <ol>
+      {{#slides}}
+        <li class="nav nav-{{index}}">
+          <a href="#"></a
+        </li>
+      {{/slides}}
+    </ol>
+  </div>
+</script>
