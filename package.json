@@ -55,6 +55,6 @@
     "compile": "npm run copy && npm run sass",
     "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
-    "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/data-test.js'"
+    "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/*-test.js'"
   }
 }

@@ -16,7 +16,8 @@ module.exports = {
     library: "[name]"
   },
   node: {
-    fs: "empty"
+    fs: "empty",
+    "child_process": "empty"
   },
   "browser": { "fs": false },
   resolve: {
@@ -27,7 +28,6 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.json$/, loader: "json-loader" },
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
@@ -37,5 +37,8 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  webpackMiddleware: {
+		noInfo: true
+	}
 }

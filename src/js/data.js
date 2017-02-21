@@ -1,5 +1,4 @@
 var parse = require('csv-parse');
-var Promise = require('es6-promise').Promise;
 
 var DataFactoryFunc = function() {
 }

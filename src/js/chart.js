@@ -19,16 +19,31 @@ Chart.prototype = {
     this.createCanvas();
     this.drawLine();
   },
+  /**
+   * sets the range of the chart
+   *
+   * @returns {undefined}
+   */
   setRange: function() {
     this.rangeX = Math.abs(this.bounds.maxX.valueOf() - this.bounds.minX.valueOf());
     this.rangeY = Math.abs(this.bounds.maxY - this.bounds.minY);
   },
+  /**
+   * sets the scale to enlarge the data points by
+   *
+   * @returns {undefined}
+   */
   setScale: function() {
     var AXIS_HEIGHT = 25;
 
     this.SCALEX = (this.width/this.rangeX);
     this.SCALEY = (this.height-AXIS_HEIGHT)/(this.rangeY);
   },
+  /**
+   * sets the degree of translation so the datapoints are made positive and within the view
+   *
+   * @returns {undefined}
+   */
   setTranslation: function() {
     this.translateX = -1 * this.bounds.minX.valueOf() * this.SCALEX
     this.translateY = -1 * (this.bounds.minY * this.SCALEY)
@@ -130,7 +145,7 @@ Chart.prototype = {
     }
 
     g.append(path)
-    
+
     return g;
   },
   createMarkers: function(x, y, counter) {

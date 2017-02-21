@@ -48,13 +48,13 @@ describe('DataJS', () => {
     })
   })
   describe('grabData', () => {
-    let data, config, instance;
+    let dataInput, config, instance;
     beforeEach(() => {
-      data = [
-      {'date': '01/31/80', 'US Unemployment Rate': 1},
-      {'date': '02/29/80', 'US Unemployment Rate': 3},
-      {'date': '03/31/80', 'US Unemployment Rate': 2},
-      {'date': '04/30/80', 'US Unemployment Rate': 3}
+      dataInput = [
+        {'date': '01/31/80', 'US Unemployment Rate': 1},
+        {'date': '02/29/80', 'US Unemployment Rate': 3},
+        {'date': '03/31/80', 'US Unemployment Rate': 2},
+        {'date': '04/30/80', 'US Unemployment Rate': 3}
       ]
       config = {
         xAxis: 'date',
@@ -67,15 +67,16 @@ describe('DataJS', () => {
       }
     })
     it('should return an object with data, bounds, axes and markers', () => {
-      const stub = sinon.stub(DataFactoryFunc.prototype, 'getSlideMarkers').returns('hello')
-      const expectedOutput = [
-        [ moment(data[0].date, config.dateFormat), data[0]["US Unemployment Rate"]],
-        [ moment(data[1].date, config.dateFormat), data[1]["US Unemployment Rate"]],
-        [ moment(data[2].date, config.dateFormat), data[2]["US Unemployment Rate"]],
-        [ moment(data[3].date, config.dateFormat), data[3]["US Unemployment Rate"]]
-      ]
-      const results = dataFactoryInstance.grabData(data, config)
-      assert.deepEqual(results.data, expectedOutput)
+      const stub = sinon.stub(DataFactoryFunc.prototype, 'getSlideMarkers')
+      const results = dataFactoryInstance.grabData(dataInput, config)
+      for(var i in dataInput) {
+        assert.isOk(results.data[i][0].isSame(moment(dataInput[i]["date"], config.dateFormat)))
+      }
+      for(var i in dataInput) {
+        expect(results.data[i][1]).to.eql(dataInput[i]["US Unemployment Rate"])
+      }
+      assert.isOk(results.bounds.minX.isSame(moment(dataInput[0]["date"], config.dateFormat)))
+      assert.isOk(results.bounds.maxX.isSame(moment(dataInput[3]["date"], config.dateFormat)))
 
       stub.restore();
     })
