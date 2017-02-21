@@ -1,13 +1,12 @@
-var moment = require('moment');
-
 var Chart = function(dataObj, width, height, margin) {
+    var AXIS_HEIGHT = 25;
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
     this.markers = dataObj.markers;
     this.margin = margin || { 'top': 30, 'right': 50, 'bottom': 30, 'left': 20 };
     this.width = width - this.margin.right - this.margin.left;
-    this.height = height - this.margin.top - this.margin.bottom ;
+    this.height = height - this.margin.top - this.margin.bottom - AXIS_HEIGHT;
     this.init();
 };
 
@@ -34,10 +33,8 @@ Chart.prototype = {
    * @returns {undefined}
    */
   setScale: function() {
-    var AXIS_HEIGHT = 25;
-
-    this.SCALEX = (this.width/this.rangeX);
-    this.SCALEY = (this.height-AXIS_HEIGHT)/(this.rangeY);
+    this.SCALEX = this.width/this.rangeX;
+    this.SCALEY = this.height/this.rangeY;
   },
   /**
    * sets the degree of translation so the datapoints are made positive and within the view
@@ -66,18 +63,14 @@ Chart.prototype = {
    *
    * @returns {object}
    */
-  makeDomain: function() {
-    var xLabel = this.axes.xLabel,
-        intervals = this.axes.xTick,
-        start = this.bounds.minX[xLabel.toLowerCase()](),
-        end = this.bounds.maxX[xLabel.toLowerCase()](),
-        tickDist = (end - start)/intervals,
-        ticks = this.createTicks(start, end, intervals);
+  makeDomain: function(label) {
+    var start = this.bounds.minX[label.toLowerCase()](),
+        end = this.bounds.maxX[label.toLowerCase()]();
 
-    return { "ticks": ticks,
-             "distance": tickDist,
-             "label": xLabel
-           };
+    return {
+      start: start,
+      end: end
+    }
   },
   /**
    * Creates an object of the range, including array of ticks, and y axis label
@@ -85,22 +78,35 @@ Chart.prototype = {
    * @returns {object}
    */
   makeRange: function() {
-    var yLabel = this.axes.yLabel,
-        intervals = this.axes.yTick,
-        start = this.bounds.minY,
-        end = this.bounds.maxY,
-        ticks = this.createTicks(start, end, intervals);
+    var start = this.bounds.minY,
+        end = this.bounds.maxY;
 
     return {
-      "ticks": ticks,
-      "label": yLabel
+      start: start,
+      end: end
+    }
+  },
+  makeAxis: function(axis) {
+    var label = this.axes[`${axis}Label`],
+        interval = this.axes[`${axis}Tick`] || 1,
+        bounds = (axis === 'x') ? this.makeDomain(label) : this.makeRange(),
+        numTicks = (bounds.end - bounds.start)/interval,
+        ticks = this.createTicks(bounds.start, bounds.end, interval);
+
+    //addTicks here//
+
+    return {
+      label: label,
+      ticks: ticks,
+      numTicks: numTicks
     }
   },
   addTicks: function(ticks, axis) {
-    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('stroke', '#000');
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
+        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
     g.setAttribute('fill', 'none')
+    path.setAttribute('stroke', '#000');
 
     for(var i=0; i<ticks.ticks.length; i++) {
       var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
@@ -110,8 +116,9 @@ Chart.prototype = {
           max = `max${axis.toUpperCase()}`;
 
       if(axis === 'x') {
-        var distBetweenTicks = this.width/ticks.distance,
+        var distBetweenTicks = this.width/ticks.numTicks,
             TRANSLATE = this.height;
+
         tickStroke.setAttribute('x1', 0);
         tickStroke.setAttribute('x2', 0);
         tickStroke.setAttribute('y2', 6);
@@ -122,7 +129,7 @@ Chart.prototype = {
         tickLabel.innerHTML = (ticks.ticks[i]);
         path.setAttribute('d', `M0,${TRANSLATE}h${this.width}`)
       } else {
-        var distBetweenTicks = (this.height-25)/(ticks.ticks.length-1),
+        var distBetweenTicks = (this.height)/(ticks.ticks.length-1),
             TRANSLATE = 0,
             start = this.bounds[min],
             end = this.bounds[max];
@@ -164,8 +171,9 @@ Chart.prototype = {
    */
   drawLine: function() {
    var line = "M",
-       marks = [],
-       counter = 0;
+       markerArray = [],
+       markerCounter = 0,
+       lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
    for(var i=0; i < this.data.length; i++) {
      var x = ((this.data[i][0].valueOf() * this.SCALEX) + this.translateX);
@@ -176,25 +184,24 @@ Chart.prototype = {
        line += "L";
      }
 
+     //while looping through data grab significant data points for markers//
      if(this.markers.indexOf(i) >=0) {
-       var mark = this.createMarkers(x, y, counter);
-       counter++;
-       marks.push(mark);
+       var mark = this.createMarkers(x, y, markerCounter);
+       markerCounter++;
+       markerArray.push(mark);
        this.elem.appendChild(mark);
      }
    }
 
-   //reassign markers to dom nodes//
-   this.markers = marks;
-   var lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+   this.markers = markerArray;
 
    lineEl.setAttribute('d', line);
    lineEl.setAttribute('stroke', 'grey');
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var xAxis = this.makeDomain();
-   var yAxis = this.makeRange();
+   var xAxis = this.makeAxis('x');
+   var yAxis = this.makeAxis('y');
    var tick = this.addTicks(xAxis, 'x');
    var tick2 = this.addTicks(yAxis, 'y');
    this.elem.appendChild(tick);

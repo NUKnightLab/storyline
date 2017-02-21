@@ -5,6 +5,11 @@ var Slider = function(slides, startIndex) {
 }
 
 Slider.prototype = {
+  /**
+   * creates the slider view and appends slides to it
+   *
+   * @returns {HTMLElement} complete slider
+   */
   createSlider: function() {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
@@ -77,8 +82,14 @@ Slider.prototype = {
 
     this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin - 20) + "px"
     this.setActiveSlide(index, pastIndex)
-    return this.cards.style.marginLeft;
+    setTimeout(this.cards.style.marginLeft, 20);
   },
+  /**
+   * sets the width of the document
+   *
+   * @param w
+   * @returns {undefined}
+   */
   setWidth: function(w) {
     var MARGIN = 10,
         numSlides = this.slides.length;
