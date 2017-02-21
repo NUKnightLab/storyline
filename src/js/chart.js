@@ -101,6 +101,39 @@ Chart.prototype = {
       numTicks: numTicks
     }
   },
+  makeTickStroke: function(x1, x2, y1, y2) {
+    var tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
+        coords = {
+          'x1': x1,
+          'x2': x2,
+          'y1': y1,
+          'y2': y2
+        };
+
+    tickStroke.setAttribute('stroke', 'black');
+    for (var value in coords) {
+      if(coords[value]!= undefined) {
+        tickStroke.setAttribute(value, coords[value])
+      }
+    }
+    return tickStroke;
+  },
+  makeTick: function(tickDist, translate) {
+    var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    tick.setAttribute("transform", `translate(${tickDist}, ${translate})`);
+    return tick;
+  },
+  makeTickLabel: function(x, y, dy, label) {
+    var tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
+    tickLabel.setAttribute('x', x);
+    tickLabel.setAttribute('y', y);
+    tickLabel.setAttribute('dy', (dy + 'em'));
+    tickLabel.innerHTML = label;
+
+    return tickLabel
+  },
   addTicks: function(ticks, axis) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
         path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -109,42 +142,30 @@ Chart.prototype = {
     path.setAttribute('stroke', '#000');
 
     for(var i=0; i<ticks.ticks.length; i++) {
-      var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-          tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
-          tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
+      var tick,
+          tickStroke,
+          tickLabel,
           min = `min${axis.toUpperCase()}`,
           max = `max${axis.toUpperCase()}`;
 
       if(axis === 'x') {
-        var distBetweenTicks = this.width/ticks.numTicks,
-            TRANSLATE = this.height;
+        var distBetweenTicks = (this.width/ticks.numTicks) * i;
 
-        tickStroke.setAttribute('x1', 0);
-        tickStroke.setAttribute('x2', 0);
-        tickStroke.setAttribute('y2', 6);
-        tick.setAttribute("transform", `translate(${distBetweenTicks*i}, ${TRANSLATE})`);
-        tickLabel.setAttribute('x', '-1em');
-        tickLabel.setAttribute('y', 9);
-        tickLabel.setAttribute('dy', '0.71em');
-        tickLabel.innerHTML = (ticks.ticks[i]);
-        path.setAttribute('d', `M0,${TRANSLATE}h${this.width}`)
+        tickStroke = this.makeTickStroke(0, 0, null, 6);
+        tick = this.makeTick(distBetweenTicks, this.height);
+        tickLabel = this.makeTickLabel(-16, 9, 0.71, ticks.ticks[i])
+        path.setAttribute('d', `M0,${this.height}h${this.width}`)
       } else {
-        var distBetweenTicks = (this.height)/(ticks.ticks.length-1),
+        var distBetweenTicks = ((this.height)/(ticks.ticks.length-1)) * i,
             TRANSLATE = 0,
             start = this.bounds[min],
             end = this.bounds[max];
-        tickStroke.setAttribute('y1', 0.5);
-        tickStroke.setAttribute('y2', 0.5);
-        tickStroke.setAttribute('x2', -6);
-        tick.setAttribute("transform", `translate(${TRANSLATE}, ${this.height - (distBetweenTicks*i)})`);
-        tickLabel.setAttribute('x', -10);
-        tickLabel.setAttribute('y', 0.5);
-        tickLabel.setAttribute('dy', '0.31em');
+        tickStroke = this.makeTickStroke(null, -6, 0.5, 0.5)
+        tick = this.makeTick(0, distBetweenTicks) //.setAttribute("transform", `translate(${TRANSLATE}, ${this.height - (distBetweenTicks*i)})`);
+        tickLabel = this.makeTickLabel(-10, 0.5, 0.31, ticks.ticks[i])
         tickLabel.setAttribute('text-anchor', 'end')
-        tickLabel.innerHTML = (ticks.ticks[i]);
         path.setAttribute('d', `M0,${25}v${this.height-25}`)
       }
-      tickStroke.setAttribute('stroke', 'black');
       tickLabel.setAttribute("fill", "#000");
       tick.append(tickStroke);
       tick.append(tickLabel);
