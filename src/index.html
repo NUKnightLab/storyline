@@ -37,7 +37,7 @@
     req.addEventListener("load", function() {
       var config = JSON.parse(this.responseText);
       window.storyline = new Storyline('storyline', config);
-      storyline.attr("margin", { top: 20, right: 30, bottom: 20, left: 30 })
+      storyline.attr("margin", { top: 10, right: 50, bottom: 20, left: 30 })
     });
     req.open("GET", "/assets/data.json");
     req.send();

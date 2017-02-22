@@ -82,7 +82,6 @@ Slider.prototype = {
 
     this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin - 20) + "px"
     this.setActiveSlide(index, pastIndex)
-    setTimeout(this.cards.style.marginLeft, 20);
   },
   /**
    * sets the width of the document
