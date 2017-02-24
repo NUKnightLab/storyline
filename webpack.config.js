@@ -39,6 +39,11 @@ module.exports = {
     ]
   },
   webpackMiddleware: {
-		noInfo: true
-	}
+    noInfo: true
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      PubSub: "pubsub-js"
+    })
+  ]
 }

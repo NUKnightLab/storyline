@@ -38,6 +38,7 @@
     "moment": "^2.17.1",
     "mustache": "^2.3.0",
     "prompt": "^1.0.0",
+    "pubsub-js": "^1.5.4",
     "rimraf": "^2.5.3",
     "shelljs": "^0.7.0",
     "simple-git": "^1.67.0",
