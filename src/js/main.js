@@ -7,9 +7,14 @@ window.Storyline = Storyline;
  *
  * @returns {undefined}
  */
-window.onresize = function() {
+window.onload = function() {onResize()}
+window.onresize = function() {onResize()}
+
+var onResize = function() {
+  debugger;
   var bp = {}
   bp.value = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
   PubSub.publish('window resized', bp)
+    console.log('PUBLICSH')
 }
 
