@@ -2,3 +2,23 @@ body {
   border: 0;
   margin: 0;
 }
+
+body:before {
+  content: "smartphone";
+  display: none; /* Prevent from displaying. */
+}
+@media(min-width: $bp-sm) {
+  body:before {
+    content: "#{$bp-sm}";
+  }
+}
+@media (min-width: $bp-md) {
+  body:before {
+    content: "#{$bp-md}";
+  }
+}
+@media (min-width: $bp-lg) {
+  body:before {
+    content: "#{$bp-lg}";
+  }
+}
