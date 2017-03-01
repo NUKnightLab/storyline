@@ -10,11 +10,12 @@
 .slider-card {
   float: left;
   display: block;
-  max-width: 480px;
+  max-width: 500px;
+  box-sizing: border-box;
   text-align: center;
   height: 200px;
   @media(max-width: 20em) {
-    width: 980px;
+    width: 1000px;
     max-width: none;
   }
 }
@@ -27,7 +28,7 @@
 }
 
 .slider-content {
-  border: 1px solid black;
+  border: 1px solid rgb(219, 30, 70);
   border-radius: 7px;
   padding: 0.75em;
 
@@ -64,6 +65,6 @@
   }
 
   & .active {
-    background-color: red;
+    background-color: rgb(219, 30, 70);
   }
 }

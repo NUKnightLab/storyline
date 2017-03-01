@@ -7,7 +7,6 @@ var Storyline = function(targetId, config) {
   this.elem = document.getElementById(targetId);
   this.config = config;
   this.init();
-
 }
 
 Storyline.prototype = {
@@ -20,6 +19,9 @@ Storyline.prototype = {
       self.slider.moveSlide();
       self.slider.attachClickHandler(self.chart.markers);
     });
+    //PubSub.subscribe('window resized', function(topic, data) {
+    //  self.checkScreenSize();
+    //})
   },
   createSlider: function() {
     var slides = this.config.slides,
@@ -74,19 +76,20 @@ Storyline.prototype = {
     slider.elem.style.opacity = 1;
   },
   checkScreenSize: function() {
+    var data = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '')
     var self = this;
-    PubSub.subscribe('window resized', function(topic, data) {
-      var screen = parseFloat(data.value.split("em")[0]);
-      if(screen <= 30) {
-        //make phone mode//
-        var width = window.innerWidth
-        self.setDimensions(width)
-      } else if(screen >= 64) {
-        //redraw fullscreen mode//
-        var width = window.innerWidth
-        self.setDimensions(width)
-      }
-    })
+    var screen = parseFloat(data.split("em")[0]);
+    if(screen <= 30) {
+      //make phone mode//
+      var width = window.innerWidth
+      self.setDimensions(width)
+    } else if(screen >= 64) {
+      //redraw fullscreen mode//
+      var width = window.innerWidth
+      self.setDimensions(width)
+    } else {
+      self.setDimensions()
+    }
   }
 }
 

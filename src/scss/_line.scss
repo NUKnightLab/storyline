@@ -6,6 +6,6 @@ circle[class^="marker-"] {
   z-index: 100;
   cursor: pointer;
   &.active {
-    fill: red;
+    fill: rgb(219, 30, 70);
   }
 }

@@ -1,10 +1,20 @@
 var Slider = function(slides, startIndex) {
-  this.slides = slides;
   this.activeSlide = startIndex;
-  this.elem = this.createSlider();
+  this.slides = slides;
+  this.MARGIN = 10;
+  this.bindElements();
 }
 
 Slider.prototype = {
+  bindElements: function() {
+    //create index key in slides for use in class naming by index in nav//
+    for(var i in this.slides) {
+      this.slides[i].index = i
+    }
+    this.cards = this.evalTemplate('slider-cards-template', this)
+    this.nav = this.evalTemplate('nav-template', this)
+    this.elem = this.createSlider();
+  },
   /**
    * creates the slider view and appends slides to it
    *
@@ -14,12 +24,6 @@ Slider.prototype = {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
 
-    //create index key in slides for use in class naming by index in nav//
-    for(var i in this.slides) {
-      this.slides[i].index = i
-    }
-    this.cards = this.evalTemplate('slider-cards-template', this)
-    this.nav = this.evalTemplate('nav-template', this)
     sliderView.appendChild(this.cards);
     sliderView.appendChild(this.nav);
     this.attachClickHandler(this.nav.children[0].children);
@@ -74,13 +78,13 @@ Slider.prototype = {
     return rows;
   },
   moveSlide: function(index, pastIndex) {
-      index = index!=undefined ? index : this.activeSlide;
-      pastIndex = pastIndex | 0;
-    //TODO: animate //
-    var slide = this.cards.children[index],
-        margin = slide.offsetWidth - slide.clientWidth;
+    index = index!=undefined ? index : this.activeSlide;
+    pastIndex = pastIndex | 0;
 
-    this.cards.style.marginLeft = -1 * (slide.offsetLeft - margin - 20) + "px"
+    var slide = this.cards.children[index];
+
+    $(this.cards, { marginLeft:  -1 * (slide.offsetLeft - this.offset) + "px"}, { duration: 500 })
+
     this.setActiveSlide(index, pastIndex)
   },
   /**
@@ -90,15 +94,19 @@ Slider.prototype = {
    * @returns {undefined}
    */
   setWidth: function(w) {
-    var MARGIN = 10,
-        numSlides = this.slides.length;
-
+    if(w <= 480) {
+      w = w - (this.MARGIN*2)
+    } else {
+      w = 500;
+    }
+    this.viewportSize = this.cards.parentElement.clientWidth;
+    this.offset = this.viewportSize/2 - w/2 - this.MARGIN
+    var numSlides = this.slides.length;
     this.cards.style.width = w * numSlides + "px";
-    this.cards.style.marginLeft = 10 + "px"
+    this.cards.style.marginLeft = this.offset + "px"
     for(var i = 0; i < this.cards.children.length; i++) {
-      var realWidth = w - (MARGIN*2);
-      this.cards.children[i].style.width = realWidth + "px";
-      this.cards.children[i].style.border = MARGIN + "px solid white";
+      this.cards.children[i].style.width = w + "px";
+      this.cards.children[i].style.border = this.MARGIN + "px solid white";
     }
     this.cards.style.opacity = 1;
   }

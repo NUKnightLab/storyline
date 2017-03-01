@@ -1,20 +1,8 @@
 import {Storyline} from './storyline';
-
+import {lib} from './lib'
 window.Storyline = Storyline;
 
-/**
- * onresize courtesy of this post: https://www.lullabot.com/articles/importing-css-breakpoints-into-javascript
- *
- * @returns {undefined}
- */
-window.onload = function() {onResize()}
-window.onresize = function() {onResize()}
+window.onload = function() { lib.onResize() }
+window.onresize = function() { lib.debounce(lib.onResize, 250) }
 
-var onResize = function() {
-  debugger;
-  var bp = {}
-  bp.value = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
-  PubSub.publish('window resized', bp)
-    console.log('PUBLICSH')
-}
 
