@@ -25,10 +25,15 @@
   margin: 0;
   padding: 0;
   height: 200px;
+  & .active {
+    .slider-content {
+      border: 1px solid rgb(219, 30, 70);
+    }
+  }
 }
 
 .slider-content {
-  border: 1px solid rgb(219, 30, 70);
+  border: 1px solid grey;
   border-radius: 7px;
   padding: 0.75em;
 
