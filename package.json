@@ -46,7 +46,6 @@
     "sinon-chai": "^2.8.0",
     "stream-transform": "^0.1.1",
     "tiny-lr": "^0.2.1",
-    "velocity-animate": "^1.4.3",
     "xhr-stream": "^1.1.0"
   },
   "scripts": {

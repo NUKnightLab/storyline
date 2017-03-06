@@ -11,7 +11,7 @@ var Storyline = function(targetId, config) {
 
 Storyline.prototype = {
   init: function() {
-    this.checkScreenSize();
+    this.setDimensions();
     this.createSlider();
     this.createChart().then(function(context) {
       var self = context;
@@ -49,7 +49,7 @@ Storyline.prototype = {
   setDimensions: function(width) {
     this.height = this.elem.getAttribute('height');
     this.elem.style.height = this.height + "px";
-    this.width = width ? width : this.elem.getAttribute('width');
+    this.width = width ? width : window.innerWidth;
     this.elem.style.width = this.width + "px";
   },
   attr: function(dimension, value) {
@@ -63,9 +63,6 @@ Storyline.prototype = {
       this.margin = value;
     }
   },
-  buildSlides: function(config, targetId) {
-    config
-  },
   appendChart: function(chart) {
     this.elem.appendChild(chart.canvas);
     //chart.setWidth(this.width)
@@ -74,22 +71,6 @@ Storyline.prototype = {
     this.elem.appendChild(slider.elem);
     slider.setWidth(this.width)
     slider.elem.style.opacity = 1;
-  },
-  checkScreenSize: function() {
-    var data = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '')
-    var self = this;
-    var screen = parseFloat(data.split("em")[0]);
-    if(screen <= 30) {
-      //make phone mode//
-      var width = window.innerWidth
-      self.setDimensions(width)
-    } else if(screen >= 64) {
-      //redraw fullscreen mode//
-      var width = window.innerWidth
-      self.setDimensions(width)
-    } else {
-      self.setDimensions()
-    }
   }
 }
 

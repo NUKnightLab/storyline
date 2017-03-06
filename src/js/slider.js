@@ -41,7 +41,7 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
-    attachClickHandler: function(div) {
+  attachClickHandler: function(div) {
     var pastActiveSlide = this.activeSlide;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event, self) {
@@ -69,21 +69,12 @@ Slider.prototype = {
     this.nav.children[0].children[currentActiveSlide].classList.add('active');
     storyline.chart.markers[currentActiveSlide].classList.add('active')
   },
-  //move to storyline, rename to identify marker rows//
-  highlightRows: function() {
-    var rows = []
-    this.slides.map(function(slide) {
-      rows.push(slide.rowNum);
-    })
-    return rows;
-  },
   moveSlide: function(index, pastIndex) {
     index = index!=undefined ? index : this.activeSlide;
     pastIndex = pastIndex | 0;
 
     var slide = this.cards.children[index];
-
-    $(this.cards, { marginLeft:  -1 * (slide.offsetLeft - this.offset) + "px"}, { duration: 500 })
+    this.cards.style.marginLeft = -1 * (slide.offsetLeft - this.offset) + "px";
 
     this.setActiveSlide(index, pastIndex)
   },

@@ -43,7 +43,6 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      $: "velocity-animate",
       PubSub: "pubsub-js"
     })
   ]
