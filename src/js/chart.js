@@ -7,16 +7,17 @@ var Chart = function(dataObj, width, height, margin) {
     this.margin = margin || { 'top': 10, 'right': 50, 'bottom': 30, 'left': 20 };
     this.width = width - this.margin.right - this.margin.left;
     this.height = height - this.margin.top - this.margin.bottom - AXIS_HEIGHT;
-    this.init();
+    this.createChart();
 };
 
 Chart.prototype = {
-  init: function() {
+  createChart: function() {
     this.setRange();
     this.setScale();
     this.setTranslation();
     this.createCanvas();
     this.drawLine();
+    this.drawMarkers();
   },
   /**
    * sets the range of the chart
@@ -120,7 +121,7 @@ Chart.prototype = {
    * @param translate
    * @returns {HTMLElement} <g>
    */
-  createSingleTick: function(tickDist, translate) {
+  createTick: function(tickDist, translate) {
     var tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
     tick.setAttribute("transform", `translate(${tickDist}, ${translate})`);
@@ -135,7 +136,7 @@ Chart.prototype = {
    * @param {num} y2
    * @returns {HTMLElement} <line>
    */
-  createTickStroke: function(x1, x2, y1, y2) {
+  drawTick: function(x1, x2, y1, y2) {
     var tickStroke = document.createElementNS('http://www.w3.org/2000/svg', 'line'),
         coords = {
           'x1': x1,
@@ -161,7 +162,7 @@ Chart.prototype = {
    * @param {string} label
    * @returns {HTMLElement} <text>
    */
-   createTickLabel: function(x, y, dy, label) {
+   labelTick: function(x, y, dy, label) {
     var tickLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 
     tickLabel.setAttribute("fill", "#000");
@@ -196,16 +197,16 @@ Chart.prototype = {
       if(axis === 'x') {
         var distBetweenTicks = (this.width/ticks.numTicks) * i;
 
-        tick = this.createSingleTick(distBetweenTicks, this.height);
-        tickStroke = this.createTickStroke(0, 0, null, 6);
-        tickLabel = this.createTickLabel(-16, 9, 0.71, ticks.tickLabels[i])
+        tick = this.createTick(distBetweenTicks, this.height);
+        tickStroke = this.drawTick(0, 0, null, 6);
+        tickLabel = this.labelTick(-16, 9, 0.71, ticks.tickLabels[i])
         path.setAttribute('d', `M0,${this.height}h${this.width}`)
       } else {
         var distBetweenTicks = ((this.height)/(ticks.tickLabels.length-1)) * i,
 
-        tick = this.createSingleTick(0, this.height-distBetweenTicks);
-        tickStroke = this.createTickStroke(null, -6, 0.5, 0.5);
-        tickLabel = this.createTickLabel(-10, 0.5, 0.31, ticks.tickLabels[i])
+        tick = this.createTick(0, this.height-distBetweenTicks);
+        tickStroke = this.drawTick(null, -6, 0.5, 0.5);
+        tickLabel = this.labelTick(-10, 0.5, 0.31, ticks.tickLabels[i])
         tickLabel.setAttribute('text-anchor', 'end')
         path.setAttribute('d', `M0,${0}v${this.height}`)
       }
@@ -226,8 +227,9 @@ Chart.prototype = {
    * @param {num} counter to keep track of order of points
    * @returns {HTMLElement} <circle>
    */
-  createMarkers: function(markersArray) {
-    var self = this
+  drawMarkers: function() {
+    var self = this,
+        markersArray = this.aggregateMarkers();
 
     self.markers = [];
     markersArray.map(function(marker) {
@@ -296,8 +298,6 @@ Chart.prototype = {
    */
   drawLine: function() {
    var lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-
-   this.createMarkers(this.aggregateMarkers());
 
    lineEl.setAttribute('d', this.aggregatePoints());
    lineEl.setAttribute('stroke', 'grey');

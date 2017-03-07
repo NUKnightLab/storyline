@@ -2,9 +2,9 @@ import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
 
-var Storyline = function(targetId, config) {
+var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
-  this.config = config;
+  this.dataConfig = dataConfig;
   this.init();
 }
 
@@ -13,7 +13,7 @@ Storyline.prototype = {
     var self = this;
     this.setDimensions();
     this.slider = this.initSlider();
-    this.grabData(this.config).then(function(dataObj) {
+    this.grabData(this.dataConfig).then(function(dataObj) {
       self.chart = self.initChart(dataObj);
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
@@ -24,10 +24,10 @@ Storyline.prototype = {
   },
   grabData: function() {
     var data = new DataFactory;
-    return data.fetchData(this.config);
+    return data.fetchData(this.dataConfig);
   },
   initSlider: function() {
-    return new Slider(this.config.slides, this.config.startIndex);
+    return new Slider(this.dataConfig.slides, this.dataConfig.startIndex);
   },
   initChart: function(dataObj) {
     return new Chart(dataObj, this.width, this.height, this.margin)
