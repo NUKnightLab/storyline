@@ -1,12 +1,12 @@
 var Slider = function(slides, startIndex) {
-  this.activeSlide = startIndex;
+  this.activeCard = startIndex;
   this.slides = slides;
   this.MARGIN = 10;
-  this.init();
+  this.createSlider();
 }
 
 Slider.prototype = {
-  init: function() {
+  createSlider: function() {
     //create index key in slides for use in class naming by index in nav//
     //mustache should have something about iterating over index//
     for(var i in this.slides) {
@@ -43,41 +43,41 @@ Slider.prototype = {
     return doc.body.children[0];
   },
   attachClickHandler: function(div) {
-    var pastActiveSlide = this.activeSlide;
+    var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event, self) {
         var classes = event.target.classList;
 
         for(var i in classes) {
           if(classes[i].indexOf("-") != -1) {
-            var currentActiveSlide = parseFloat(classes[i].split("-")[1]);
-            var pastActiveSlide = storyline.slider.activeSlide
-            storyline.slider.setTrayPosition(currentActiveSlide, pastActiveSlide)
+            var currentActiveCard = parseFloat(classes[i].split("-")[1]);
+            var pastActiveCard = storyline.slider.activeCard
+            storyline.slider.setTrayPosition(currentActiveCard, pastActiveCard)
             return false;
           }
         }
       }
     }
   },
-  setActiveSlide: function(currentActiveSlide, pastActiveSlide) {
-    this.activeSlide = currentActiveSlide;
-    if(this.cards.children[pastActiveSlide].classList.contains('active')) {
-      this.cards.children[pastActiveSlide].classList.remove('active');
-      this.nav.children[0].children[pastActiveSlide].classList.remove('active');
-      storyline.chart.markers[pastActiveSlide].classList.remove('active')
+  setActiveCard: function(currentActiveCard, pastActiveCard) {
+    this.activeCard = currentActiveCard;
+    if(this.cards.children[pastActiveCard].classList.contains('active')) {
+      this.cards.children[pastActiveCard].classList.remove('active');
+      this.nav.children[0].children[pastActiveCard].classList.remove('active');
+      storyline.chart.markers[pastActiveCard].classList.remove('active')
     }
-    this.cards.children[currentActiveSlide].classList.add('active');
-    this.nav.children[0].children[currentActiveSlide].classList.add('active');
-    storyline.chart.markers[currentActiveSlide].classList.add('active')
+    this.cards.children[currentActiveCard].classList.add('active');
+    this.nav.children[0].children[currentActiveCard].classList.add('active');
+    storyline.chart.markers[currentActiveCard].classList.add('active')
   },
   setTrayPosition: function(index, pastIndex) {
-    index = index!=undefined ? index : this.activeSlide;
+    index = index!=undefined ? index : this.activeCard;
     pastIndex = pastIndex | 0;
 
-    var slide = this.cards.children[index];
-    this.cards.style.marginLeft = -1 * (slide.offsetLeft - this.offset) + "px";
+    var card = this.cards.children[index];
+    this.cards.style.marginLeft = -1 * (card.offsetLeft - this.offset) + "px";
 
-    this.setActiveSlide(index, pastIndex)
+    this.setActiveCard(index, pastIndex)
   },
   /**
    * sets the width of the document
