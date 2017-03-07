@@ -1,9 +1,8 @@
 import { Chart } from './chart';
-import { DataFactoryFunc } from './data';
+import { DataFactory } from './data';
 import { Slider } from './slider';
 
 var Storyline = function(targetId, config) {
-  var self = this;
   this.elem = document.getElementById(targetId);
   this.config = config;
   this.init();
@@ -11,35 +10,27 @@ var Storyline = function(targetId, config) {
 
 Storyline.prototype = {
   init: function() {
+    var self = this;
     this.setDimensions();
-    this.createSlider();
-    this.createChart().then(function(context) {
-      var self = context;
-      self.appendSlider(self.slider);
-      self.slider.moveSlide();
-      self.slider.attachClickHandler(self.chart.markers);
+    this.slider = this.initSlider();
+    this.grabData(this.config).then(function(dataObj) {
+      self.chart = self.initChart(dataObj);
+      self.positionChart(self.chart)
+      self.positionSlider(self.slider)
     });
     //PubSub.subscribe('window resized', function(topic, data) {
     //  self.checkScreenSize();
     //})
   },
-  createSlider: function() {
-    var slides = this.config.slides,
-        startIndex = this.config.startIndex,
-        slider;
-
-    this.slider = new Slider(slides, startIndex);
+  grabData: function() {
+    var data = new DataFactory;
+    return data.fetchData(this.config);
   },
-  createChart: function() {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-      var data = new DataFactoryFunc;
-      data.fetchData(self.config).then(function(dataObj) {
-        self.chart = new Chart(dataObj, self.width, self.height, self.margin)
-        self.appendChart(self.chart)
-        resolve(self)
-      })
-    })
+  initSlider: function() {
+    return new Slider(this.config.slides, this.config.startIndex);
+  },
+  initChart: function(dataObj) {
+    return new Chart(dataObj, this.width, this.height, this.margin)
   },
   /**
    * checks browser size and if mobile, overrides input dimensions
@@ -63,13 +54,15 @@ Storyline.prototype = {
       this.margin = value;
     }
   },
-  appendChart: function(chart) {
+  positionChart: function(chart) {
     this.elem.appendChild(chart.canvas);
     //chart.setWidth(this.width)
   },
-  appendSlider: function(slider) {
+  positionSlider: function(slider) {
     this.elem.appendChild(slider.elem);
     slider.setWidth(this.width)
+    slider.setTrayPosition();
+    slider.attachClickHandler(this.chart.markers);
     slider.elem.style.opacity = 1;
   }
 }

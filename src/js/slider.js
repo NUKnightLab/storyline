@@ -2,35 +2,36 @@ var Slider = function(slides, startIndex) {
   this.activeSlide = startIndex;
   this.slides = slides;
   this.MARGIN = 10;
-  this.bindElements();
+  this.init();
 }
 
 Slider.prototype = {
-  bindElements: function() {
+  init: function() {
     //create index key in slides for use in class naming by index in nav//
+    //mustache should have something about iterating over index//
     for(var i in this.slides) {
       this.slides[i].index = i
     }
-    this.cards = this.evalTemplate('slider-cards-template', this)
-    this.nav = this.evalTemplate('nav-template', this)
-    this.elem = this.createSlider();
+    this.cards = this.renderTemplate('slider-cards-template', this)
+    this.nav = this.renderTemplate('nav-template', this)
+    this.elem = this.createSliderView();
+    this.attachClickHandler(this.nav.children[0].children);
   },
   /**
    * creates the slider view and appends slides to it
    *
    * @returns {HTMLElement} complete slider
    */
-  createSlider: function() {
+  createSliderView: function() {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
 
     sliderView.appendChild(this.cards);
     sliderView.appendChild(this.nav);
-    this.attachClickHandler(this.nav.children[0].children);
 
     return sliderView;
   },
-  evalTemplate: function(templateId, context) {
+  renderTemplate: function(templateId, context) {
     var mustache = require('mustache'),
 
     templateContent = document.getElementById(templateId).innerHTML,
@@ -51,7 +52,7 @@ Slider.prototype = {
           if(classes[i].indexOf("-") != -1) {
             var currentActiveSlide = parseFloat(classes[i].split("-")[1]);
             var pastActiveSlide = storyline.slider.activeSlide
-            storyline.slider.moveSlide(currentActiveSlide, pastActiveSlide)
+            storyline.slider.setTrayPosition(currentActiveSlide, pastActiveSlide)
             return false;
           }
         }
@@ -69,7 +70,7 @@ Slider.prototype = {
     this.nav.children[0].children[currentActiveSlide].classList.add('active');
     storyline.chart.markers[currentActiveSlide].classList.add('active')
   },
-  moveSlide: function(index, pastIndex) {
+  setTrayPosition: function(index, pastIndex) {
     index = index!=undefined ? index : this.activeSlide;
     pastIndex = pastIndex | 0;
 
@@ -99,7 +100,6 @@ Slider.prototype = {
       this.cards.children[i].style.width = w + "px";
       this.cards.children[i].style.border = this.MARGIN + "px solid white";
     }
-    this.cards.style.opacity = 1;
   }
 }
 
