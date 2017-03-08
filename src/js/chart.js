@@ -1,3 +1,8 @@
+var d3 = {}
+d3.axis = require('d3-axis');
+d3.scale = require('d3-scale');
+d3.selection = require('d3-selection');
+
 var Chart = function(dataObj, width, height, margin) {
     var AXIS_HEIGHT = 25;
     this.data = dataObj.data;
@@ -18,6 +23,57 @@ Chart.prototype = {
     this.createCanvas();
     this.drawLine();
     this.drawMarkers();
+    this.drawAxes(d3);
+  },
+  drawAxes: function(d3) {
+    var self = this;
+    var timeAxis = this.axes.xLabel;
+    var thing = `d3.time${timeAxis}`
+
+    var x = d3.scale.scaleTime()
+      .domain([new Date(this.bounds.minX.year(), this.bounds.minX.month(), this.bounds.minX.date()), new Date(this.bounds.maxX.year(), this.bounds.maxX.month(), this.bounds.maxX.date())])
+      .range([0, this.width]);
+    var xAxis = d3.axis.axisBottom(x)
+      .tickSize(this.height)
+      .ticks(d3.timeYear)
+
+    var y = d3.scale.scaleLinear()
+      .domain([this.bounds.minY, this.bounds.maxY])
+      .range([this.height, 0])
+   var yAxis = d3.axis.axisRight(y)
+      .tickSize(this.width)
+      .tickFormat(function(d){
+        return this.parentNode.nextSibling ? "\xa0" + d : d
+      })
+
+    function customXAxis(g) {
+      g.call(xAxis);
+      g.select(".domain").remove();
+      g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
+    }
+
+    function customYAxis(g) {
+      g.call(yAxis);
+      g.select(".domain").remove();
+      g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
+      g.selectAll(".tick text").attr("dy", -4);
+    }
+
+    d3.selection.select(this.elem)
+    .append("g")
+    .attr("transform", "translate(0,0)")
+    .call(customXAxis)
+
+    d3.selection.select(this.elem)
+      .append("g")
+      .call(customYAxis)
+    .append("text")
+      .attr("fill", "#000")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text(this.axes.yLabel);
   },
   /**
    * sets the range of the chart
@@ -304,10 +360,10 @@ Chart.prototype = {
    lineEl.setAttribute('fill', 'none');
    this.elem.appendChild(lineEl);
 
-   var xAxis = this.createAxis(this.makeAxisValues('x'), 'x');
-   var yAxis = this.createAxis(this.makeAxisValues('y'), 'y');
-   this.elem.appendChild(xAxis);
-   this.elem.appendChild(yAxis);
+   //var xAxis = this.createAxis(this.makeAxisValues('x'), 'x');
+   ///var yAxis = this.createAxis(this.makeAxisValues('y'), 'y');
+   //this.elem.appendChild(xAxis);
+   //this.elem.appendChild(yAxis);
   },
   /**
    * create an empty svg object "canvas" where line graph will be drawn
