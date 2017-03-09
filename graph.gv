@@ -1,0 +1,14 @@
+digraph G {
+  node [shape=box];
+  Storyline -> init;
+  init -> setDimensions;
+  init -> createSlider;
+  init -> createChart -> appendSlider
+
+  node [shape=box,style=filled,color=".7 .3 1.0"];
+  createChart -> moveSlide
+  createChart -> attachClickHandler;
+  createSlider -> Slider;
+  Slider -> bindElements -> createSlide -> attachClickHandler -> moveSlide -> setActiveSlide;
+  Slider -> evalTemplate;
+}

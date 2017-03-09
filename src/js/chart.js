@@ -27,15 +27,12 @@ Chart.prototype = {
   },
   drawAxes: function(d3) {
     var self = this;
-    var timeAxis = this.axes.xLabel;
-    var thing = `d3.time${timeAxis}`
 
     var x = d3.scale.scaleTime()
-      .domain([new Date(this.bounds.minX.year(), this.bounds.minX.month(), this.bounds.minX.date()), new Date(this.bounds.maxX.year(), this.bounds.maxX.month(), this.bounds.maxX.date())])
+      .domain([this.bounds.minX.toDate(), this.bounds.maxX.toDate()])
       .range([0, this.width]);
     var xAxis = d3.axis.axisBottom(x)
       .tickSize(this.height)
-      .ticks(d3.timeYear)
 
     var y = d3.scale.scaleLinear()
       .domain([this.bounds.minY, this.bounds.maxY])
@@ -49,6 +46,9 @@ Chart.prototype = {
     function customXAxis(g) {
       g.call(xAxis);
       g.select(".domain").remove();
+      var text = g.select(".tick:first-of-type").text();
+      var t2 = g.select(".tick").text();
+      debugger;
       g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
     }
 
