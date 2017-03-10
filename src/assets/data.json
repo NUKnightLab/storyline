@@ -1,9 +1,9 @@
 {
-  "filename": "./assets/dates_unemployment_copy.csv",
-  "dateFormat": "MM/DD/YY",
-  "timeDisplayFormat": "%Y",
-  "xAxis": "Date",
-  "yAxis": "US unemployment rate",
+  "filename": "./assets/time_no_day.csv",
+  "dateFormat": "H:mm",
+  "timeDisplayFormat": "%I %p",
+  "xAxis": "time",
+  "yAxis": "number of flights",
   "startIndex": 2,
   "slides": [
     {

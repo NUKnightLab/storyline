@@ -39,7 +39,7 @@ Chart.prototype = {
     var y = d3.scale.scaleLinear()
       .domain([this.bounds.minY, this.bounds.maxY])
       .range([this.height, 0])
-   var yAxis = d3.axis.axisRight(y)
+    var yAxis = d3.axis.axisRight(y)
       .tickSize(this.width)
       .tickFormat(function(d){
         if(d > 1e6) {
@@ -70,10 +70,10 @@ Chart.prototype = {
       .append("g")
       .call(customYAxis)
     .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
+      .attr("fill", "rgb(184, 184, 184)")
+      .attr("x", this.width)
       .attr("y", 6)
-      .attr("dy", "0.71em")
+      .attr("dy", "1.75em")
       .attr("text-anchor", "end")
       .text(this.axes.yLabel);
   },
