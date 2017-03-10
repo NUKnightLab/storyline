@@ -42,6 +42,9 @@ Chart.prototype = {
    var yAxis = d3.axis.axisRight(y)
       .tickSize(this.width)
       .tickFormat(function(d){
+        if(d > 1e6) {
+          d = d/1e6
+        }
         return this.parentNode.nextSibling ? "\xa0" + d : d
       })
 
@@ -55,7 +58,7 @@ Chart.prototype = {
       g.call(yAxis);
       g.select(".domain").remove();
       g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
-      g.selectAll(".tick text").attr("dy", -4);
+      g.selectAll(".tick text").attr("dy", -4).attr("text-anchor", "end");
     }
 
     d3.selection.select(this.elem)
