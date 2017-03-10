@@ -1,12 +1,9 @@
 {
   "filename": "./assets/dates_unemployment_copy.csv",
   "dateFormat": "MM/DD/YY",
+  "timeDisplayFormat": "%Y",
   "xAxis": "Date",
-  "xLabel": "Year",
   "yAxis": "US unemployment rate",
-  "yLabel": "US unemployment rate",
-  "xTickInterval": 10,
-  "yTickInterval": null,
   "startIndex": 2,
   "slides": [
     {
@@ -30,13 +27,13 @@
     {
       "title": "3: Example Title Four",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
-      "rowNum": 40,
+      "rowNum": 22,
       "isActive": false
     },
     {
       "title": "4: Example Title Five",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police have come under tremendous scrutiny surronding the issue of transparency",
-      "rowNum": 200,
+      "rowNum": 23,
       "isActive": false
     }
   ]

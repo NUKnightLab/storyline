@@ -21,10 +21,8 @@ DataFactory.prototype = {
           maxY: null
         },
         axes = {
-          xTick: null,
-          yTick: null,
-          xAxis: null,
-          yAxis: null
+          yLabel: null,
+          timeFormat: null
         },
         markers = [];
 
@@ -36,10 +34,8 @@ DataFactory.prototype = {
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
       output.push([x, y]);
-      axes.xTick = config.xTickInterval;
-      axes.yTick = config.yTickInterval;
-      axes.xLabel = config.xLabel;
-      axes.yLabel = config.yLabel;
+      axes.timeFormat = config.timeDisplayFormat;
+      axes.yLabel = config.yLabel ? config.yLabel : config.yAxis;
     }
     markers = this.getSlideMarkers(config.slides);
 

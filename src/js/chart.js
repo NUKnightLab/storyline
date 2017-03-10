@@ -2,6 +2,7 @@ var d3 = {}
 d3.axis = require('d3-axis');
 d3.scale = require('d3-scale');
 d3.selection = require('d3-selection');
+d3.time = require('d3-time-format');
 
 var Chart = function(dataObj, width, height, margin) {
     var AXIS_HEIGHT = 25;
@@ -33,6 +34,7 @@ Chart.prototype = {
       .range([0, this.width]);
     var xAxis = d3.axis.axisBottom(x)
       .tickSize(this.height)
+      .tickFormat(d3.time.timeFormat(this.axes.timeFormat))
 
     var y = d3.scale.scaleLinear()
       .domain([this.bounds.minY, this.bounds.maxY])
@@ -46,9 +48,6 @@ Chart.prototype = {
     function customXAxis(g) {
       g.call(xAxis);
       g.select(".domain").remove();
-      var text = g.select(".tick:first-of-type").text();
-      var t2 = g.select(".tick").text();
-      debugger;
       g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
     }
 
