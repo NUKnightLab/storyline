@@ -20,14 +20,14 @@ text {
 circle[class^="marker-"] {
   z-index: 100;
   cursor: pointer;
-  border: 6px solid @color-circle;
-  stroke: @color-circle;
+  border: 6px solid $color-circle;
+  stroke: $color-circle;
   stroke-width: 6px;
-  fill: @color-circle !important;
+  fill: $color-circle !important;
 
   &.active {
-    fill: @color-circle-active !important;
-    border: 6px solid @color-circle-active;
-    stroke: @color-circle-active;
+    fill: $color-circle-active !important;
+    border: 6px solid $color-circle-active;
+    stroke: $color-circle-active;
   }
 }
