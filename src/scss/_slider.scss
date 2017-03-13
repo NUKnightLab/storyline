@@ -89,20 +89,25 @@
 
   & li {
   top: -5px;
-  width: 11px;
-  height: 11px;
+  width: $size-nav-dot;
+  height: $size-nav-dot;
   margin: 0 4px;
   position: relative;
   border-radius: 100%;
   display: inline-block;
   background-color: $color-grey--lighter;
-
+  margin-bottom: 2px;
     &:hover {
       cursor: pointer;
     }
+
+    &.active {
+        background-color: $color-primary;
+        width: $size-nav-dot--active;
+        height: $size-nav-dot--active;
+        margin-bottom: 0px;
+    }
   }
 
-  & .active {
-    background-color: $color-primary;
-  }
+
 }
