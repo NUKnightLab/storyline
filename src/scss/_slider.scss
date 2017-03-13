@@ -13,10 +13,30 @@
   max-width: 480px;
   text-align: center;
   height: 200px;
+
   @media(max-width: 20em) {
     width: 980px;
     max-width: none;
   }
+
+  .slider-content {
+      box-shadow: $shadow-1;
+  }
+
+  &.active {
+      .slider-content {
+          box-shadow: $shadow-5;
+          border: 1px solid $color-text-default;
+          h3 {
+              background-color: $color-primary;
+              color: $color-bg-default;
+          }
+           p {
+               color: $color-text-default;
+           }
+      }
+  }
+
 }
 
 .slider-cards {
@@ -27,13 +47,32 @@
 }
 
 .slider-content {
-  border: 1px solid black;
-  border-radius: 7px;
-  padding: 0.75em;
+    font-family: $fontFamily-sansSerif;
+    border: 1px solid $color-grey--light;
+    border-radius: 7px;
+    font-size: $font-size-base;
+    line-height: $font-line-height;
 
-  & p {
-    text-align: left;
-  }
+    //padding: 0.75em;
+
+    & p {
+        text-align: left;
+        padding: 0 $spacing-default 0 $spacing-default;
+        color: $color-grey--light;
+    }
+
+    h3 {
+        margin:0;
+        text-align: left;
+        padding: $spacing-default;
+        font-weight: bold;
+        font-size: $font-size-base;
+        color: $color-grey--light;
+        span.h3-date {
+            font-size: $font-size-base +2;
+            font-weight: normal;
+        }
+    }
 }
 
 .nav {
@@ -56,7 +95,7 @@
   position: relative;
   border-radius: 100%;
   display: inline-block;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: $color-grey--lighter;
 
     &:hover {
       cursor: pointer;
@@ -64,6 +103,6 @@
   }
 
   & .active {
-    background-color: red;
+    background-color: $color-primary;
   }
 }
