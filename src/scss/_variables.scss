@@ -1,7 +1,76 @@
-//Breakpoints//
-$bp-sm: 30em;
-$bp-md: 43.75em;
-$bp-lg: 64em;
+// STYLE GUIDE // --------------------------------------------------
+// Variables
+// Syntax: <property>-<value>[--componentName]
+// Ex: @color-grayLight--highlightMenu: rgb(51, 51, 50);
 
-//Colors//
-$chart-highlight: rgb(219, 30, 70);
+$font-size-base: 15px !default;
+$font-size-base-phone: 15px !default;
+$rem-base: $font-size-base !default;
+
+// Spacing // --------------------------------------------------
+$spacing-default: $rem-base !default;
+
+// Fonts // --------------------------------------------------
+$fontFamily-sansSerif:		"Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$fontFamily-serif:			"Turnip RE", Georgia, "Times New Roman", Times, serif !default;
+$fontFamily-displaySerif:	"Salvo Serif Cond", Georgia, "Times New Roman", Times, serif !default;
+$fontFamily-monospace:		Consolas, "Liberation Mono", Courier, monospace !default;
+
+$font-line-height: 1.3 !default;//1.618 !default;
+
+// Colors // --------------------------------------------------
+$color-amount--light:		11%;
+$color-amount--lighter:		22%;
+$color-amount--lightest:	33%;
+$color-amount--dark:		11%;
+$color-amount--darker:		22%;
+$color-amount--darkest:		33%;
+
+// Primary
+$color-primary: 			#FF1744 !default;
+$color-primary--light:		lighten($color-primary, $color-amount--lightest);
+$color-primary--dark:		darken($color-primary, $color-amount--darkest);
+
+// Tetrad
+$color-tetrad: 				adjust_hue($color-primary, 30);
+$color-tetrad--light:		lighten($color-tetrad, $color-amount--lightest);
+$color-tetrad--dark:		darken($color-tetrad, $color-amount--darkest);
+
+// Compliment (Based on primary)
+$color-complement: 			complement($color-primary);
+$color-complement--light:	lighten($color-complement, $color-amount--lightest);
+$color-complement--dark:	darken($color-complement, $color-amount--darkest);
+
+// Secondary (Based on primary)
+$color-secondary: 			desaturate(adjust_hue($color-primary, 120), 20%);
+$color-secondary--light:	lighten($color-secondary, $color-amount--lightest);
+$color-secondary--dark:		darken($color-secondary, $color-amount--darkest);
+
+// Tertiary (Based on primary)
+$color-tertiary: 			adjust_hue($color-primary, -120);
+$color-tertiary--light:		lighten($color-tertiary, $color-amount--lightest);
+$color-tertiary--dark:		darken($color-tertiary, $color-amount--darkest);
+
+// Dark
+$color-dark:			#1d1f21 !default;
+
+// Grey
+$color-grey:			#9C9C9C !default;
+$color-grey--light:		lighten($color-grey, $color-amount--light);
+$color-grey--lighter:	lighten($color-grey, $color-amount--lighter);
+$color-grey--lightest:	lighten($color-grey, $color-amount--lightest);
+$color-grey--dark:		darken($color-grey, $color-amount--dark);
+$color-grey--darker:	darken($color-grey, $color-amount--darker);
+$color-grey--darkest:	darken($color-grey, $color-amount--darkest);
+
+// Defaults
+$color-text-default:	#222222 !default;
+$color-bg-default:		#FFFFFF !default;
+
+
+// Storyline specific
+@color-circle:  rgba( $color-grey, .7);
+
+$shadow-1: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+$shadow-3: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+$shadow-5: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0  6px 30px 5px rgba(0, 0, 0, 0.12), 0  8px 10px -5px rgba(0, 0, 0, 0.4);
