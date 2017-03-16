@@ -7,6 +7,7 @@
 }
 
 .slider-card {
+  cursor: pointer;
   display: inline-block;
   max-width: 500px;
   box-sizing: border-box;
@@ -29,6 +30,7 @@
       h3 {
         background-color: $color-primary;
         color: $color-bg-default;
+        border-radius: 6px 6px 0 0;
       }
       p {
         color: $color-text-default;
@@ -64,14 +66,14 @@
     padding: 0 $spacing-default 0 $spacing-default;
     color: $color-grey--light;
   }
-
   h3 {
-    margin:0;
+    margin: 0;
     text-align: left;
     padding: $spacing-default;
     font-weight: bold;
     font-size: $font-size-base;
     color: $color-grey--light;
+
     span.h3-date {
       font-size: $font-size-base +2;
       font-weight: normal;
@@ -103,15 +105,16 @@
   display: inline-block;
   background-color: $color-grey--lighter;
   margin-bottom: 2px;
-    &:hover {
-      cursor: pointer;
-    }
 
-    &.active {
-      background-color: $color-primary;
-      width: $size-nav-dot--active;
-      height: $size-nav-dot--active;
-      margin-bottom: 0px;
-    }
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.active {
+    background-color: $color-primary;
+    width: $size-nav-dot--active;
+    height: $size-nav-dot--active;
+    margin-bottom: 0px;
+  }
   }
 }

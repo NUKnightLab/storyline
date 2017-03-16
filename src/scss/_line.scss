@@ -11,10 +11,12 @@ path {
 text {
   font-family: $fontFamily-sansSerif;
   border: 1px solid $color-text-default;
-  font-size: $font-size-base - 2;
-  //font-weight: bold;
+  font-size: $font-size-base - 5;
   color: $color-grey--light;
   fill: $color-grey--light !important;
+  @media(min-width: 30em) {
+    font-size: $font-size-base - 2;
+  }
 }
 
 circle[class^="marker-"] {

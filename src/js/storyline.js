@@ -14,13 +14,22 @@ Storyline.prototype = {
     this.setDimensions();
     this.slider = this.initSlider();
     this.grabData(this.dataConfig).then(function(dataObj) {
+      self.data = dataObj;
       self.chart = self.initChart(dataObj);
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
     });
-    //PubSub.subscribe('window resized', function(topic, data) {
-    //  self.checkScreenSize();
-    //})
+    PubSub.subscribe('window resized', function(topic, data) {
+      self.resetWidth(data);
+    })
+  },
+  resetWidth: function(newWidth) {
+    this.width = newWidth.value;
+    var oldSlider = this.slider.elem
+    oldSlider.style.opacity = 0;
+    this.slider = this.initSlider();
+    this.positionSlider(this.slider)
+    oldSlider.remove();
   },
   grabData: function() {
     var data = new DataFactory;
