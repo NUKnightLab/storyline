@@ -20,23 +20,23 @@
   }
 
   .slider-content {
-      box-shadow: $shadow-1;
+    box-shadow: $shadow-1;
   }
 
   &.active {
-      .slider-content {
-          box-shadow: $shadow-5;
-          border: 1px solid $color-text-default;
-          h3 {
-              background-color: $color-primary;
-              color: $color-bg-default;
-          }
-           p {
-               color: $color-text-default;
-           }
+    .slider-content {
+      box-shadow: $shadow-5;
+      border: 1px solid $color-text-default;
+      h3 {
+        background-color: $color-primary;
+        color: $color-bg-default;
+        border-radius: 6px 6px 0 0;
       }
+      p {
+        color: $color-text-default;
+      }
+    }
   }
-
 }
 
 .slider-cards {
@@ -47,32 +47,31 @@
 }
 
 .slider-content {
-    font-family: $fontFamily-sansSerif;
-    border: 1px solid $color-grey--light;
-    border-radius: 7px;
+  font-family: $fontFamily-sansSerif;
+  border: 1px solid $color-grey--light;
+  border-radius: 7px;
+  font-size: $font-size-base;
+  line-height: $font-line-height;
+
+  & p {
+    text-align: left;
+    padding: 0 $spacing-default 0 $spacing-default;
+    color: $color-grey--light;
+  }
+
+  h3 {
+    margin: 0;
+    text-align: left;
+    padding: $spacing-default;
+    font-weight: bold;
     font-size: $font-size-base;
-    line-height: $font-line-height;
+    color: $color-grey--light;
 
-    //padding: 0.75em;
-
-    & p {
-        text-align: left;
-        padding: 0 $spacing-default 0 $spacing-default;
-        color: $color-grey--light;
+    span.h3-date {
+      font-size: $font-size-base +2;
+      font-weight: normal;
     }
-
-    h3 {
-        margin:0;
-        text-align: left;
-        padding: $spacing-default;
-        font-weight: bold;
-        font-size: $font-size-base;
-        color: $color-grey--light;
-        span.h3-date {
-            font-size: $font-size-base +2;
-            font-weight: normal;
-        }
-    }
+  }
 }
 
 .nav {
@@ -97,17 +96,16 @@
   display: inline-block;
   background-color: $color-grey--lighter;
   margin-bottom: 2px;
-    &:hover {
-      cursor: pointer;
-    }
 
-    &.active {
-        background-color: $color-primary;
-        width: $size-nav-dot--active;
-        height: $size-nav-dot--active;
-        margin-bottom: 0px;
-    }
+  &:hover {
+    cursor: pointer;
   }
 
-
+  &.active {
+    background-color: $color-primary;
+    width: $size-nav-dot--active;
+    height: $size-nav-dot--active;
+    margin-bottom: 0px;
+  }
+  }
 }

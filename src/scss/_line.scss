@@ -3,18 +3,17 @@ line {
 }
 
 path {
-    stroke: $color-grey--lighter !important;
-    stroke-width: 2px;
-    z-index:0;
+  stroke: $color-grey--lighter !important;
+  stroke-width: 2px;
+  z-index:0;
 }
 
 text {
-    font-family: $fontFamily-sansSerif;
-    border: 1px solid $color-text-default;
-    font-size: $font-size-base - 2;
-    //font-weight: bold;
-    color: $color-grey--light;
-    fill: $color-grey--light !important;
+  font-family: $fontFamily-sansSerif;
+  border: 1px solid $color-text-default;
+  font-size: $font-size-base - 2;
+  color: $color-grey--light;
+  fill: $color-grey--light !important;
 }
 
 circle[class^="marker-"] {
