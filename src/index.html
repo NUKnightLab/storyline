@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <div id="storyline" height="400" width="600"></div>
+  <div id="storyline" height="568" width="600"></div>
   <script id="slider-cards-template" type="text/x-tmpl-mustache">
    <div class="slider-cards">
     {{#slides}}
@@ -38,7 +38,7 @@
     req.addEventListener("load", function() {
       var config = JSON.parse(this.responseText);
       window.storyline = new Storyline('storyline', config);
-      storyline.attr("margin", { top: 10, right: 50, bottom: 20, left: 30 })
+      storyline.attr("margin", { top: 10, right: 30, bottom: 20, left: 30 })
     });
     req.open("GET", "/assets/data.json");
     req.send();

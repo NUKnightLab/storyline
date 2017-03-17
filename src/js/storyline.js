@@ -27,10 +27,13 @@ Storyline.prototype = {
     return data.fetchData(this.dataConfig);
   },
   initSlider: function() {
-    return new Slider(this.dataConfig.slides, this.dataConfig.startIndex);
+    var sliderHeight = (0.4*this.height)
+    return new Slider(this.dataConfig.slides, this.dataConfig.startIndex, sliderHeight);
   },
   initChart: function(dataObj) {
-    return new Chart(dataObj, this.width, this.height, this.margin)
+    //chart height//
+    var chartHeight = (0.6*this.height);
+    return new Chart(dataObj, this.width, chartHeight, this.margin)
   },
   /**
    * checks browser size and if mobile, overrides input dimensions
@@ -39,9 +42,9 @@ Storyline.prototype = {
    */
   setDimensions: function(width) {
     this.height = this.elem.getAttribute('height');
-    this.elem.style.height = this.height + "px";
+    //this.elem.style.height = this.height + "px";
     this.width = width ? width : window.innerWidth;
-    this.elem.style.width = this.width + "px";
+    //this.elem.style.width = this.width + "px";
   },
   attr: function(dimension, value) {
     if(dimension == "height") {

@@ -1,8 +1,12 @@
-var Slider = function(slides, startIndex) {
+var Hammer = require('hammerjs');
+
+var Slider = function(slides, startIndex, height) {
   this.activeCard = startIndex;
   this.slides = slides;
   this.MARGIN = 10;
+  this.height = height;
   this.createSlider();
+  this.slideCard();
 }
 
 Slider.prototype = {
@@ -25,6 +29,7 @@ Slider.prototype = {
   createSliderView: function() {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
+        sliderView.style.height = this.height + "px";
 
     sliderView.appendChild(this.cards);
     sliderView.appendChild(this.nav);
@@ -92,14 +97,64 @@ Slider.prototype = {
       w = 500;
     }
     this.viewportSize = this.cards.parentElement.clientWidth;
-    this.offset = this.viewportSize/2 - w/2 - this.MARGIN
+    this.offset = this.viewportSize/2 - w/2 - this.MARGIN;
+    this.cardwidth = w;
     var numSlides = this.slides.length;
-    this.cards.style.width = w * numSlides + "px";
     this.cards.style.marginLeft = this.offset + "px"
     for(var i = 0; i < this.cards.children.length; i++) {
       this.cards.children[i].style.width = w + "px";
       this.cards.children[i].style.border = this.MARGIN + "px solid white";
     }
+  },
+  slideCard: function() {
+    var self = this;
+    var offset;
+    var getOffset = function() {
+      offset = self.cards.style.marginLeft;
+      offset = parseInt(offset.split("px")[0], 10)
+      self.offsets = [
+        self.offset,
+        -(self.cardwidth - self.offset),
+        -(self.cardwidth*2 - self.offset),
+        -(self.cardwidth*3 - self.offset),
+        -(self.cardwidth*4 - self.offset)
+      ]
+      console.log(self.offsets)
+    }
+    var onPan = function(ev) {
+      var delta = offset + ev.deltaX;
+      var left = self.cardwidth*4 - self.offset
+      if (delta >= -left && delta <= self.offset) {
+        if(delta <= self.offsets[4]) {
+          self.cards.style.marginLeft = self.offsets[4] + "px"
+        } else if(delta <= self.offsets[3]) {
+          self.cards.style.marginLeft = self.offsets[3] + "px"
+        } else if(delta <= self.offsets[2]){
+          self.cards.style.marginLeft = self.offsets[2] + "px"
+        } else if(delta <= self.offsets[1]) {
+          self.cards.style.marginLeft = self.offsets[1] + "px"
+        } else if(delta <= self.offsets[0]) {
+          self.cards.style.marginLeft = self.offsets[0] + "px"
+        }
+      }
+    }
+
+    var createHammer = function(v) {
+      var mc = new Hammer.Manager(v, {})
+      mc.add(new Hammer.Pan({
+        direction: Hammer.DIRECTION_HORIZONTAL,
+        threshold: 10
+      }))
+      mc.on('panstart', getOffset)
+      mc.on('panleft', onPan)
+      mc.on('panright', onPan)
+      mc.on('panend')
+    }
+
+    Array.prototype.map.call(this.cards.children, function(content) {
+       content = content.children[0]
+       createHammer(content)
+    })
   }
 }
 
