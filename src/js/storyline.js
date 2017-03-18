@@ -26,10 +26,13 @@ Storyline.prototype = {
   resetWidth: function(newWidth) {
     this.width = newWidth.value;
     var oldSlider = this.slider.elem
-    oldSlider.style.opacity = 0;
-    this.slider = this.initSlider();
-    this.positionSlider(this.slider)
+    var oldChart = this.chart.canvas
     oldSlider.remove();
+    oldChart.remove();
+    this.slider = this.initSlider();
+    this.chart = this.initChart(this.data)
+    this.positionChart(this.chart)
+    this.positionSlider(this.slider)
   },
   grabData: function() {
     var data = new DataFactory;
