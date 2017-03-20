@@ -36,11 +36,13 @@ Slider.prototype = {
 
     return sliderView;
   },
+  getTemplate: function(templateId) {
+    return MUSTACHE_TEMPLATES[templateId];
+  },
   renderTemplate: function(templateId, context) {
     var mustache = require('mustache'),
-
-    templateContent = document.getElementById(templateId).innerHTML,
-    rendered = mustache.render(templateContent, context);
+        templateContent = this.getTemplate(templateId),
+        rendered = mustache.render(templateContent, context);
 
     var parser = new DOMParser(),
         doc = parser.parseFromString(rendered, "text/html");
@@ -166,4 +168,28 @@ Slider.prototype = {
 
 module.exports = {
   Slider: Slider
+}
+
+const MUSTACHE_TEMPLATES = {
+    "slider-cards-template":
+      "<div class='slider-cards'>" +
+       "{{#slides}}" +
+       "<div class='slider-card {{class}}'>" +
+         "<div class='slider-content'>" +
+           "<h3>{{ title }}</h3>" +
+           "<p>{{ text }}<p>" +
+         "</div>" +
+       "</div>" +
+       "{{/slides}}" +
+       "</div>",
+    "nav-template":
+      "<div class='nav'>" +
+         "<ol>" +
+           "{{#slides}}" +
+             "<li class='nav nav-{{index}}'>" +
+               "<a href='#'></a>" +
+             "</li>" +
+           "{{/slides}}" +
+         "</ol>" +
+       "</div>"
 }
