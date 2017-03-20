@@ -100,6 +100,7 @@ Slider.prototype = {
     this.offset = this.viewportSize/2 - w/2 - this.MARGIN;
     this.cardwidth = w;
     var numSlides = this.slides.length;
+    this.cards.style.width = w * numSlides + "px";
     this.cards.style.marginLeft = this.offset + "px"
     for(var i = 0; i < this.cards.children.length; i++) {
       this.cards.children[i].style.width = w + "px";
@@ -126,14 +127,19 @@ Slider.prototype = {
       var left = self.cardwidth*4 - self.offset
       if (delta >= -left && delta <= self.offset) {
         if(delta <= self.offsets[4]) {
+          self.setActiveCard(4, self.activeCard)
           self.cards.style.marginLeft = self.offsets[4] + "px"
         } else if(delta <= self.offsets[3]) {
+          self.setActiveCard(3, self.activeCard)
           self.cards.style.marginLeft = self.offsets[3] + "px"
         } else if(delta <= self.offsets[2]){
+          self.setActiveCard(2, self.activeCard)
           self.cards.style.marginLeft = self.offsets[2] + "px"
         } else if(delta <= self.offsets[1]) {
+          self.setActiveCard(1, self.activeCard)
           self.cards.style.marginLeft = self.offsets[1] + "px"
         } else if(delta <= self.offsets[0]) {
+          self.setActiveCard(0, self.activeCard)
           self.cards.style.marginLeft = self.offsets[0] + "px"
         }
       }

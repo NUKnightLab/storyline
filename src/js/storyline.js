@@ -24,7 +24,7 @@ Storyline.prototype = {
     })
   },
   resetWidth: function(newWidth) {
-    this.width = newWidth.value;
+    this.width = newWidth;
     var oldSlider = this.slider.elem
     var oldChart = this.chart.canvas
     oldSlider.remove();
