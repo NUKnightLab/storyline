@@ -1,15 +1,34 @@
 const prompt = require('prompt'),
       simpleGit = require('simple-git'),
       fse = require('fs-extra'),
-      path = require('path');
+      path = require('path'),
+      AdmZip = require('adm-zip');
 
 const CDN_ROOT = '../cdn.knightlab.com', // maybe parameterize later
       PROJECT_NAME = 'storyline'; // can we read this from package.json?
 
-function stageToCDN(version) {
-  var dest = path.join(CDN_ROOT,'app/libs',PROJECT_NAME, version);
-  fse.copy('dist', dest);
-  console.log('copied to ' + dest);
+function makeCDNPath(version) {
+  return path.normalize(path.join(CDN_ROOT,'app/libs',PROJECT_NAME, version));
+}
+
+function stageToCDN(version, latest) {
+  if (fse.existsSync(CDN_ROOT)) {
+    var dest = makeCDNPath(version);
+    var zip = new AdmZip();
+    zip.addLocalFolder('dist', PROJECT_NAME);
+    zip.writeZip(path.join('dist', PROJECT_NAME+".zip"));
+    fse.copySync('dist', dest, onErr);
+    console.log('copied to ' + dest);
+
+    if (latest) {
+      var latest_dir = makeCDNPath('latest');
+      fse.copySync(dest, latest_dir, onErr);
+      console.log('copied version ' + version + ' to latest');
+    }
+
+  } else {
+    console.error("CDN directory " + CDN_ROOT + "does not exist; nothing was copied")
+  }
 }
 
 simpleGit().tags(function(_,tagList) {
@@ -37,7 +56,8 @@ simpleGit().tags(function(_,tagList) {
     simpleGit().addTag(result.version, function() {
       simpleGit().pushTags('origin', function() {
         console.log('  Tagged with: ' + result.version);
-        stageToCDN(result.version);
+        var latest = ("latest" == process.argv[2]); // maybe later use a CLI arg parser
+        stageToCDN(result.version, latest);
       })
     });
   });

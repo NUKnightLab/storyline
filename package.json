@@ -23,6 +23,7 @@
     "webpack": "^1.13.1"
   },
   "devDependencies": {
+    "adm-zip": "^0.4.7",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "chai-as-promised": "^6.0.0",
@@ -64,6 +65,7 @@
     "copy": "ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
     "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/*-test.js'",
-    "stage": "node tasks/stage.js"
+    "stage": "npm run dist && node tasks/stage.js",
+    "stage_latest": "npm run dist && node tasks/stage.js latest"
   }
 }
