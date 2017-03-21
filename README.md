@@ -1,4 +1,4 @@
-Storyline is a prototype tool to make it easy to provide a narrative contect for timeseries data.
+StorylineJS is a prototype tool to make it easy to provide a narrative contect for timeseries data.
 
 ROADMAP
 -------
@@ -14,4 +14,15 @@ After checking out the repository, run
     npm run start
 
 This should get you a locally running webserver which supports viewing a sample storyline and which supports automatic recompilation as code changes.
-    
+
+AUTHORING
+---------
+In this stage of StorylineJS's development, you must write some javascript, including your own configuration file. Here are the details.
+
+Much like our other tools, you instantiate a storyline with two arguments: the ID of a DOM element which will contain the rendered storyline, and a configuration object which provides the details.
+
+```
+  <script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script>
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css">
+  var storyline = new Storyline('my-storyline', config);
+```
