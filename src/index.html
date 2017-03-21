@@ -41,14 +41,8 @@
 <body>
   <div id="storyline" height="568" width="600"></div>
   <script type="text/javascript">
-    var req = new XMLHttpRequest;
-    req.addEventListener("load", function() {
-      var config = JSON.parse(this.responseText);
-      window.storyline = new Storyline('storyline', config);
-      storyline.attr("margin", { top: 10, right: 30, bottom: 20, left: 30 })
-    });
-    req.open("GET", "/assets/data.json");
-    req.send();
+    window.storyline = new Storyline('storyline', "/assets/data.json");
+    storyline.attr("margin", { top: 10, right: 30, bottom: 20, left: 30 })
   </script>
 </body>
 </html>
