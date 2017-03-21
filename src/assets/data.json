@@ -4,37 +4,32 @@
   "timeDisplayFormat": "%I %p",
   "xAxis": "time",
   "yAxis": "number of flights",
-  "startIndex": 2,
+  "startIndex": 0,
   "slides": [
     {
       "title": "0: Pentagon Militarizes Local Police Departments",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5 million. Federal initiatives to provide funding and equipment to police.",
-      "rowNum": 5,
-      "isActive": false
+      "rowNum": 5
     },
     {
       "title": "1: Some More Important Text Will Go Here",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police",
-      "rowNum": 15,
-      "isActive": true
+      "rowNum": 15
     },
     {
       "title": "2: Example Title Three",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police",
-      "rowNum": 21,
-      "isActive": false
+      "rowNum": 21
     },
     {
       "title": "3: Example Title Four",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police",
-      "rowNum": 22,
-      "isActive": false
+      "rowNum": 22
     },
     {
       "title": "4: Example Title Five",
       "text": "The pentagon has calculated that the equipment received in 2006 cost around $5million. Federal initiatives to provide funding and equipment to police",
-      "rowNum": 23,
-      "isActive": false
+      "rowNum": 23
     }
   ]
 }
