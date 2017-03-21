@@ -1,0 +1,36 @@
+{
+  "filename": "https://cdn.knightlab.com/libs/storyline/latest/assets/dates_unemployment_1980_2015.csv",
+  "dateFormat": "MM/DD/YY",
+  "timeDisplayFormat": "%m/%Y",
+  "xAxis": "Date",
+  "yAxis": "US unemployment rate",
+  "yLabel": "Unemployment (%)",
+  "startIndex": 0,
+  "slides": [
+    {
+      "title": "Average",
+      "text": "For the first data point, the unemployment rate (6.3%) is pretty close to the average rate in the set (6.4%) although that may be a meaningless number.",
+      "rowNum": 0
+    },
+    {
+      "title": "Peak unemployment",
+      "text": "In November and December 1982, unemployment reached its highest rate in this dataset, 10.8%.",
+      "rowNum": 35
+    },
+    {
+      "title": "Local valley #1",
+      "text": "At the end of March, 1989, the rate was at a local valley of 5%",
+      "rowNum": 110
+    },
+    {
+      "title": "Valley unemployment",
+      "text": "At the end of April, 2000, unemployment was at its lowest in this dataset, 3.8%.",
+      "rowNum": 243
+    },
+    {
+      "title": "Local peak #3",
+      "text": "At the end of October, 2009, unemployment was at its second highest in this dataset, and the highest after the financial crisis, at 10%.",
+      "rowNum": 357
+    }
+  ]
+}
