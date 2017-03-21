@@ -6,8 +6,7 @@ var webpack = require('webpack'),
 module.exports = {
   context: path.join(__dirname),
   entry: {
-    main: "./src/js/main.js",
-    slider: ["./src/js/slider.js"]
+    main: "./src/js/storyline.js"
   },
   output: {
     path: path.join(__dirname, "./dist/js"),
