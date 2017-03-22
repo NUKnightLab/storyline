@@ -22,9 +22,9 @@ Chart.prototype = {
     this.setScale();
     this.setTranslation();
     this.createCanvas();
+    this.drawAxes(d3);
     this.drawLine();
     this.drawMarkers();
-    this.drawAxes(d3);
   },
   drawAxes: function(d3) {
     var self = this;
@@ -388,4 +388,3 @@ Chart.prototype = {
 module.exports = {
   Chart
 }
-
