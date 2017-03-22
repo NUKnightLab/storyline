@@ -45,8 +45,8 @@
   padding: 0;
   height: 200px;
   width: max-content;
-  -webkit-transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  /*-webkit-transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19); */
   & .active {
     .slider-content {
       border: 1px solid rgb(219, 30, 70);
