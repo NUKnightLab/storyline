@@ -55,7 +55,7 @@ Storyline.prototype = {
   },
   initSlider: function() {
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.slides, this.dataConfig.start_index, sliderHeight);
+    return new Slider(this.dataConfig.cards, this.dataConfig.start_at_card, sliderHeight);
   },
   initChart: function(dataObj) {
     //chart height//
@@ -68,13 +68,13 @@ Storyline.prototype = {
    */
   populateSlideDates: function(dataObj) {
     var d3Time = require('d3-time-format'),
-        formatter = d3Time.timeFormat(this.dataConfig.chart.display_date_format);
+        formatter = d3Time.timeFormat(this.dataConfig.chart.datetime_format);
 
-    for (var slide of this.dataConfig.slides) {
-      if (slide.display_date === undefined) {
-        var row = dataObj.data[slide.rowNum];
+    for (var card of this.dataConfig.cards) {
+      if (card.display_date === undefined) {
+        var row = dataObj.data[card.row_number];
         // if row is null, we should have checked/errored before here
-        slide.display_date = formatter(row[0]);
+        card.display_date = formatter(row[0]);
       }
     }
   },
