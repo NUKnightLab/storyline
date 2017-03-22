@@ -83,7 +83,8 @@ Slider.prototype = {
 
     var card = this.cards.children[index];
     var move = ((card.offsetLeft/this.sliderWidth) * 100) - this.offsetPercent
-    this.cards.style.transform = 'translateX(' +  -move  + "%)";
+    this.currentOffset = - move
+    this.cards.style.transform = 'translateX(' +  this.currentOffset  + "%)";
 
     this.setActiveCard(index, pastIndex)
   },
@@ -106,7 +107,6 @@ Slider.prototype = {
     this.offset = this.viewportSize/2 - w/2;
     this.offsetPercent = this.offset/(w*numSlides) * 100
     this.cards.style.width = this.sliderWidth + "px"
-    debugger;
     this.cards.style.transform = 'translateX(' + this.offsetPercent + '%)';
     for(var i = 0; i < numSlides; i++) {
       this.cards.children[i].style.width = w + "px";
@@ -117,43 +117,45 @@ Slider.prototype = {
     var self = this;
     var offset;
     var percentage = 0;
+    var perc = 0;
     var goToSlide = function(number) {
-      if(number < 0)
+      if(number < 0) {
         self.activeCard = 0;
-      else if(number > self.slides.length - 1)
-        self.activeCard = number
-      else
+      } else if(number > self.slides.length - 1) {
+        self.activeCard = number - 1
+      } else {
         self.activeCard = number;
+      }
         var percentage = -(100 / self.slides.length) * self.activeCard;
+        percentage = percentage + self.offsetPercent
         self.cards.style.transform = 'translateX(' + percentage + '%)';
+
     }
     var handleHammer = function(ev) {
       ev.preventDefault();
       switch(ev.type) {
-        case 'panstart':
-          //get offset//
-          offset = self.cards.style.marginLeft;
-          offset = parseInt(offset.split("px")[0], 10)
-          break;
         case 'panleft':
         case 'panright':
-          percentage = 100 / self.slides.length * ev.deltaX / window.innerWidth; // NEW: our % calc
-          var transformPercentage = percentage - 100 / self.slides.length * self.activeCard
-          self.cards.style.transform = 'translateX(' + transformPercentage + '%)'; // NEW: our CSS transform
-          //var delta = offset + ev.deltaX;
-          //var left = self.cardwidth*4 - self.offset
-          //if(delta >= -left && delta <= self.offset) {
-            //set container offset//
-            //$('.slider-cards')[0].style.marginLeft = (percent+"px");
-         //}
+          perc = (ev.deltaX/self.sliderWidth) * 100
+          percentage = perc + self.currentOffset
+          if(percentage > -100 && percentage < 20) {
+            self.cards.style.transform = 'translateX(' + percentage + '%)';
+          }
           break;
         case 'panend':
-          //if(percentage < 0)
-          //  goToSlide(self.activeCard + 1);
-          //else if(percentage > 0)
-          //  goToSlide(self.activeCard - 1);
-          //else
-          //  goToSlide(self.activeCard);
+          var thing = (ev.deltaX/self.viewportSize*100)
+          if(thing < -50) {
+            var newCard = self.activeCard + 1;
+            self.currentOffset =  -(100/self.slides.length * newCard - self.offsetPercent)
+            goToSlide(self.activeCard + 1);
+          } else if(thing > 50) {
+            var newCard = self.activeCard - 1;
+            self.currentOffset =  -( 100/self.slides.length * newCard - self.offsetPercent)
+            goToSlide(self.activeCard - 1);
+          } else {
+            self.currentOffset =  - (100/self.slides.length * self.activeCard - self.offsetPercent)
+            goToSlide(self.activeCard);
+          }
           break;
       }
     }
@@ -164,11 +166,7 @@ Slider.prototype = {
         direction: Hammer.DIRECTION_HORIZONTAL,
         threshold: 50
       }))
-      mc.on('panstart panleft panright panend', handleHammer)
-      //mc.on('panstart', getOffset)
-      //mc.on('panleft', onPan)
-      //mc.on('panright', onPan)
-      //mc.on('panend')
+      mc.on('panleft panright panend', handleHammer)
     }
 
     Array.prototype.map.call(this.cards.children, function(content) {
