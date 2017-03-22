@@ -82,7 +82,8 @@ Slider.prototype = {
     pastIndex = pastIndex | 0;
 
     var card = this.cards.children[index];
-    //this.cards.style.marginLeft = -1 * (card.offsetLeft - this.offset) + "px";
+    var move = ((card.offsetLeft/this.sliderWidth) * 100) - this.offsetPercent
+    this.cards.style.transform = 'translateX(' +  -move  + "%)";
 
     this.setActiveCard(index, pastIndex)
   },
@@ -100,12 +101,15 @@ Slider.prototype = {
     }
     var numSlides = this.slides.length;
     this.viewportSize = this.cards.parentElement.clientWidth;
-    this.offset = this.viewportSize/2 - w/2 - this.MARGIN;
+    this.cardWidth = w
+    this.sliderWidth = w * numSlides
+    this.offset = this.viewportSize/2 - w/2;
     this.offsetPercent = this.offset/(w*numSlides) * 100
-    this.cards.style.width = w/this.viewportSize * 100 * numSlides + "%"
+    this.cards.style.width = this.sliderWidth + "px"
+    debugger;
     this.cards.style.transform = 'translateX(' + this.offsetPercent + '%)';
     for(var i = 0; i < numSlides; i++) {
-      this.cards.children[i].style.width = w/this.viewportSize * 100 + "%";
+      this.cards.children[i].style.width = w + "px";
       this.cards.children[i].style.border = this.MARGIN + "px solid white";
     }
   },
