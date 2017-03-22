@@ -27,17 +27,17 @@ DataFactory.prototype = {
         markers = [];
 
     for(var i=0; i<data.length;i++) {
-      var x = moment(data[i][config.chart.datetime_column], config.chart.source_date_format);
-      var y = parseFloat(data[i][config.chart.data_column]);
+      var x = moment(data[i][config.data.datetime_column_name], config.data.datetime_format);
+      var y = parseFloat(data[i][config.data.data_column_name]);
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
       output.push([x, y]);
-      axes.timeFormat = config.chart.display_date_format;
-      axes.yLabel = config.data_axis_label ? config.data_axis_label : config.data_column;
+      axes.timeFormat = config.chart.datetime_format;
+      axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
     }
-    markers = this.getSlideMarkers(config.slides);
+    markers = this.getSlideMarkers(config.cards);
 
     var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
     return dataObj;
@@ -88,7 +88,7 @@ DataFactory.prototype = {
   getSlideMarkers: function(slides) {
     var markers = [];
     slides.map(function(slide, index) {
-      markers.push(slide.rowNum)
+      markers.push(slide.row_number)
     })
     return markers;
   },
@@ -126,7 +126,7 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      self.get(config.chart.data_url).then(function(response) {
+      self.get(config.data.url).then(function(response) {
         parse(response, {'columns': true}, function(err, data) {
           resolve(self.createDataObj(data, config))
         })
