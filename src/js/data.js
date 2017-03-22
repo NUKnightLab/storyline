@@ -34,7 +34,7 @@ DataFactory.prototype = {
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
       output.push([x, y]);
-      axes.timeFormat = config.display_date_format;
+      axes.timeFormat = config.chart.display_date_format;
       axes.yLabel = config.data_axis_label ? config.data_axis_label : config.data_column;
     }
     markers = this.getSlideMarkers(config.slides);
