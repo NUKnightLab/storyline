@@ -4,8 +4,21 @@ import { Slider } from './slider';
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
-  this.dataConfig = dataConfig;
-  this.init();
+  var self = this;
+  if (typeof dataConfig == 'string') {
+    var req = new XMLHttpRequest;
+    req.addEventListener("load", function() {
+      var config = JSON.parse(this.responseText);
+      self.dataConfig = config;
+      self.init();
+    });
+    // TODO: add error handling to request
+    req.open("GET", dataConfig);
+    req.send();
+  } else {
+    this.dataConfig = dataConfig;
+    this.init();
+  }
 }
 
 Storyline.prototype = {
