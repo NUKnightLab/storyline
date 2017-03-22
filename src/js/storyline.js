@@ -53,7 +53,7 @@ Storyline.prototype = {
   },
   initSlider: function() {
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.slides, this.dataConfig.startIndex, sliderHeight);
+    return new Slider(this.dataConfig.slides, this.dataConfig.start_index, sliderHeight);
   },
   initChart: function(dataObj) {
     //chart height//

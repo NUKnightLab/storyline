@@ -27,15 +27,15 @@ DataFactory.prototype = {
         markers = [];
 
     for(var i=0; i<data.length;i++) {
-      var x = moment(data[i][config.xAxis], config.dateFormat);
-      var y = parseFloat(data[i][config.yAxis]);
+      var x = moment(data[i][config.chart.datetime_column], config.chart.source_date_format);
+      var y = parseFloat(data[i][config.chart.data_column]);
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
       output.push([x, y]);
-      axes.timeFormat = config.timeDisplayFormat;
-      axes.yLabel = config.yLabel ? config.yLabel : config.yAxis;
+      axes.timeFormat = config.display_date_format;
+      axes.yLabel = config.data_axis_label ? config.data_axis_label : config.data_column;
     }
     markers = this.getSlideMarkers(config.slides);
 
@@ -126,7 +126,7 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      self.get(config.filename).then(function(response) {
+      self.get(config.chart.data_url).then(function(response) {
         parse(response, {'columns': true}, function(err, data) {
           resolve(self.createDataObj(data, config))
         })

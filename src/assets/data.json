@@ -1,10 +1,13 @@
 {
-  "filename": "./assets/time_no_day.csv",
-  "dateFormat": "H:mm",
-  "timeDisplayFormat": "%I %p",
-  "xAxis": "time",
-  "yAxis": "number of flights",
-  "startIndex": 0,
+  "chart": {
+    "data_url": "./assets/time_no_day.csv",
+    "source_date_format": "H:mm",
+    "display_date_format": "%I %p",
+    "datetime_column": "time",
+    "data_column": "number of flights",
+    "data_axis_label": "# of flights"
+  },
+  "start_index": 0,
   "slides": [
     {
       "title": "0: Pentagon Militarizes Local Police Departments",
