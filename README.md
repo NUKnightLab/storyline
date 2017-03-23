@@ -9,9 +9,9 @@ Limitations:
 
 ROADMAP
 -------
-In our current cycle (ending mid-March 2017), we are trying to get a prototype which can be tested in a browser with a variety of datasets. We want to find the edge cases that test the design concepts developed in the Fall 2016 Knight Lab Studio Class and identify any hard challenges in presentation.
+In our current cycle (ending mid-March 2017), we're aiming for a prototype that can be tested in a browser with a variety of datasets. We want to find edge cases that test the design concepts developed by students in the Fall 2016 Knight Lab Studio, and to identify any hard challenges in presentation.
 
-If this prototype is promising, we'll consider also developing an authoring tool to make it easier for people to create embeddable storylines.
+If this prototype proves promising, we'll consider developing an authoring tool to make it easier for people to create embeddable Storylines.
 
 
 # Trying it out
@@ -19,12 +19,12 @@ In this stage of StorylineJS's development, you must write some javascript, incl
 
 ## Running a local webserver
 
-If you really don't know what this means, it may be too early for you to do much with StorylineJS. Typically we use node's `http-server` or python's `python -m SimpleHTTPServer` or `python3 -m http.server`
+This is the first potential barrier for beginners. If you don't clear this hurdle, it may be too early for you to do much with StorylineJS. Typically we use node's `http-server` or python's `python -m SimpleHTTPServer` or `python3 -m http.server`. If you're a Mac user, you could also try MAMP. 
 
 ## The simplest test
 
 
-Much like our other tools, you instantiate a storyline with two arguments: the ID of a DOM element which will contain the rendered storyline, and a configuration object which provides the details. If you prefer, you can use a URL in place of the configuration object. The URL should point to a JSON file which will be retrieved. Details on the Config object/JSON file format are below.
+Much like our other tools, you instantiate a Storyline with two arguments: the ID of a DOM element, which will contain the rendered storyline, and a configuration object which provides the details. If you prefer, you can use a URL in place of the configuration object. The URL should point to a JSON file, which will be retrieved. Details on the Config object/JSON file format are below.
 
 Here is the simplest possible Storyline you could create. Put this in an HTML file, run a local server, and load it. You should see a simple example based on a config file and data set which are on our servers.
 
