@@ -1,9 +1,9 @@
-StorylineJS is a prototype tool to make it easy to provide a narrative context for time series data.
+StorylineJS is a prototype tool to make it easy to tell the story behind time-series data.
 
-In its initial form, StorylineJS has some key limitations, because we wanted to create something we could share for testing and feedback. If you're a fan of our more finished, ready-to-use software, you may need to have some patience while we work through the next phase.
+In its initial form, StorylineJS has some limitations--we're sharing this for testing and feedback. If you're a fan of our more finished, ready-to-use software, please be patient while we work through the next phase.
 
 Limitations:
-* StorylineJS only works with time series data. The x-axis should be string values parseable as dates. The y-axis can be any number.
+* StorylineJS works only with time series data. The x-axis should be string values parseable as dates. The y-axis can be any number.
 * For now, StorylineJS needs to read the data from a CSV file that it can load from a URL. We expect eventually to also support Google Sheets, and possibly other structured sources.
 * This means that for now, you need to run a local web server to experiment with StorylineJS.
 
