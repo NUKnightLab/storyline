@@ -124,12 +124,18 @@ Slider.prototype = {
       } else if(number > self.slides.length - 1) {
         self.activeCard = number - 1
       } else {
+        self.setActiveCard(number, self.activeCard)
         self.activeCard = number;
       }
-        var percentage = -(100 / self.slides.length) * self.activeCard;
-        percentage = percentage + self.offsetPercent
-        self.cards.style.transform = 'translateX(' + percentage + '%)';
 
+      self.cards.classList.add('is-animating')
+      var percentage = -(100 / self.slides.length) * self.activeCard;
+      percentage = percentage + self.offsetPercent
+      self.cards.style.transform = 'translateX(' + percentage + '%)';
+      clearTimeout(timer);
+      var timer = setTimeout(function() {
+        self.cards.classList.remove( 'is-animating' );
+      }, 400 );
     }
     var handleHammer = function(ev) {
       ev.preventDefault();
