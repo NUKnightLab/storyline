@@ -25,10 +25,12 @@ Storyline.prototype = {
   init: function() {
     var self = this;
     this.setDimensions();
-    this.slider = this.initSlider();
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
       self.chart = self.initChart(dataObj);
+      // slider cards include dates so must happen after data is grabbed
+      self.populateSlideDates(dataObj);
+      self.slider = self.initSlider();
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
     });
@@ -59,6 +61,22 @@ Storyline.prototype = {
     //chart height//
     var chartHeight = (0.6*this.height);
     return new Chart(dataObj, this.width, chartHeight, this.margin)
+  },
+  /**
+   * For each slide configuration object, if no display_date is specified,
+   * fill it in based on the data set.
+   */
+  populateSlideDates: function(dataObj) {
+    var d3Time = require('d3-time-format'),
+        formatter = d3Time.timeFormat(this.dataConfig.chart.datetime_format);
+
+    for (var card of this.dataConfig.cards) {
+      if (card.display_date === undefined) {
+        var row = dataObj.data[card.row_number];
+        // if row is null, we should have checked/errored before here
+        card.display_date = formatter(row[0]);
+      }
+    }
   },
   /**
    * checks browser size and if mobile, overrides input dimensions

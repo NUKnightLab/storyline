@@ -196,7 +196,8 @@ const MUSTACHE_TEMPLATES = {
        "{{#cards}}" +
        "<div class='slider-card {{class}}'>" +
          "<div class='slider-content'>" +
-           "<h3>{{ title }}</h3>" +
+           "<h3><span class='h3-date'>{{ display_date }}</span>" +
+           "{{ title }}</h3>" +
            "<p>{{ text }}<p>" +
          "</div>" +
        "</div>" +
