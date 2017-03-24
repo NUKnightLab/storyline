@@ -81,12 +81,7 @@ Slider.prototype = {
     index = index!=undefined ? index : this.activeCard;
     pastIndex = pastIndex | 0;
 
-    var card = this.cardsElem.children[index];
-    var move = ((card.offsetLeft/this.sliderWidth) * 100) - this.offsetPercent
-    this.currentOffset = - move
-    this.cardsElem.style.transform = 'translateX(' +  this.currentOffset  + "%)";
-
-    this.setActiveCard(index, pastIndex)
+    this.goToCard(index);
   },
   /**
    * sets the width of the document
