@@ -167,11 +167,11 @@ Slider.prototype = {
           break;
         case 'panend':
           var dragPercentage = (ev.deltaX/self.viewportSize*100)
-          if(dragPercentage < -50) {
+          if(dragPercentage < -25) {
             var newCard = self.activeCard + 1;
             self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
             goToSlide(self.activeCard + 1);
-          } else if(dragPercentage > 50) {
+          } else if(dragPercentage > 25) {
             var newCard = self.activeCard - 1;
             self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
             goToSlide(self.activeCard - 1);

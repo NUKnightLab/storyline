@@ -13,6 +13,7 @@
   box-sizing: border-box;
   text-align: center;
   height: 200px;
+  overflow: auto;
 
   @media(max-width: 20em) {
     width: 1000px;
@@ -21,6 +22,7 @@
 
   .slider-content {
     box-shadow: $shadow-1;
+    min-height: 160px;
   }
 
   &.active {
