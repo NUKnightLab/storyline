@@ -149,9 +149,13 @@ Slider.prototype = {
           var prevCardBound = clickMoveCardSpace/window.innerWidth;
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
           if(ev.center.x/window.innerWidth < prevCardBound) {
-            console.log('previous!')
+            var newCard = self.activeCard - 1;
+            self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
+            goToSlide(self.activeCard - 1);
           } else if(ev.center.x/window.innerWidth > nextCardBound) {
-            console.log('next!')
+            var newCard = self.activeCard + 1;
+            self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
+            goToSlide(self.activeCard + 1);
           }
         case 'panleft':
         case 'panright':
