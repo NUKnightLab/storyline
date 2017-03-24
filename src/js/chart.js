@@ -28,7 +28,6 @@ Chart.prototype = {
   },
   drawAxes: function(d3) {
     var self = this;
-
     var x = d3.scale.scaleTime()
       .domain([this.bounds.minX.toDate(), this.bounds.maxX.toDate()])
       .range([0, this.width]);
@@ -118,15 +117,25 @@ Chart.prototype = {
 
     self.markers = [];
     markersArray.map(function(marker) {
+      var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       circle.setAttribute('cx', marker.x);
       circle.setAttribute('cy', marker.y);
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
+      text.innerHTML = marker.label;
+      text.setAttribute('x', marker.x + 15);
+      text.setAttribute('y', marker.y);
+      text.setAttribute('fill', 'grey');
+      markerElem.setAttribute('class', 'marker-' + marker.markerCount);
 
-    self.markers.push(circle);
-    self.elem.appendChild(circle)
+      markerElem.appendChild(circle);
+      markerElem.appendChild(text);
+
+    self.markers.push(markerElem);
+    self.elem.appendChild(markerElem)
     })
   },
   /**
@@ -158,15 +167,17 @@ Chart.prototype = {
         markerCount = 0,
         self = this;
     this.markers.map(function(marker) {
-      var point, x, y, mark;
+      var point, x, y, mark, label;
 
       point = self.data[marker]
       x = ((point[0].valueOf() * self.SCALEX) + self.translateX);
       y = self.height - ((point[1] * self.SCALEY) + self.translateY);
+      label = point[1]
 
       mark = {
         x: x,
         y: y,
+        label: label,
         markerCount: markerCount
       }
 

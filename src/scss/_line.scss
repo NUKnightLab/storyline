@@ -19,7 +19,7 @@ text {
   }
 }
 
-circle[class^="marker-"] {
+circle[class^="marker"] {
   z-index: 100;
   cursor: pointer;
   border: 6px solid $color-circle;
@@ -31,5 +31,24 @@ circle[class^="marker-"] {
     fill: $color-circle-active !important;
     border: 6px solid $color-circle-active;
     stroke: $color-circle-active;
+  }
+}
+
+g[class^="marker-"] {
+  text {
+    opacity: 0;
+  }
+  &.active {
+    circle {
+      fill: $color-circle-active !important;
+      border: 6px solid $color-circle-active;
+      stroke: $color-circle-active;
+    }
+    text {
+      color: $color-circle-active;
+      fill: $color-circle-active !important;
+      opacity: 1;
+      stroke: $color-circle-active;
+    }
   }
 }
