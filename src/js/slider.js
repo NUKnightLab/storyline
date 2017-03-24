@@ -59,7 +59,7 @@ Slider.prototype = {
           if(classes[i].indexOf("-") != -1) {
             var currentActiveCard = parseFloat(classes[i].split("-")[1]);
             var pastActiveCard = storyline.slider.activeCard
-            storyline.slider.setTrayPosition(currentActiveCard, pastActiveCard)
+            storyline.slider.goToCard(currentActiveCard)
             return false;
           }
         }
@@ -76,12 +76,6 @@ Slider.prototype = {
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
     storyline.chart.markers[currentActiveCard].classList.add('active')
-  },
-  setTrayPosition: function(index, pastIndex) {
-    index = index!=undefined ? index : this.activeCard;
-    pastIndex = pastIndex | 0;
-
-    this.goToCard(index);
   },
   /**
    * sets the width of the document
@@ -108,6 +102,8 @@ Slider.prototype = {
     }
   },
   goToCard: function(number) {
+    //catches condition when number is not passed in//
+    number = number!=undefined ? number : this.activeCard;
     var self = this;
     if(number < 0) {
       this.activeCard = 0;

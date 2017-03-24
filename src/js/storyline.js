@@ -107,7 +107,7 @@ Storyline.prototype = {
   positionSlider: function(slider) {
     this.elem.appendChild(slider.elem);
     slider.setWidth(this.width)
-    slider.setTrayPosition();
+    slider.goToCard();
     slider.attachClickHandler(this.chart.markers);
     slider.elem.style.opacity = 1;
   }
