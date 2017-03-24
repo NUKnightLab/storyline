@@ -144,6 +144,15 @@ Slider.prototype = {
     var handleHammer = function(ev) {
       ev.preventDefault();
       switch(ev.type) {
+        case 'tap':
+          var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
+          var prevCardBound = clickMoveCardSpace/window.innerWidth;
+          var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
+          if(ev.center.x/window.innerWidth < prevCardBound) {
+            console.log('previous!')
+          } else if(ev.center.x/window.innerWidth > nextCardBound) {
+            console.log('next!')
+          }
         case 'panleft':
         case 'panright':
           percentage = (ev.deltaX/self.sliderWidth) * 100
@@ -174,9 +183,12 @@ Slider.prototype = {
       var mc = new Hammer.Manager(v, {})
       mc.add(new Hammer.Pan({
         direction: Hammer.DIRECTION_HORIZONTAL,
-        threshold: 50
+        threshold: 25
       }))
-      mc.on('panleft panright panend', handleHammer)
+      mc.add(new Hammer.Tap({
+        domEvents: true
+      }))
+      mc.on('panleft panright panend tap', handleHammer)
     }
 
     Array.prototype.map.call(this.cardsElem.children, function(content) {
