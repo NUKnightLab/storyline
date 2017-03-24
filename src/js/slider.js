@@ -112,6 +112,26 @@ Slider.prototype = {
       this.cardsElem.children[i].style.border = this.MARGIN + "px solid white";
     }
   },
+  goToCard: function(number) {
+    var self = this;
+    if(number < 0) {
+      this.activeCard = 0;
+    } else if(number > this.cards.length - 1) {
+      this.activeCard = number - 1
+    } else {
+      this.setActiveCard(number, this.activeCard)
+      this.activeCard = number;
+    }
+
+    this.cardsElem.classList.add('is-animating')
+    var percentage = -(100 / this.cards.length) * this.activeCard;
+    percentage = percentage + this.offsetPercent
+    this.cardsElem.style.transform = 'translateX(' + percentage + '%)';
+    clearTimeout(timer);
+    var timer = setTimeout(function() {
+      self.cardsElem.classList.remove( 'is-animating' );
+    }, 400 );
+  },
   /**
    * Calculates position of slider offset based on dragging the card
    *
@@ -122,25 +142,6 @@ Slider.prototype = {
     var offset;
     var transformPercentage = 0;
     var percentage = 0;
-    var goToSlide = function(number) {
-      if(number < 0) {
-        self.activeCard = 0;
-      } else if(number > self.cards.length - 1) {
-        self.activeCard = number - 1
-      } else {
-        self.setActiveCard(number, self.activeCard)
-        self.activeCard = number;
-      }
-
-      self.cardsElem.classList.add('is-animating')
-      var percentage = -(100 / self.cards.length) * self.activeCard;
-      percentage = percentage + self.offsetPercent
-      self.cardsElem.style.transform = 'translateX(' + percentage + '%)';
-      clearTimeout(timer);
-      var timer = setTimeout(function() {
-        self.cardsElem.classList.remove( 'is-animating' );
-      }, 400 );
-    }
     var handleHammer = function(ev) {
       ev.preventDefault();
       switch(ev.type) {
@@ -151,11 +152,11 @@ Slider.prototype = {
           if(ev.center.x/window.innerWidth < prevCardBound) {
             var newCard = self.activeCard - 1;
             self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
-            goToSlide(self.activeCard - 1);
+            self.goToCard(self.activeCard - 1);
           } else if(ev.center.x/window.innerWidth > nextCardBound) {
             var newCard = self.activeCard + 1;
             self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
-            goToSlide(self.activeCard + 1);
+            self.goToCard(self.activeCard + 1);
           }
         case 'panleft':
         case 'panright':
@@ -170,14 +171,14 @@ Slider.prototype = {
           if(dragPercentage < -25) {
             var newCard = self.activeCard + 1;
             self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
-            goToSlide(self.activeCard + 1);
+            self.goToCard(self.activeCard + 1);
           } else if(dragPercentage > 25) {
             var newCard = self.activeCard - 1;
             self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
-            goToSlide(self.activeCard - 1);
+            self.goToCard(self.activeCard - 1);
           } else {
             self.currentOffset =  - (100/self.cards.length * self.activeCard - self.offsetPercent)
-            goToSlide(self.activeCard);
+            self.goToCard(self.activeCard);
           }
           break;
       }
