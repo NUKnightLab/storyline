@@ -70,7 +70,7 @@
     padding: 0 10px 0 10px;
     color: $color-grey--light;
 
-    @media(min-width: 20em) {
+    @media(min-width: 30em) {
       padding: 0 $spacing-default 0 $spacing-default;
     }
   }
@@ -85,7 +85,10 @@
     span.h3-date {
       font-size: $font-size-base +2;
       font-weight: normal;
-      display: block;
+      display: inline-block;
+      @media(min-width: 30em) {
+        display: block;
+      }
     }
   }
 }
