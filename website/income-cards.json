@@ -1,0 +1,51 @@
+{
+  "data": {
+    "url": "income-data.csv",
+    "datetime_format": "%Y-%m-%d",
+    "datetime_column_name": "DATE",
+    "data_column_name": "INCOME"
+  },
+  "chart": {
+    "datetime_format": "%Y",
+    "y_axis_label": "Income"
+  },
+  "start_at_card": 1,
+  "cards": [
+    {
+      "title": "Reagan Boom Boom",
+      "text": "Two major underlying factors lead to a weakening U.S. economy—restrictive moves from the Federal Reserve designed to curb inflation, and a depreciating real estate market.",
+      "row_number": 5,
+      "display_date": "1989"
+    },
+    {
+      "title": "Hello Downturn My Old Friend",
+      "text": "It’s all over in July, the last month of this period’s economic expansion. When Iraq invades Kuwait in August, oil prices skyrocket, and consumer confidence tanks. We head into a recession.",
+      "row_number": 6,
+      "display_date": "1990"
+    },
+    {
+      "title": "Internet FTW",
+      "text": "Okay, technically the internet isn’t acting alone. Alongside this technology boon, the housing market starts to recover, due in part to lower interest rates and energy prices. People start making and spending money again.",
+      "row_number": 9,
+      "display_date": "1993"
+    },
+    {
+      "title": "Internet, You Have Failed Me",
+      "text": "What’s the sound of countless investors sneaking away from Silicon Valley? A dot-com bubble burst. Investors see no path to revenue, dot-coms shut their doors, and the economy slumps. Goodbye, pets.com.",
+      "row_number": 15,
+      "display_date": "1999"
+    },
+    {
+      "title": "Housing Market, You Have REALLY Failed Me",
+      "text": "A bubble bursts anew. This time the housing market is the culprit—shady banking practices lead to the subprime mortgage crisis, which combined with a market correction, causes the economy to tank.",
+      "row_number": 16,
+      "display_date": "2000"
+    },
+    {
+      "title": "Is it safe to come out yet?",
+      "text": "After a few years of economic recovery but general (understandable) wariness, consumers start to emerge from their bunkers. Economic indicators like employment rate and (trigger warning) housing prices see an uptick.",
+      "row_number": 29,
+      "display_date": "2012"
+    }
+  ]
+}

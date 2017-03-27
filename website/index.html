@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-            Storyline JS
+            StorylineJS
     </title>
     <link rel="stylesheet" href="https://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css"/>
     <link rel="stylesheet" href="https://cdn.knightlab.com/libs/orangeline/latest/css/orangeline.css"/>
@@ -19,14 +19,14 @@
     <!-- /favicons -->
 
     <!-- Meta -->
-    <meta name="keywords" content="story, news, chart, create, twitter, journalism, line-chart">
-    <meta name="description" content="Easy-to-make, storytelling charts.">
+    <meta name="keywords" content="story, news, chart, annotate, create, make, journalism, line-chart">
+    <meta name="description" content="Tell the story behind the numbers.">
     <!-- /Meta -->
 
     <!-- Open Graph -->
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Storyline" />
-    <meta property="og:description" content="Easy-to-make, storytelling charts." />
+    <meta property="og:description" content="Tell the story behind the numbers." />
     <meta property="og:image" content="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-timeline.png" />
     <meta property="og:url" content="https://storyline.knightlab.com" />
     <meta property="og:site_name" content="Storyline JS" />
@@ -34,12 +34,13 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:title" content="Storyline">
-    <meta name="twitter:description" content="Easy-to-make, storytelling charts.">
+    <meta name="twitter:description" content="Tell the story behind the numbers.">
     <meta name="twitter:image" content="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-timeline.png">
     <meta name="twitter:site" content="@knightlab">
     <meta name="twitter:creator" content="@knightlab">
     <!-- /Twitter Card -->
 
+  
 
 </head>
 
@@ -64,11 +65,11 @@
 </nav>
 
     <header class="header-product">
-	<h1 class="product-logo product-logo-large">
+    <h1 class="product-logo product-logo-large">
         Storyline <span>JS</span>
     </h1>
-	<h2 class="product-tagline">Easy-to-make, storytelling charts.</h2>
-        <a class="button button-secondary button-large button-small-phone" href="#make">Try the Beta</a>
+    <h2 class="product-tagline">Tell the story behind the numbers.</h2>
+        <a class="button button-secondary button-large button-small-phone" href="https://github.com/NUKnightLab/storyline" target="_blank">Try the Beta</a>
     <nav id="navbar-secondary" class="navbar navbar-subnav column-hide-phone">
         <ul>
             <li class="logo">
@@ -79,9 +80,7 @@
         </ul>
         <ul>
                 <li><a class="button" href="#overview">Overview</a></li>
-                <li><a class="button" href="#examples">Examples</a></li>
-                <li><a class="button" href="https://github.com/NUKnightLab/storyline">Try the Beta</a></li>
-                <li><a class="button" href="#help">Help</a></li>
+                <li><a class="button" href="#help">Get Started</a></li>
         </ul>
     </nav>
 </header>
@@ -89,61 +88,35 @@
     <article id="product-body">
         <section id="demo" class="container-fluid">
             <div class="product-demo">
-                <iframe frameborder="0" src="https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1xuY4upIooEeszZ_lCmeNx24eSFWe0rHe9ZdqH2xqVNk&amp;font=Default&amp;lang=en&amp;initial_zoom=2&amp;height=100%" width="100%"></iframe>
+            <iframe src="from-example.html" style="width: 100%; height: 500px" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">
+</iframe>
             </div>
 
         </section>
         <section id="overview" class="container">
-        	<div class="grid-size-2 grid-size-1-phone">
-        		<div class="grid-item">
+            <div class="grid-size-2 grid-size-1-phone">
+                <div class="grid-item">
+                    <h3 style="margin-top:0;">Introducing Storyline</h3>
+                    <p>
+                       Storyline is an open-source tool that enables anyone to build an annotated, interactive line chart. Note that <strong>this tool is in beta</strong>. That means it’s a work in progress. We’re floating our unfinished work to get feedback and see if people find it useful before we release the easy-to-use authoring tools that make this a better fit for beginners.
+                    </p>
+ 
+                </div>
+                <div class="grid-item">
+                    <h3 style="margin-top:0;">...and its limits</h3>
+                    <ol>
+                        <li>We’re focused on line charts for now. The x-axis will accept only time/date formats.</li>
+                        <li>Our mobile-first design requires you to keep it short. No more than 12 cards per story, titles limited to 54 characters, and paragraphs limited to 200 characters.</li>
+                        <li>Storyline works best with fewer than 800 data points.</li>
+                    </ol>
 
-        			<p>
-        				TimelineJS is an open-source tool that enables anyone to build visually rich, interactive timelines. Beginners can create a timeline using nothing more than a Google spreadsheet, like the one we used for the Timeline above. Experts can use their JSON skills to create custom installations, while keeping TimelineJS's core functionality.
-        			</p>
-                    <h3>This is a beta</h3>
-        			<p>
-        				TimelineJS can pull in media from a variety of sources.
-        				Twitter, Flickr, YouTube, Vimeo, Vine, Dailymotion, Google Maps, Wikipedia, SoundCloud, Document Cloud and more!
-        			</p>
-        		</div>
-        		<div class="grid-item">
-        			<h3 style="margin-top:0;">Known Issues</h3>
-        			<ol>
-        				<li>Keep it short. We recommend not having more than 20 slides for a reader to click through.</li>
-        				<li>Pick stories that have a strong chronological narrative. It does not work well for stories that need to jump around in the timeline.</li>
-        				<li>Write each event as a part of a larger narrative.</li>
-        				<li>Include events that build up to major occurrences — not just the major events.</li>
-        			</ol>
-
-        		</div>
-        	</div>
+                </div>
+            </div>
 
         </section>
 
         <section class="section-color fill-color-grey--lightest" id="examples">
-    <div class="container">
-        <h2>Examples</h2>
-        <div class="example-grid">
-                <div class="grid-item">
-                    <a href="http://world.time.com/2013/12/05/nelson-mandelas-extraordinary-life-an-interactive-timeline/" class="button button-light">
-                        <figure class="examples">
-                            <img src="https://timeline.knightlab.com/static/img/examples/thumbs/thumb_mandela.jpg" alt="Mandela: A Life of Purpose">
-                        </figure>
-                        <img src="https://timeline.knightlab.com/static/img/examples/logos/logo_time.png" class="logo-inline">
-                        <h4>Mandela: A Life of Purpose</h4>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="http://www.lemonde.fr/election-presidentielle-2012/visuel/2012/04/21/chronologie-une-si-longue-campagne-presidentielle_1681661_1471069.html#meter_toaster" class="button button-light">
-                        <figure class="examples">
-                            <img src="https://timeline.knightlab.com/static/img/examples/thumbs/thumb_lemonde.jpg" alt="Chronology of the French Presidential Race">
-                        </figure>
-                        <img src="https://timeline.knightlab.com/static/img/examples/logos/logo_lemonde.png" class="logo-inline">
-                        <h4>Chronology of the French Presidential Race</h4>
-                    </a>
-                </div>
-        </div>
-    </div>
+  
 </section>
 
 
@@ -151,29 +124,23 @@
         <section class="section container" id="help">
 
     <div class="grid">
-        <div class="column-8">
-            <h2>Help</h2>
-            <p>
-                Need help? First, please be sure to look at our list of <a href="#faq">frequently asked questions</a> below. If you're brand new to Storyline JS, you may also want to watch our <a href="https://vimeo.com/143407878" target="_blank">introductory video</a>.
-            </p>
-            <p>
-                If you don't find an answer there, try our <a href="https://knightlab.zendesk.com/forums/22551396-TimelineJS">support forums</a> or use our <a href="https://knightlab.zendesk.com/anonymous_requests/new">tech support web form.</a> <strong>Please be clear</strong> with your question, <strong>include a link to your spreadsheet</strong>, and if appropriate, a link to a page which shows the issue with which you need help. <strong>We can only answer support questions in English.</strong> We try to be prompt, but please understand that we do not have a dedicated tech support staff.
-            </p>
+        <div class="column-12">
+            <h2>Try the Beta</h2>
+            <p>For this beta version, we're doing all of our documentation <a href="https://github.com/NUKnightLab/storyline">on Github</a>. Check out the <a href="https://github.com/NUKnightLab/storyline/blob/master/README.md">README</a> for a walk-through.</p>
+            <p>Note that this working version requires you to run a local web server. If that process is baffling for you, try a free program like <a href="https://www.mamp.info/en/" target="_blank">MAMP</a> or following Mozilla's guide.</p>
+           
             <p class="note">
-                <strong>Find a bug?</strong> If you are confident you have found a bug, please report it as <a href="https://github.com/NUKnightLab/storyline/issues">a GitHub issue</a>. Be sure to include detailed instructions on how to reproduce the bug. If you're not sure, please start with <a href="https://knightlab.zendesk.com/anonymous_requests/new">the tech support system</a>.
+                <strong>Find a bug?</strong> If you are confident you have found a bug, please report it as <a href="https://github.com/NUKnightLab/storyline/issues">a GitHub issue</a>. Be sure to include detailed instructions on how to reproduce the bug.
             </p>
         </div>
-        <div class="column-4">
-            <h3>Technical documentation</h3>
-            <p>Go further with Storyline:</p>
-            <ul>
-                    <li><a href="/docs/using-spreadsheets.html">Use our spreadsheet template</a></li>
-                    <li><a href="/docs/media-types.html">Supported Media Types</a></li>
-                    <li><a href="/docs/json-format.html">JSON data format reference</a></li>
-                    <li><a href="/docs/overriding-styles.html">Using the TimelineJS CSS selectors</a></li>
-                    <li><a href="/docs/options.html">Timeline Configuration Options</a></li>
-                    <li><a href="/docs/instantiate-a-timeline.html">Using TimelineJS in Javascript</a></li>
-            </ul>
+        <div class="column-12">
+            <h3>Help</h3>
+            <p>
+                Thanks so much for building a Storyline. It’s a work in progress, and <strong>we’d love to know what’s working and what’s not</strong>. We’re inviting people to <a href="https://github.com/NUKnightLab/storyline/issues">submit issues on Github</a> to let us know what could be better. Make sure to check out our existing plans before submitting. 
+            </p>
+            <p>
+                Want us to build out the authoring tool to make this more robust? Have other big ideas that don't feel like they belong on Github? Feel free to <a href="mailto:knightlab@northwestern.edu">send us feedback</a>.  
+            </p>
         </div>
     </div>
 
@@ -186,7 +153,7 @@
 
     </article>
 
-    <section class="moth--product" id="tools">
+    <section class="moth--product">
     <h3>Storytelling Tools</h3>
     <p class="product-tagline">We build easy-to-use tools that can help you tell better stories.</p>
     <div class="grid grid-size-4 grid-size-2-tablet grid-size-1-phone">
@@ -278,8 +245,6 @@
         </div>
     </div>
 </footer>
-<script src="https://cdn.knightlab.com/libs/orangeline/latest/js/main.js"></script>
-
 
 </body>
 
