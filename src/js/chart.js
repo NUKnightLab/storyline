@@ -12,6 +12,7 @@ var Chart = function(dataObj, width, height, margin) {
     this.markers = dataObj.markers;
     this.margin = margin || { 'top': 10, 'right': 50, 'bottom': 30, 'left': 20 };
     this.width = width - this.margin.right - this.margin.left;
+    this.lineWidth = this.width - 40;
     this.height = height - this.margin.top - this.margin.bottom - AXIS_HEIGHT;
     this.createChart();
 };
@@ -30,7 +31,7 @@ Chart.prototype = {
     var self = this;
     var x = d3.scale.scaleTime()
       .domain([this.bounds.minX.toDate(), this.bounds.maxX.toDate()])
-      .range([0, this.width]);
+      .range([0, this.lineWidth]);
     var xAxis = d3.axis.axisBottom(x)
       .tickSize(this.height)
       .tickFormat(d3.time.timeFormat(this.axes.timeFormat))
@@ -39,7 +40,7 @@ Chart.prototype = {
       .domain([this.bounds.minY, this.bounds.maxY])
       .range([this.height, 0])
     var yAxis = d3.axis.axisRight(y)
-      .tickSize(this.width)
+      .tickSize(this.lineWidth + this.margin.right + this.margin.left)
       .tickFormat(function(d){
         if(d > 1e6) {
           d = d/1e6
@@ -50,6 +51,12 @@ Chart.prototype = {
     function customXAxis(g) {
       g.call(xAxis);
       g.select(".domain").remove();
+      if((window.innerWidth < 500) && (g.selectAll(".tick")._groups[0].length > 5)) {
+        var numLabels = g.selectAll(".tick text")._groups[0];
+        for(var i = 1; i< numLabels.length; i+=2 ) {
+          numLabels[i].remove();
+        }
+      }
       g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
     }
 
@@ -70,7 +77,7 @@ Chart.prototype = {
       .call(customYAxis)
     .append("text")
       .attr("fill", "rgb(184, 184, 184)")
-      .attr("x", this.width)
+      .attr("x", this.lineWidth + this.margin.right + this.margin.left)
       .attr("y", 6)
       .attr("dy", "1.75em")
       .attr("text-anchor", "end")
@@ -91,7 +98,7 @@ Chart.prototype = {
    * @returns {undefined}
    */
   setScale: function() {
-    this.SCALEX = this.width/this.rangeX;
+    this.SCALEX = this.lineWidth/this.rangeX;
     this.SCALEY = this.height/this.rangeY;
   },
   /**
