@@ -13,7 +13,7 @@
   box-sizing: border-box;
   text-align: center;
   height: 200px;
-  overflow: auto;
+  overflow: hidden;
 
   @media(max-width: 20em) {
     width: 1000px;

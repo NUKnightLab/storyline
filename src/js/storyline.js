@@ -41,10 +41,11 @@ Storyline.prototype = {
   resetWidth: function(newWidth) {
     this.width = newWidth;
     var oldSlider = this.slider.elem
+    var lastActiveCard = this.slider.activeCard;
     var oldChart = this.chart.canvas
     oldSlider.remove();
     oldChart.remove();
-    this.slider = this.initSlider();
+    this.slider = this.initSlider(lastActiveCard);
     this.chart = this.initChart(this.data)
     this.positionChart(this.chart)
     this.positionSlider(this.slider)
@@ -53,9 +54,10 @@ Storyline.prototype = {
     var data = new DataFactory;
     return data.fetchData(this.dataConfig);
   },
-  initSlider: function() {
+  initSlider: function(lastActiveCard) {
+    var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.cards, this.dataConfig.start_at_card, sliderHeight);
+    return new Slider(this.dataConfig.cards, activeCard, sliderHeight);
   },
   initChart: function(dataObj) {
     //chart height//
