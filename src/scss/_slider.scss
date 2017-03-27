@@ -13,7 +13,6 @@
   box-sizing: border-box;
   text-align: center;
   height: 200px;
-  overflow: hidden;
 
   @media(max-width: 20em) {
     width: 1000px;
@@ -22,7 +21,8 @@
 
   .slider-content {
     box-shadow: $shadow-1;
-    min-height: 160px;
+    height: 160px;
+    overflow: hidden;
   }
 
   &.active {
@@ -67,8 +67,12 @@
 
   & p {
     text-align: left;
-    padding: 0 $spacing-default 0 $spacing-default;
+    padding: 0 10px 0 10px;
     color: $color-grey--light;
+
+    @media(min-width: 20em) {
+      padding: 0 $spacing-default 0 $spacing-default;
+    }
   }
   h3 {
     margin: 0;
