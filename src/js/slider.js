@@ -6,7 +6,6 @@ var Slider = function(cards, startIndex, height) {
   this.MARGIN = 10;
   this.height = height;
   this.createSlider();
-  this.slideCard();
 }
 
 Slider.prototype = {
@@ -122,6 +121,10 @@ Slider.prototype = {
     var timer = setTimeout(function() {
       self.cardsElem.classList.remove( 'is-animating' );
     }, 400 );
+    this.setCardOffset(self.activeCard);
+  },
+  setCardOffset: function(activeCard) {
+    this.currentOffset =  -(100/this.cards.length * activeCard - this.offsetPercent)
   },
   /**
    * Calculates position of slider offset based on dragging the card
@@ -133,6 +136,7 @@ Slider.prototype = {
     var offset;
     var transformPercentage = 0;
     var percentage = 0;
+    this.currentOffset = this.offsetPercent;
     var handleHammer = function(ev) {
       ev.preventDefault();
       switch(ev.type) {
@@ -142,35 +146,41 @@ Slider.prototype = {
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
           if(ev.center.x/window.innerWidth < prevCardBound) {
             var newCard = self.activeCard - 1;
-            self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
+            self.setCardOffset(newCard);
             self.goToCard(self.activeCard - 1);
           } else if(ev.center.x/window.innerWidth > nextCardBound) {
             var newCard = self.activeCard + 1;
-            self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
+            self.setCardOffset(newCard);
             self.goToCard(self.activeCard + 1);
           }
         case 'panleft':
         case 'panright':
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
+          //make a check if first or last card to prevent crazy space//
           if(percentage > -100 && percentage < 20) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
+            if(transformPercentage >= 10.37) {
+              self.setActiveCard(0, self.activeCard)
+              console.log("1st card")
+            } else if(transformPercentage >= -10.37) {
+              self.setActiveCard(1, self.activeCard)
+              console.log("2nd card")
+            } else if(transformPercentage >= -29.63) {
+              self.setActiveCard(2, self.activeCard)
+              console.log("3rd")
+            } else if(transformPercentage >= -49.63) {
+              self.setActiveCard(3, self.activeCard)
+              console.log("4th")
+            } else if(transformPercentage >= -68.89) {
+              self.setActiveCard(4, self.activeCard)
+              console.log("5th")
+            }
           }
           break;
         case 'panend':
-          var dragPercentage = (ev.deltaX/self.viewportSize*100)
-          if(dragPercentage < -25) {
-            var newCard = self.activeCard + 1;
-            self.currentOffset =  -(100/self.cards.length * newCard - self.offsetPercent)
-            self.goToCard(self.activeCard + 1);
-          } else if(dragPercentage > 25) {
-            var newCard = self.activeCard - 1;
-            self.currentOffset =  -( 100/self.cards.length * newCard - self.offsetPercent)
-            self.goToCard(self.activeCard - 1);
-          } else {
-            self.currentOffset =  - (100/self.cards.length * self.activeCard - self.offsetPercent)
-            self.goToCard(self.activeCard);
-          }
+          self.setCardOffset(self.activeCard);
+          self.goToCard(self.activeCard)
           break;
       }
     }

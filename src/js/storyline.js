@@ -110,6 +110,7 @@ Storyline.prototype = {
     this.elem.appendChild(slider.elem);
     slider.setWidth(this.width)
     slider.goToCard();
+    slider.slideCard();
     slider.attachClickHandler(this.chart.markers);
     slider.elem.style.opacity = 1;
   }
