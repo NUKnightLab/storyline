@@ -93,6 +93,7 @@ Slider.prototype = {
     this.cardWidth = w
     this.sliderWidth = w * this.cards.length
     this.offsetPercent = offset/(w*this.cards.length) * 100
+    this.offsets = this.getCardOffsets();
     this.cardsElem.style.width = this.sliderWidth + "px"
     this.cardsElem.style.transform = 'translateX(' + this.offsetPercent + '%)';
     for(var i = 0; i < this.cards.length; i++) {
@@ -121,10 +122,23 @@ Slider.prototype = {
     var timer = setTimeout(function() {
       self.cardsElem.classList.remove( 'is-animating' );
     }, 400 );
-    this.setCardOffset(self.activeCard);
+    this.currentOffset = this.offsets[self.activeCard];
   },
-  setCardOffset: function(activeCard) {
-    this.currentOffset =  -(100/this.cards.length * activeCard - this.offsetPercent)
+  getCardOffsets: function() {
+    var self = this;
+    var offsets = [];
+    this.cards.map(function(card, index) {
+      var offset = -(100/self.cards.length * index - self.offsetPercent)
+      offsets.push(offset);
+    })
+    //console.log(offsets)
+    console.log(offsets[0])
+    console.log(-(Math.abs(offsets[1]) + offsets[0]/2))
+    console.log(-(Math.abs(offsets[2]) + offsets[0]/2))
+    console.log(-(Math.abs(offsets[3]) + offsets[0]/2))
+    console.log(-(Math.abs(offsets[4]) + offsets[0]/2))
+  //  this.currentOffset =  -(100/this.cards.length * activeCard - this.offsetPercent)
+    return offsets;
   },
   /**
    * Calculates position of slider offset based on dragging the card
@@ -146,11 +160,11 @@ Slider.prototype = {
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
           if(ev.center.x/window.innerWidth < prevCardBound) {
             var newCard = self.activeCard - 1;
-            self.setCardOffset(newCard);
+            self.currentOffset = self.offsets(newCard);
             self.goToCard(self.activeCard - 1);
           } else if(ev.center.x/window.innerWidth > nextCardBound) {
             var newCard = self.activeCard + 1;
-            self.setCardOffset(newCard);
+            self.currentOffset = self.offsets(newCard);
             self.goToCard(self.activeCard + 1);
           }
         case 'panleft':
@@ -158,28 +172,31 @@ Slider.prototype = {
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
           //make a check if first or last card to prevent crazy space//
+          console.log(transformPercentage)
+          var t = ((self.cardWidth/2)/self.sliderWidth)*100;
+          console.log(t)
           if(percentage > -100 && percentage < 20) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
-            if(transformPercentage >= 10.37) {
+            if(transformPercentage >= self.offsets[0] - t) {
               self.setActiveCard(0, self.activeCard)
               console.log("1st card")
-            } else if(transformPercentage >= -10.37) {
+            } else if(transformPercentage >= self.offsets[1] -t) {
               self.setActiveCard(1, self.activeCard)
               console.log("2nd card")
-            } else if(transformPercentage >= -29.63) {
+            } else if(transformPercentage >= self.offsets[2] -t) {
               self.setActiveCard(2, self.activeCard)
               console.log("3rd")
-            } else if(transformPercentage >= -49.63) {
+            } else if(transformPercentage >= self.offsets[3] -t) {
               self.setActiveCard(3, self.activeCard)
               console.log("4th")
-            } else if(transformPercentage >= -68.89) {
+            } else if(transformPercentage >= self.offsets[4] -t) {
               self.setActiveCard(4, self.activeCard)
               console.log("5th")
             }
           }
           break;
         case 'panend':
-          self.setCardOffset(self.activeCard);
+          self.currentOffset = self.offsets[self.activeCard]
           self.goToCard(self.activeCard)
           break;
       }
