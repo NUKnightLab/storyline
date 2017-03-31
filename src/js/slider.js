@@ -131,13 +131,6 @@ Slider.prototype = {
       var offset = -(100/self.cards.length * index - self.offsetPercent)
       offsets.push(offset);
     })
-    //console.log(offsets)
-    console.log(offsets[0])
-    console.log(-(Math.abs(offsets[1]) + offsets[0]/2))
-    console.log(-(Math.abs(offsets[2]) + offsets[0]/2))
-    console.log(-(Math.abs(offsets[3]) + offsets[0]/2))
-    console.log(-(Math.abs(offsets[4]) + offsets[0]/2))
-  //  this.currentOffset =  -(100/this.cards.length * activeCard - this.offsetPercent)
     return offsets;
   },
   /**
@@ -160,11 +153,11 @@ Slider.prototype = {
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
           if(ev.center.x/window.innerWidth < prevCardBound) {
             var newCard = self.activeCard - 1;
-            self.currentOffset = self.offsets(newCard);
+            self.currentOffset = self.offsets[newCard];
             self.goToCard(self.activeCard - 1);
           } else if(ev.center.x/window.innerWidth > nextCardBound) {
             var newCard = self.activeCard + 1;
-            self.currentOffset = self.offsets(newCard);
+            self.currentOffset = self.offsets[newCard];
             self.goToCard(self.activeCard + 1);
           }
         case 'panleft':
