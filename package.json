@@ -26,7 +26,6 @@
     "adm-zip": "^0.4.7",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
-    "banner": "0.0.5",
     "chai-as-promised": "^6.0.0",
     "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
