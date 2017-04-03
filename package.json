@@ -1,13 +1,13 @@
 {
   "name": "storyline",
-  "version": "1.0.0",
+  "version": "0.0.9",
   "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NUKnightLab/storyline.git"
   },
-  "author": "Divya Sasidharan",
+  "author": "Northwestern University Knight Lab",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/NUKnightLab/storyline/issues"
@@ -26,6 +26,7 @@
     "adm-zip": "^0.4.7",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
+    "banner": "0.0.5",
     "chai-as-promised": "^6.0.0",
     "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
@@ -67,5 +68,27 @@
     "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/*-test.js'",
     "stage": "npm run clean && npm run dist && node tasks/stage.js",
     "stage_latest": "npm run clean && npm run dist && node tasks/stage.js latest"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Divya Sasidharan",
+      "email": "div@northwestern.edu",
+      "url": "https://github.com/shortdiv"
+    },
+    {
+      "name": "Zach Wise",
+      "email": "wise@northwestern.edu",
+      "url": "https://github.com/zachwise"
+    },
+    {
+      "name": "Joe Germuska",
+      "email": "joegermuska@northwestern.edu",
+      "url": "https://github.com/JoeGermuska"
+    },
+    {
+      "name": "Emily Withrow",
+      "email": "e-withrow@northwestern.edu",
+      "url": "https://github.com/emilywithrow"
+    }
+  ]
 }
