@@ -2,6 +2,10 @@ line {
   z-index: 3;
 }
 
+.tick line {
+  stroke: rgb(230, 230, 230);
+}
+
 path {
   stroke: $color-grey--lighter !important;
   stroke-width: 2px;
