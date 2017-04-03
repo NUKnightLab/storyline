@@ -69,23 +69,26 @@
     text-align: left;
     padding: 0 10px 0 10px;
     color: $color-grey--light;
+    font-size: 12px;
 
     @media(min-width: 30em) {
       padding: 0 $spacing-default 0 $spacing-default;
+      font-size: 15px;
     }
   }
   h3 {
     margin: 0;
     text-align: left;
-    padding: $spacing-default;
+    padding: 5px 10px;
     font-weight: bold;
     font-size: $font-size-base;
     color: $color-grey--light;
 
     span.h3-date {
-      font-size: $font-size-base +2;
+      font-size: $font-size-base;
       font-weight: normal;
       display: inline-block;
+      margin-right: 5px;
       @media(min-width: 30em) {
         display: block;
       }

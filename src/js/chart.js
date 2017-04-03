@@ -57,13 +57,11 @@ Chart.prototype = {
           numLabels[i].remove();
         }
       }
-      g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
     }
 
     function customYAxis(g) {
       g.call(yAxis);
       g.select(".domain").remove();
-      g.selectAll(".tick line").attr("stroke", "rgb(211, 211, 211)");
       g.selectAll(".tick text").attr("dy", -4).attr("text-anchor", "end");
     }
 
