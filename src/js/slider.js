@@ -121,7 +121,7 @@ Slider.prototype = {
     clearTimeout(timer);
     var timer = setTimeout(function() {
       self.cardsElem.classList.remove( 'is-animating' );
-    }, 400 );
+    }, 700 );
     this.currentOffset = this.offsets[self.activeCard];
   },
   getCardOffsets: function() {
