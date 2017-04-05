@@ -1,11 +1,12 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, startIndex, height) {
+var Slider = function(cards, startIndex, height, width) {
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
   this.navHeight = 16 + 10; // actual height + margin height//
   this.height = height;
+  this.width = width;
   this.createSlider();
 }
 
@@ -30,6 +31,7 @@ Slider.prototype = {
     var sliderView = document.createElement("div");
         sliderView.setAttribute('class', 'slider-view');
         sliderView.style.height = this.height + "px";
+        sliderView.style.width = this.width + "px";
 
     sliderView.appendChild(this.cardsElem);
     sliderView.appendChild(this.navElem);
