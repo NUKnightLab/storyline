@@ -172,16 +172,11 @@ Slider.prototype = {
           var t = ((self.cardWidth/2)/self.sliderWidth)*100;
           if(percentage > -100 && percentage < 20) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
-            if(transformPercentage >= self.offsets[0] - t) {
-              self.setActiveCard(0, self.activeCard)
-            } else if(transformPercentage >= self.offsets[1] -t) {
-              self.setActiveCard(1, self.activeCard)
-            } else if(transformPercentage >= self.offsets[2] -t) {
-              self.setActiveCard(2, self.activeCard)
-            } else if(transformPercentage >= self.offsets[3] -t) {
-              self.setActiveCard(3, self.activeCard)
-            } else if(transformPercentage >= self.offsets[4] -t) {
-              self.setActiveCard(4, self.activeCard)
+            for(var i=0; i < self.offsets.length; i++) {
+              if(transformPercentage >= self.offsets[i] - t) {
+                self.setActiveCard(i, self.activeCard);
+                break;
+              }
             }
           }
           break;
