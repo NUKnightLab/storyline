@@ -4,6 +4,7 @@ var Slider = function(cards, startIndex, height) {
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
+  this.navHeight = 16 + 10; // actual height + margin height//
   this.height = height;
   this.createSlider();
 }
@@ -91,12 +92,13 @@ Slider.prototype = {
     this.viewportSize = this.cardsElem.parentElement.clientWidth;
     var offset = this.viewportSize/2 - w/2;
     this.cardWidth = w
-    this.sliderWidth = w * this.cards.length
+    this.sliderWidth = w * this.cards.length;
     this.offsetPercent = offset/(w*this.cards.length) * 100
     this.offsets = this.getCardOffsets();
     this.cardsElem.style.width = this.sliderWidth + "px"
     this.cardsElem.style.transform = 'translateX(' + this.offsetPercent + '%)';
     for(var i = 0; i < this.cards.length; i++) {
+      this.cardsElem.children[i].children[0].style.height = (this.height - this.navHeight - this.MARGIN*2) + "px";
       this.cardsElem.children[i].style.width = w + "px";
       this.cardsElem.children[i].style.border = this.MARGIN + "px solid white";
     }
