@@ -61,7 +61,7 @@ Storyline.prototype = {
   },
   initChart: function(dataObj) {
     //chart height//
-    var chartHeight = (0.6*this.height);
+    var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
     return new Chart(dataObj, this.width, chartHeight, this.margin)
   },
   /**
@@ -86,10 +86,12 @@ Storyline.prototype = {
    * @returns {undefined}
    */
   setDimensions: function(width) {
-    this.height = this.elem.getAttribute('height');
-    //this.elem.style.height = this.height + "px";
     this.width = width ? width : window.innerWidth;
-    //this.elem.style.width = this.width + "px";
+    this.height = this.elem.getAttribute('height');
+    //slider has a max height of 246px so let chart take up the additional space//
+    if(0.4*this.height > 246) {
+      this.chartHeight = this.height - 246;
+    }
   },
   attr: function(dimension, value) {
     if(dimension == "height") {
