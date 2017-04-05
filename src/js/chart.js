@@ -76,7 +76,7 @@ Chart.prototype = {
     .append("text")
       .attr("fill", "rgb(184, 184, 184)")
       .attr("x", this.lineWidth + this.margin.right + this.margin.left)
-      .attr("y", 6)
+      .attr("y", -20)
       .attr("dy", "1.75em")
       .attr("text-anchor", "end")
       .text(this.axes.yLabel);
