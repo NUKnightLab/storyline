@@ -13,6 +13,8 @@ $color-primary: #FF1744 !default;
 $color-grey: #9C9C9C !default;
 $color-grey--light: lighten($color-grey, $color-amount--light);
 $color-grey--lighter: lighten($color-grey, $color-amount--lighter);
+$color-grey--dark: darken($color-grey, $color-amount--dark);
+$color-grey--darker: darken($color-grey, $color-amount--darker);
 
 $color-text-default: #222222 !default;
 $color-bg-default: #FFFFFF !default;

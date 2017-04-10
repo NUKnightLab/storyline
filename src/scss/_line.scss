@@ -7,7 +7,7 @@ line {
 }
 
 path {
-  stroke: $color-grey--lighter !important;
+  stroke: $color-grey--lighter;
   stroke-width: 2px;
   z-index:0;
 }
@@ -17,7 +17,7 @@ text {
   border: 1px solid $color-text-default;
   font-size: $font-size-base - 5;
   color: $color-grey--light;
-  fill: $color-grey--light !important;
+  fill: $color-grey--light;
   @media(min-width: 30em) {
     font-size: $font-size-base - 2;
   }
@@ -29,10 +29,10 @@ circle[class^="marker"] {
   border: 6px solid $color-circle;
   stroke: $color-circle;
   stroke-width: 6px;
-  fill: $color-circle !important;
+  fill: $color-circle;
 
   &.active {
-    fill: $color-circle-active !important;
+    fill: $color-circle-active;
     border: 6px solid $color-circle-active;
     stroke: $color-circle-active;
   }
@@ -44,13 +44,13 @@ g[class^="marker-"] {
   }
   &.active {
     circle {
-      fill: $color-circle-active !important;
+      fill: $color-circle-active;
       border: 6px solid $color-circle-active;
       stroke: $color-circle-active;
     }
     text {
       color: $color-circle-active;
-      fill: $color-circle-active !important;
+      fill: $color-circle-active;
       opacity: 1;
       stroke: $color-circle-active;
     }
