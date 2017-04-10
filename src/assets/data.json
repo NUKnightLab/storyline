@@ -2,8 +2,8 @@
   "data": {
     "url": "./assets/time_no_day.csv",
     "data_column_name": "number of flights",
-    "datetime_column_name": "time",
-    "datetime_format": "H:mm"
+    "datetime_format": "%H:%M",
+    "datetime_column_name": "time"
   },
   "chart": {
     "datetime_format": "%I %p",

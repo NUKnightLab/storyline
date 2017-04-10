@@ -30,7 +30,7 @@ Chart.prototype = {
   drawAxes: function(d3) {
     var self = this;
     var x = d3.scale.scaleTime()
-      .domain([this.bounds.minX.toDate(), this.bounds.maxX.toDate()])
+      .domain([this.bounds.minX, this.bounds.maxX])
       .range([0, this.lineWidth]);
     var xAxis = d3.axis.axisBottom(x)
       .tickSize(this.height)

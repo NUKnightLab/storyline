@@ -12,7 +12,7 @@ DataFactory.prototype = {
    * @returns {object} dataObj - data needed for creating a new chart
    */
   createDataObj: function(data, config) {
-    var moment = require('moment');
+    var d3Time = require('d3-time-format');
     var output = [],
         bounds = {
           minX: null,
@@ -27,7 +27,8 @@ DataFactory.prototype = {
         markers = [];
 
     for(var i=0; i<data.length;i++) {
-      var x = moment(data[i][config.data.datetime_column_name], config.data.datetime_format);
+      var dateParse = d3Time.timeParse(config.data.datetime_format);
+      var x = dateParse(data[i][config.data.datetime_column_name]);
       var y = parseFloat(data[i][config.data.data_column_name]);
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
