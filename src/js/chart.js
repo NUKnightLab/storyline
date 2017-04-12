@@ -120,9 +120,11 @@ Chart.prototype = {
     var self = this,
         markersArray = this.aggregateMarkers();
 
+    self.textMarkers = [],
     self.markers = [];
     markersArray.map(function(marker) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       circle.setAttribute('cx', marker.x);
@@ -134,14 +136,21 @@ Chart.prototype = {
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
       text.setAttribute('fill', 'grey');
+      text.setAttribute('class', 'text-' + marker.markerCount);
       markerElem.setAttribute('class', 'marker-' + marker.markerCount);
+      textElem.setAttribute('class', 'text-' + marker.markerCount);
 
       markerElem.appendChild(circle);
-      markerElem.appendChild(text);
+      textElem.appendChild(text);
 
+    self.textMarkers.push(textElem);
     self.markers.push(markerElem);
     self.elem.appendChild(markerElem)
     })
+    self.textMarkers.map(function(textItem) {
+      self.elem.appendChild(textItem)
+    })
+
   },
   /**
    * Collect data points as a string

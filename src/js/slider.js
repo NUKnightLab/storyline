@@ -74,10 +74,12 @@ Slider.prototype = {
       this.cardsElem.children[pastActiveCard].classList.remove('active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('active');
       storyline.chart.markers[pastActiveCard].classList.remove('active')
+      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
     storyline.chart.markers[currentActiveCard].classList.add('active')
+    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
   },
   /**
    * sets the width of the document

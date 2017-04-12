@@ -67,6 +67,8 @@ Storyline.prototype = {
   /**
    * For each slide configuration object, if no display_date is specified,
    * fill it in based on the data set.
+   *
+   * @returns {undefined}
    */
   populateSlideDates: function(dataObj) {
     var d3Time = require('d3-time-format'),

@@ -38,7 +38,7 @@ circle[class^="marker"] {
   }
 }
 
-g[class^="marker-"] {
+g[class^="marker-"], g[class^="text-"] {
   text {
     opacity: 0;
   }
