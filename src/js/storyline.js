@@ -2,7 +2,6 @@ import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
 import ua from 'universal-analytics'
-const visitor = ua('UA-27829802-5');
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
@@ -26,6 +25,7 @@ var Storyline = function(targetId, dataConfig) {
 Storyline.prototype = {
   init: function() {
     var self = this;
+    self.tracking();
     this.setDimensions();
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
@@ -39,6 +39,10 @@ Storyline.prototype = {
     PubSub.subscribe('window resized', function(topic, data) {
       self.resetWidth(data);
     })
+  },
+  tracking: function() {
+    this.visitor = ua('UA-27829802-5');
+    //this.visitor.event('Navigation', this.slider.handleClick, function(err) {console.log(err)})
   },
   resetWidth: function(newWidth) {
     this.width = newWidth;

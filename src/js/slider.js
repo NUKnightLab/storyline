@@ -61,6 +61,7 @@ Slider.prototype = {
     }
   },
   handleClick: function(event) {
+    storyline.visitor.event('Navigation', 'clicked', function(err) {})
     var classes = event.target.classList;
 
     for(var i in classes) {
