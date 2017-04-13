@@ -16,6 +16,8 @@ module.exports = {
   },
   node: {
     fs: "empty",
+    net: "empty",
+    tls: "empty",
     "child_process": "empty"
   },
   "browser": { "fs": false },
@@ -34,6 +36,10 @@ module.exports = {
         query: {
           presets: ['es2015']
         }
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },

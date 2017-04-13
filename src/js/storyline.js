@@ -1,6 +1,8 @@
 import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
+import ua from 'universal-analytics'
+const visitor = ua('UA-27829802-5');
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
