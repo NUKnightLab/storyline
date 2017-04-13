@@ -52,19 +52,23 @@ Slider.prototype = {
     return doc.body.children[0];
   },
   attachClickHandler: function(div) {
+    var self = this;
     var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
-      div[i].onclick = function(event, self) {
-        var classes = event.target.classList;
+      div[i].onclick = function(event) {
+        storyline.slider.handleClick(event);
+      }
+    }
+  },
+  handleClick: function(event) {
+    var classes = event.target.classList;
 
-        for(var i in classes) {
-          if(classes[i].indexOf("-") != -1) {
-            var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-            var pastActiveCard = storyline.slider.activeCard
-            storyline.slider.goToCard(currentActiveCard)
-            return false;
-          }
-        }
+    for(var i in classes) {
+      if(classes[i].indexOf("-") != -1) {
+        var currentActiveCard = parseFloat(classes[i].split("-")[1]);
+        var pastActiveCard = storyline.slider.activeCard
+        storyline.slider.goToCard(currentActiveCard)
+        return false;
       }
     }
   },
