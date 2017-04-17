@@ -19,35 +19,62 @@ describe('DataJS', () => {
     dataFactoryInstance = new DataFactory
   })
   describe('fetchData', () => {
-    let exampleData, callBack;
+    let exampleData, callBack, createData;
     beforeEach(() => {
       global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
       requests = [];
 
-      XMLHttpRequest.onCreate = function (xhr) {
-        requests.push(xhr);
-      };
+      //XMLHttpRequest.onCreate = function (xhr) {
+      //  requests.push(xhr);
+      //};
+      const finalData = {
+        date:
+        [
+          ['01/31/80',1],
+          ['02/29/80',3],
+          ['03/31/80',2],
+          ['04/30/80', 3]
+        ],
+        bounds: {
+          minX: null,
+          maxX: null,
+          minY: null,
+          maxY: null
+        },
+        axes: {
+          yLabel: null,
+          timeFormat: null
+        },
+        markers: []
+      }
 
       exampleData = "Date,US unemployment rate 1/31/80, 6.3 2/29/80 6.3, 3/31/80 6.3";
       callBack = sinon.stub(dataFactoryInstance, 'get').returns(new Promise(function(resolve, reject) {
         resolve(exampleData);
       }))
-    })
 
-    xit('should return a promise from calling fetchData', () => {
-      const result = dataFactoryInstance.fetchData(config)
-        console.log(result)
-      expect(result.then).to.be.a('Function')
-      expect(result).to.be.a('Function')
+      createData = sinon.stub(DataFactory.prototype, 'createDataObj').returns(finalData)
     })
-    xit('should resolve and return with a data string from the get request in fetchData', () => {
-      dataFactoryInstance.fetchData(config).then(function(response) {
-        expect(response).to.eql(exampleData)
+    it('should invoke the get method', () => {
+      dataFactoryInstance.fetchData(config);
+      expect(callBack.called).to.be.true
+    })
+    it('should return exampleData from get method', () => {
+      dataFactoryInstance.fetchData(config);
+      callBack().then(function(result) {
+        expect(result).to.eq(exampleData)
+      })
+    })
+    it('should resolve with a final data object', () => {
+      const result = dataFactoryInstance.fetchData(config)
+      result.then(function(result){
+        expect(result).to.eq(finalData)
       })
     })
     afterEach(() => {
       global.XMLHttpRequest.restore()
       callBack.restore();
+      createData.restore();
     })
   })
   describe('Create a dataObject from input data and config', () => {
