@@ -102,7 +102,6 @@ Slider.prototype = {
     for(var i = 0; i < this.cards.length; i++) {
       this.cardsElem.children[i].children[0].style.height = (this.height - this.NAV_HEIGHT - this.MARGIN*2) + "px";
       this.cardsElem.children[i].style.width = w + "px";
-      this.cardsElem.children[i].style.border = this.MARGIN + "px solid white";
     }
   },
   goToCard: function(number) {

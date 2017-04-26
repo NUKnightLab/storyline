@@ -13,6 +13,9 @@
   max-width: 500px;
   box-sizing: border-box;
   text-align: center;
+  &:not(:last-child) {
+    border-right: 20px solid white;
+  }
 
   @media(max-width: 20em) {
     width: 1000px;
