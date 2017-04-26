@@ -7,7 +7,7 @@ line {
 }
 
 path {
-  stroke: $color-grey--lighter !important;
+  stroke: $color-grey--lighter;
   stroke-width: 2px;
   z-index:0;
 }
@@ -39,7 +39,7 @@ circle[class^="marker"] {
 }
 
 g[class^="marker-"] {
-  text {
+  text, path {
     opacity: 0;
   }
   &.active {
@@ -53,6 +53,10 @@ g[class^="marker-"] {
       fill: $color-circle-active !important;
       opacity: 1;
       stroke: $color-circle-active;
+    }
+    path {
+      stroke: $color-circle-active;
+      opacity: 1;
     }
   }
 }
