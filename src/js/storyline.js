@@ -78,7 +78,7 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.cards, activeCard, sliderHeight, this.width);
+    return new Slider(this, this.dataConfig.cards, activeCard, this.width, sliderHeight);
   },
   initChart: function(dataObj) {
     //chart height//

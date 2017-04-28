@@ -1,12 +1,22 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, startIndex, height, width) {
+/**
+ * Instantiate a slider to display the given cards on the given storyline.
+ * @constructor
+ * @param {object} storyline - the Storyline instance where this slider will be shown
+ * @param {object[]} cards - an array of configuration objects containing the content for the cards in this slider
+ * @param {number} startIndex - an integer value [0,cards.length)
+ * @param {number} width - the intended width in pixels for the chart
+ * @param {number} height - the intended height in pixels for the chart
+ */
+var Slider = function(storyline, cards, startIndex, width, height) {
+  this.storyline = storyline;
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
   this.NAV_HEIGHT = 16 + 10; // actual height + margin height//
-  this.height = height;
   this.width = width;
+  this.height = height;
   this.createSlider();
 }
 
@@ -56,19 +66,19 @@ Slider.prototype = {
     var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
-        storyline.slider.handleClick(event);
+        self.storyline.slider.handleClick(event);
       }
     }
   },
   handleClick: function(event) {
-    storyline.visitor.event('Navigation', 'clicked', function(err) {})
+    this.storyline.visitor.event('Navigation', 'clicked', function(err) {})
     var classes = event.target.classList;
 
     for(var i in classes) {
       if(classes[i].indexOf("-") != -1) {
         var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-        var pastActiveCard = storyline.slider.activeCard
-        storyline.slider.goToCard(currentActiveCard)
+        var pastActiveCard = this.storyline.slider.activeCard
+        this.storyline.slider.goToCard(currentActiveCard)
         return false;
       }
     }
@@ -78,13 +88,13 @@ Slider.prototype = {
     if(this.cardsElem.children[pastActiveCard].classList.contains('active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('active');
-      storyline.chart.markers[pastActiveCard].classList.remove('active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.markers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
-    storyline.chart.markers[currentActiveCard].classList.add('active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
+    this.storyline.chart.markers[currentActiveCard].classList.add('active')
+    this.storyline.chart.textMarkers[currentActiveCard].classList.add('active')
   },
   /**
    * sets the width of the document
