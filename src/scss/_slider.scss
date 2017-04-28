@@ -22,33 +22,35 @@
     max-width: none;
   }
 
-  .slider-content {
-    box-shadow: $shadow-1;
-    max-height: 200px;
-    overflow: hidden;
-    -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    h3 {
-        -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-        transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    }
-  }
-
   &.active {
     .slider-content {
       box-shadow: $shadow-4;
       border: 1px solid $color-text-default;
-      h3 {
-        background-color: $color-primary;
-        color: $color-bg-default;
-        border-radius: 6px 6px 0 0;
-      }
-      p {
-        color: $color-text-default;
-      }
+    h3 {
+      background-color: $color-primary;
+      color: $color-bg-default;
+      border-radius: 6px 6px 0 0;
+    }
+    p {
+      color: $color-text-default;
+    }
     }
   }
 }
+
+.slider-content {
+  box-shadow: $shadow-1;
+  max-height: 200px;
+  overflow: hidden;
+  -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+  transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+  h3 {
+    -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+    transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+    min-height: 38px;
+  }
+}
+
 
 .slider-cards {
   position: relative;
@@ -59,11 +61,6 @@
   &.is-animating {
     -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
     transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-  }
-  & .active {
-    .slider-content {
-      border: 1px solid rgb(219, 30, 70);
-    }
   }
 }
 
