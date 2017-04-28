@@ -3,6 +3,13 @@ import { DataFactory } from './data';
 import { Slider } from './slider';
 import ua from 'universal-analytics'
 
+/**
+ * Instantiate a storyline. For many users, this will be the only public part of the code they use.
+ * @constructor
+ * @param {string} targetId - a DOM element ID indicating the container for the StoryLine.
+ * @param {object|string} dataConfig - a JS object which defines the data source and other configuration options,
+ *                                     or a URL to a JSON file which represents such an object.
+ */
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   var self = this;
@@ -24,9 +31,9 @@ var Storyline = function(targetId, dataConfig) {
 
 Storyline.prototype = {
   init: function() {
-    var self = this;
-    self.tracking();
+    this.initTracking();
     this.setDimensions();
+    var self = this;
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
       self.chart = self.initChart(dataObj);
@@ -40,9 +47,17 @@ Storyline.prototype = {
       self.resetWidth(data);
     })
   },
-  tracking: function() {
-    this.visitor = ua('UA-27829802-5');
-    //this.visitor.event('Navigation', this.slider.handleClick, function(err) {console.log(err)})
+  initTracking: function() {
+    try {
+      var visitor = ua('UA-27829802-5',  {https: true});
+      visitor.pageview({dl: document.location.href});
+      this.visitor = visitor;
+    } catch(e) { /* we don't want any problem here to sidetrack things */}
+  },
+  trackEvent: function( category, action, label, value ) {
+    if (this.visitor) {
+      this.visitor.event(category, action, label, value);
+    }
   },
   resetWidth: function(newWidth) {
     this.width = newWidth;
@@ -68,7 +83,7 @@ Storyline.prototype = {
   initChart: function(dataObj) {
     //chart height//
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
-    return new Chart(dataObj, this.width, chartHeight, this.margin)
+    return new Chart(this, dataObj, this.width, chartHeight, this.margin);
   },
   /**
    * For each slide configuration object, if no display_date is specified,
