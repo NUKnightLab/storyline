@@ -101,6 +101,7 @@ DataFactory.prototype = {
    * @returns {undefined}
    */
   get: function(file) {
+    file = file ? file.data.url : undefined
     return new Promise(function(resolve, reject) {
       var req = new XMLHttpRequest();
       req.open("GET", file, true)
@@ -127,12 +128,29 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      self.get(config.data.url).then(function(response) {
-        parse(response, {'columns': true}, function(err, data) {
-          resolve(self.createDataObj(data, config))
+      self.get(config)
+        .then(function(response) {
+          parse(response, {'columns': true}, function(err, data) {
+            resolve(self.createDataObj(data, config))
+          })
+        }, function(reason) {
+          debugger;
+          self.errorMessage = reason
+          self.errorLog()
         })
-      })
     })
+  },
+  errorLog: function() {
+    var mustache = require('mustache');
+    const template =
+      "<div class='error'>" +
+        "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
+      "</div>"
+    var rendered = mustache.render(template, this),
+        parser = new DOMParser(),
+        doc = parser.parseFromString(rendered, "text/html");
+
+    storyline.elem.append(doc.body.children[0])
   }
 }
 
