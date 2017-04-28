@@ -125,6 +125,7 @@ Chart.prototype = {
     markersArray.map(function(marker) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       circle.setAttribute('cx', marker.x);
@@ -132,6 +133,10 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
+      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30;
+      var slidertopY = self.height+self.margin.bottom+1;
+      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
+      connector.setAttribute('fill', '#FF1744');
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
@@ -140,6 +145,7 @@ Chart.prototype = {
       markerElem.setAttribute('class', 'marker-' + marker.markerCount);
       textElem.setAttribute('class', 'text-' + marker.markerCount);
 
+      markerElem.appendChild(connector);
       markerElem.appendChild(circle);
       textElem.appendChild(text);
 
