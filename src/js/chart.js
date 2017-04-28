@@ -159,9 +159,9 @@ Chart.prototype = {
       markerElem.appendChild(circle);
       textElem.appendChild(text);
 
-    self.textMarkers.push(textElem);
-    self.markers.push(markerElem);
-    self.elem.appendChild(markerElem)
+      self.textMarkers.push(textElem);
+      self.markers.push(markerElem);
+      self.elem.appendChild(markerElem)
     })
     self.textMarkers.map(function(textItem) {
       self.elem.appendChild(textItem)
