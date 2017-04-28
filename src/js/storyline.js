@@ -50,13 +50,13 @@ Storyline.prototype = {
   initTracking: function() {
     try {
       var visitor = ua('UA-27829802-5',  {https: true});
-      visitor.pageview({dl: document.location.href});
+      visitor.pageview({dl: document.location.href}).send();
       this.visitor = visitor;
     } catch(e) { /* we don't want any problem here to sidetrack things */}
   },
   trackEvent: function( category, action, label, value ) {
     if (this.visitor) {
-      this.visitor.event(category, action, label, value);
+      this.visitor.event(category, action, label, value).send();
     }
   },
   resetWidth: function(newWidth) {
@@ -136,7 +136,7 @@ Storyline.prototype = {
     slider.setWidth(this.width)
     slider.goToCard();
     slider.slideCard();
-    slider.attachClickHandler(this.chart.markers);
+    slider.attachClickHandler(this.chart.markers,'marker');
     slider.elem.style.opacity = 1;
   }
 }

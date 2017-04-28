@@ -30,7 +30,7 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.attachClickHandler(this.navElem.children[0].children);
+    this.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
@@ -61,16 +61,19 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
-  attachClickHandler: function(div) {
+  /**
+   *
+   */
+  attachClickHandler: function(div, targetType) {
     var self = this;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
-        self.handleClick(event);
+        self.handleClick(event, targetType);
       }
     }
   },
-  handleClick: function(event) {
-    this.storyline.visitor.event('Navigation', 'clicked', function(err) {})
+  handleClick: function(event, targetType) {
+    this.storyline.trackEvent('click', targetType)
     var classes = event.target.classList;
 
     for(var i in classes) {
