@@ -63,10 +63,9 @@ Slider.prototype = {
   },
   attachClickHandler: function(div) {
     var self = this;
-    var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
-        self.storyline.slider.handleClick(event);
+        self.handleClick(event);
       }
     }
   },
@@ -77,8 +76,7 @@ Slider.prototype = {
     for(var i in classes) {
       if(classes[i].indexOf("-") != -1) {
         var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-        var pastActiveCard = this.storyline.slider.activeCard
-        this.storyline.slider.goToCard(currentActiveCard)
+        this.goToCard(currentActiveCard)
         return false;
       }
     }
