@@ -135,8 +135,28 @@ Storyline.prototype = {
     slider.setWidth(this.width)
     slider.goToCard();
     slider.slideCard();
-    slider.attachClickHandler(this.chart.markers,'marker');
+    storyline.attachClickHandler(this.chart.markers,'marker');
     slider.elem.style.opacity = 1;
+  },
+  attachClickHandler: function(div, targetType) {
+    var self = this;
+    for(var i=0; i < div.length; i++) {
+      div[i].onclick = function(event) {
+        self.handleClick(event, targetType);
+      }
+    }
+  },
+  handleClick: function(event, targetType) {
+    storyline.trackEvent('click', targetType)
+    var classes = event.target.classList;
+
+    for(var i in classes) {
+      if(classes[i].indexOf("-") != -1) {
+        var currentActiveCard = parseFloat(classes[i].split("-")[1]);
+        this.slider.goToCard(currentActiveCard)
+        return false;
+      }
+    }
   }
 }
 

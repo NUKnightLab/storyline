@@ -29,7 +29,7 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.attachClickHandler(this.navElem.children[0].children, 'nav');
+    storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
@@ -59,29 +59,6 @@ Slider.prototype = {
         doc = parser.parseFromString(rendered, "text/html");
 
     return doc.body.children[0];
-  },
-  /**
-   *
-   */
-  attachClickHandler: function(div, targetType) {
-    var self = this;
-    for(var i=0; i < div.length; i++) {
-      div[i].onclick = function(event) {
-        self.handleClick(event, targetType);
-      }
-    }
-  },
-  handleClick: function(event, targetType) {
-    storyline.trackEvent('click', targetType)
-    var classes = event.target.classList;
-
-    for(var i in classes) {
-      if(classes[i].indexOf("-") != -1) {
-        var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-        this.goToCard(currentActiveCard)
-        return false;
-      }
-    }
   },
   setActiveCard: function(currentActiveCard, pastActiveCard) {
     this.activeCard = currentActiveCard;
