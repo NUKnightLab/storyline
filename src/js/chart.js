@@ -13,9 +13,8 @@ d3.time = require('d3-time-format');
  * @param {number} height - the intended height in pixels for the chart
  * @param {object} margin - a JS object with `top`, `right`, `bottom`, and `left` values, each of which is a number of pixels.
  */
-var Chart = function(storyline, dataObj, width, height, margin) {
+var Chart = function(dataObj, width, height, margin) {
     var AXIS_HEIGHT = 25;
-    this.storyline = storyline;
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;

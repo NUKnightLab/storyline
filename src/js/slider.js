@@ -5,12 +5,11 @@ var Hammer = require('hammerjs');
  * @constructor
  * @param {object} storyline - the Storyline instance where this slider will be shown
  * @param {object[]} cards - an array of configuration objects containing the content for the cards in this slider
- * @param {number} startIndex - an integer value [0,cards.length)
+ * @param {number} startIndex - an index for start card
  * @param {number} width - the intended width in pixels for the chart
  * @param {number} height - the intended height in pixels for the chart
  */
-var Slider = function(storyline, cards, startIndex, width, height) {
-  this.storyline = storyline;
+var Slider = function(cards, startIndex, width, height) {
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
@@ -73,7 +72,7 @@ Slider.prototype = {
     }
   },
   handleClick: function(event, targetType) {
-    this.storyline.trackEvent('click', targetType)
+    storyline.trackEvent('click', targetType)
     var classes = event.target.classList;
 
     for(var i in classes) {
@@ -89,13 +88,13 @@ Slider.prototype = {
     if(this.cardsElem.children[pastActiveCard].classList.contains('active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('active');
-      this.storyline.chart.markers[pastActiveCard].classList.remove('active')
-      this.storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
+      storyline.chart.markers[pastActiveCard].classList.remove('active')
+      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
-    this.storyline.chart.markers[currentActiveCard].classList.add('active')
-    this.storyline.chart.textMarkers[currentActiveCard].classList.add('active')
+    storyline.chart.markers[currentActiveCard].classList.add('active')
+    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
   },
   /**
    * sets the width of the document

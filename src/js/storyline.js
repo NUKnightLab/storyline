@@ -4,7 +4,7 @@ import { Slider } from './slider';
 import ua from 'universal-analytics'
 
 /**
- * Instantiate a storyline. For many users, this will be the only public part of the code they use.
+ * Instantiate a storyline
  * @constructor
  * @param {string} targetId - a DOM element ID indicating the container for the StoryLine.
  * @param {object|string} dataConfig - a JS object which defines the data source and other configuration options,
@@ -20,7 +20,6 @@ var Storyline = function(targetId, dataConfig) {
       self.dataConfig = config;
       self.init();
     });
-    // TODO: add error handling to request
     req.open("GET", dataConfig);
     req.send();
   } else {
@@ -78,12 +77,12 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
     var sliderHeight = (0.4*this.height)
-    return new Slider(this, this.dataConfig.cards, activeCard, this.width, sliderHeight);
+    return new Slider(this.dataConfig.cards, activeCard, this.width, sliderHeight);
   },
   initChart: function(dataObj) {
     //chart height//
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
-    return new Chart(this, dataObj, this.width, chartHeight, this.margin);
+    return new Chart(dataObj, this.width, chartHeight, this.margin);
   },
   /**
    * For each slide configuration object, if no display_date is specified,
