@@ -26,6 +26,7 @@ Slider.prototype = {
     for(var i in this.cards) {
       this.cards[i].index = i
     }
+    debugger;
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
@@ -54,6 +55,7 @@ Slider.prototype = {
     var mustache = require('mustache'),
         templateContent = this.getTemplate(templateId),
         rendered = mustache.render(templateContent, context);
+    debugger;
 
     var parser = new DOMParser(),
         doc = parser.parseFromString(rendered, "text/html");
@@ -64,6 +66,7 @@ Slider.prototype = {
    *
    */
   attachClickHandler: function(div, targetType) {
+    debugger;
     var self = this;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
@@ -72,6 +75,7 @@ Slider.prototype = {
     }
   },
   handleClick: function(event, targetType) {
+    debugger;
     storyline.trackEvent('click', targetType)
     var classes = event.target.classList;
 
@@ -243,7 +247,7 @@ const MUSTACHE_TEMPLATES = {
       "<div class='nav'>" +
          "<ol>" +
            "{{#cards}}" +
-             "<li class='nav nav-{{index}}'>" +
+             "<li onclick='{{this}}' class='nav nav-{{index}}'>" +
                "<a href='#'></a>" +
              "</li>" +
            "{{/cards}}" +
