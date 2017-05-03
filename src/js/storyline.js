@@ -78,12 +78,11 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.cards, activeCard, this.width, sliderHeight);
+    return new Slider(this, this.dataConfig.cards, activeCard, this.width, sliderHeight);
   },
   initChart: function(dataObj) {
-    //chart height//
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
-    return new Chart(dataObj, this.width, chartHeight, this.margin);
+    return new Chart(this, dataObj, this.width, chartHeight, this.margin);
   },
   /**
    * For each slide configuration object, if no display_date is specified,
@@ -136,11 +135,11 @@ Storyline.prototype = {
     slider.setWidth(this.width)
     slider.goToCard();
     slider.slideCard();
-    storyline.attachClickHandler(this.chart.markers,'marker');
+    this.attachClickHandler(this.chart.markers,'marker');
     slider.elem.style.opacity = 1;
   },
   attachClickHandler: function(div, targetType) {
-    storyline.trackEvent('click', targetType)
+    this.trackEvent('click', targetType)
     var self = this;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
@@ -149,7 +148,7 @@ Storyline.prototype = {
     }
   },
   handleClick: function(event, targetType) {
-    storyline.trackEvent('click', targetType)
+    this.trackEvent('click', targetType)
     var classes = event.target.classList;
 
     for(var i in classes) {

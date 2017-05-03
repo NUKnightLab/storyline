@@ -3,13 +3,14 @@ var Hammer = require('hammerjs');
 /**
  * Instantiate a slider to display the given cards on the given storyline.
  * @constructor
- * @param {object} storyline - the Storyline instance where this slider will be shown
+ * @param {object} storyline - the storyline instance where this slider will be shown
  * @param {object[]} cards - an array of configuration objects containing the content for the cards in this slider
  * @param {number} startIndex - an index for start card
  * @param {number} width - the intended width in pixels for the chart
  * @param {number} height - the intended height in pixels for the chart
  */
-var Slider = function(cards, startIndex, width, height) {
+var Slider = function(storyline, cards, startIndex, width, height) {
+  this.storyline = storyline;
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
@@ -29,7 +30,7 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
+    this.storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
@@ -65,13 +66,13 @@ Slider.prototype = {
     if(this.cardsElem.children[pastActiveCard].classList.contains('active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('active');
-      storyline.chart.markers[pastActiveCard].classList.remove('active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.markers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
-    storyline.chart.markers[currentActiveCard].classList.add('active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
+    this.storyline.chart.markers[currentActiveCard].classList.add('active')
+    this.storyline.chart.textMarkers[currentActiveCard].classList.add('active')
   },
   /**
    * sets the width of the document
@@ -145,7 +146,7 @@ Slider.prototype = {
       ev.preventDefault();
       switch(ev.type) {
         case 'tap':
-          storyline.trackEvent('tap', 'cards')
+          self.storyline.trackEvent('tap', 'cards')
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
           var prevCardBound = clickMoveCardSpace/window.innerWidth;
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
@@ -160,7 +161,7 @@ Slider.prototype = {
           }
         case 'panleft':
         case 'panright':
-          storyline.trackEvent('pan', 'slider')
+          self.storyline.trackEvent('pan', 'slider')
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
           //make a check if first or last card to prevent crazy space//
