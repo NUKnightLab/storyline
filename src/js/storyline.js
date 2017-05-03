@@ -43,7 +43,7 @@ Storyline.prototype = {
       self.positionSlider(self.slider)
     });
     PubSub.subscribe('window resized', function(topic, data) {
-      self.resetWidth(data);
+      self.resetWidth(data, 'window');
     })
   },
   initTracking: function() {
@@ -58,7 +58,8 @@ Storyline.prototype = {
       this.visitor.event(category, action, label, value).send();
     }
   },
-  resetWidth: function(newWidth) {
+  resetWidth: function(newWidth, targetType) {
+    storyline.trackEvent('resize', targetType)
     this.width = newWidth;
     var oldSlider = this.slider.elem
     var lastActiveCard = this.slider.activeCard;
@@ -139,6 +140,7 @@ Storyline.prototype = {
     slider.elem.style.opacity = 1;
   },
   attachClickHandler: function(div, targetType) {
+    storyline.trackEvent('click', targetType)
     var self = this;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {

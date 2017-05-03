@@ -145,6 +145,7 @@ Slider.prototype = {
       ev.preventDefault();
       switch(ev.type) {
         case 'tap':
+          storyline.trackEvent('tap', 'cards')
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
           var prevCardBound = clickMoveCardSpace/window.innerWidth;
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
@@ -159,6 +160,7 @@ Slider.prototype = {
           }
         case 'panleft':
         case 'panright':
+          storyline.trackEvent('pan', 'slider')
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
           //make a check if first or last card to prevent crazy space//
@@ -189,8 +191,8 @@ Slider.prototype = {
       mc.add(new Hammer.Tap({
         domEvents: true
       }))
-      mc.on('panleft panright panend', handleHammer, 'pan')
-      mc.on('tap', handleHammer, 'tap')
+      mc.on('panleft panright panend', handleHammer)
+      mc.on('tap', handleHammer)
     }
 
     Array.prototype.map.call(this.cardsElem.children, function(content) {
