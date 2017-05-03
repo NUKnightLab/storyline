@@ -134,7 +134,6 @@ DataFactory.prototype = {
             resolve(self.createDataObj(data, config))
           })
         }, function(reason) {
-          debugger;
           self.errorMessage = reason
           self.errorLog()
         })

@@ -1,12 +1,22 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, startIndex, height, width) {
+/**
+ * Instantiate a slider to display the given cards on the given storyline.
+ * @constructor
+ * @param {object} storyline - the storyline instance where this slider will be shown
+ * @param {object[]} cards - an array of configuration objects containing the content for the cards in this slider
+ * @param {number} startIndex - an index for start card
+ * @param {number} width - the intended width in pixels for the chart
+ * @param {number} height - the intended height in pixels for the chart
+ */
+var Slider = function(storyline, cards, startIndex, width, height) {
+  this.storyline = storyline;
   this.activeCard = startIndex;
   this.cards = cards;
   this.MARGIN = 10;
   this.NAV_HEIGHT = 16 + 10; // actual height + margin height//
-  this.height = height;
   this.width = width;
+  this.height = height;
   this.createSlider();
 }
 
@@ -20,7 +30,7 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.attachClickHandler(this.navElem.children[0].children);
+    this.storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
@@ -51,35 +61,18 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
-  attachClickHandler: function(div) {
-    var pastActiveCard = this.activeCard;
-    for(var i=0; i < div.length; i++) {
-      div[i].onclick = function(event, self) {
-        var classes = event.target.classList;
-
-        for(var i in classes) {
-          if(classes[i].indexOf("-") != -1) {
-            var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-            var pastActiveCard = storyline.slider.activeCard
-            storyline.slider.goToCard(currentActiveCard)
-            return false;
-          }
-        }
-      }
-    }
-  },
   setActiveCard: function(currentActiveCard, pastActiveCard) {
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('active');
-      storyline.chart.markers[pastActiveCard].classList.remove('active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.markers[pastActiveCard].classList.remove('active')
+      this.storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('active');
     this.navElem.children[0].children[currentActiveCard].classList.add('active');
-    storyline.chart.markers[currentActiveCard].classList.add('active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
+    this.storyline.chart.markers[currentActiveCard].classList.add('active')
+    this.storyline.chart.textMarkers[currentActiveCard].classList.add('active')
   },
   /**
    * sets the width of the document
@@ -153,6 +146,7 @@ Slider.prototype = {
       ev.preventDefault();
       switch(ev.type) {
         case 'tap':
+          self.storyline.trackEvent('tap', 'cards')
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
           var prevCardBound = clickMoveCardSpace/window.innerWidth;
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
@@ -167,6 +161,7 @@ Slider.prototype = {
           }
         case 'panleft':
         case 'panright':
+          self.storyline.trackEvent('pan', 'slider')
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
           //make a check if first or last card to prevent crazy space//
@@ -197,7 +192,8 @@ Slider.prototype = {
       mc.add(new Hammer.Tap({
         domEvents: true
       }))
-      mc.on('panleft panright panend tap', handleHammer)
+      mc.on('panleft panright panend', handleHammer)
+      mc.on('tap', handleHammer)
     }
 
     Array.prototype.map.call(this.cardsElem.children, function(content) {

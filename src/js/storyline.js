@@ -1,7 +1,15 @@
 import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
+import ua from 'universal-analytics'
 
+/**
+ * Instantiate a storyline
+ * @constructor
+ * @param {string} targetId - a DOM element ID indicating the container for the StoryLine.
+ * @param {object|string} dataConfig - a JS object which defines the data source and other configuration options,
+ *                                     or a URL to a JSON file which represents such an object.
+ */
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   var self = this;
@@ -12,7 +20,6 @@ var Storyline = function(targetId, dataConfig) {
       self.dataConfig = config;
       self.init();
     });
-    // TODO: add error handling to request
     req.open("GET", dataConfig);
     req.send();
   } else {
@@ -23,8 +30,9 @@ var Storyline = function(targetId, dataConfig) {
 
 Storyline.prototype = {
   init: function() {
-    var self = this;
+    this.initTracking();
     this.setDimensions();
+    var self = this;
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
       self.chart = self.initChart(dataObj);
@@ -35,10 +43,23 @@ Storyline.prototype = {
       self.positionSlider(self.slider)
     });
     PubSub.subscribe('window resized', function(topic, data) {
-      self.resetWidth(data);
+      self.resetWidth(data, 'window');
     })
   },
-  resetWidth: function(newWidth) {
+  initTracking: function() {
+    try {
+      var visitor = ua('UA-27829802-5',  {https: true});
+      visitor.pageview({dl: document.location.href}).send();
+      this.visitor = visitor;
+    } catch(e) { /* we don't want any problem here to sidetrack things */}
+  },
+  trackEvent: function( category, action, label, value ) {
+    if (this.visitor) {
+      this.visitor.event(category, action, label, value).send();
+    }
+  },
+  resetWidth: function(newWidth, targetType) {
+    storyline.trackEvent('resize', targetType)
     this.width = newWidth;
     var oldSlider = this.slider.elem
     var lastActiveCard = this.slider.activeCard;
@@ -57,12 +78,11 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.cards, activeCard, sliderHeight, this.width);
+    return new Slider(this, this.dataConfig.cards, activeCard, this.width, sliderHeight);
   },
   initChart: function(dataObj) {
-    //chart height//
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
-    return new Chart(dataObj, this.width, chartHeight, this.margin)
+    return new Chart(this, dataObj, this.width, chartHeight, this.margin);
   },
   /**
    * For each slide configuration object, if no display_date is specified,
@@ -115,8 +135,29 @@ Storyline.prototype = {
     slider.setWidth(this.width)
     slider.goToCard();
     slider.slideCard();
-    slider.attachClickHandler(this.chart.markers);
+    this.attachClickHandler(this.chart.markers,'marker');
     slider.elem.style.opacity = 1;
+  },
+  attachClickHandler: function(div, targetType) {
+    this.trackEvent('click', targetType)
+    var self = this;
+    for(var i=0; i < div.length; i++) {
+      div[i].onclick = function(event) {
+        self.handleClick(event, targetType);
+      }
+    }
+  },
+  handleClick: function(event, targetType) {
+    this.trackEvent('click', targetType)
+    var classes = event.target.classList;
+
+    for(var i in classes) {
+      if(classes[i].indexOf("-") != -1) {
+        var currentActiveCard = parseFloat(classes[i].split("-")[1]);
+        this.slider.goToCard(currentActiveCard)
+        return false;
+      }
+    }
   }
 }
 

@@ -18,6 +18,7 @@ describe('ChartJS', () => {
                    [d3Time.timeParse("%m/%d/%Y")("05/30/80"), 2]
                  ];
       Chart1 = new Chart(
+                null, // no storyline needed for testing.
                  {
                    data: {},
                    bounds: {

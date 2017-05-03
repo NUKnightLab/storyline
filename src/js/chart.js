@@ -4,7 +4,16 @@ d3.scale = require('d3-scale');
 d3.selection = require('d3-selection');
 d3.time = require('d3-time-format');
 
-var Chart = function(dataObj, width, height, margin) {
+/**
+ * Instantiate the chart component of the Storyline.
+ * @constructor
+ * @param {object} storyline - the Storyline instance where this chart will be shown
+ * @param {object} dataObj - an object which contains all the data values and interpretation needed to render the chart. This should be created using DataFactory.
+ * @param {number} width - the intended width in pixels for the chart
+ * @param {number} height - the intended height in pixels for the chart
+ * @param {object} margin - a JS object with `top`, `right`, `bottom`, and `left` values, each of which is a number of pixels.
+ */
+var Chart = function(storyline, dataObj, width, height, margin) {
     var AXIS_HEIGHT = 25;
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
@@ -149,9 +158,9 @@ Chart.prototype = {
       markerElem.appendChild(circle);
       textElem.appendChild(text);
 
-    self.textMarkers.push(textElem);
-    self.markers.push(markerElem);
-    self.elem.appendChild(markerElem)
+      self.textMarkers.push(textElem);
+      self.markers.push(markerElem);
+      self.elem.appendChild(markerElem)
     })
     self.textMarkers.map(function(textItem) {
       self.elem.appendChild(textItem)
