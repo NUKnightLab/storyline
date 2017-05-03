@@ -1,6 +1,18 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, config, startIndex, height, width, markers) {
+/**
+ * Instantiate a slider to display the given cards on the given storyline.
+ *
+ * @param {object} storyline - the storyline instance where this slider will be shown
+ * @param {object[]} cards - an array of configuration objects containing the content for the cards in this slider
+ * @param {object} config
+ * @param {number} startIndex - an index for start card
+ * @param {number} height - the intended height in pixels for the chart
+ * @param {number} width - the intended width in pixels for the chart
+ * @returns {undefined}
+ */
+var Slider = function(storyline, cards, config, startIndex, height, width) {
+  this.storyline = storyline;
   this.activeCard = startIndex;
   this.config = config;
   this.cards = cards;
@@ -24,6 +36,7 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
+    this.storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
@@ -185,6 +198,7 @@ Slider.prototype = {
       ev.preventDefault();
       switch(ev.type) {
         case 'tap':
+          self.storyline.trackEvent('tap', 'cards')
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
           var prevCardBound = clickMoveCardSpace/window.innerWidth;
           var nextCardBound = (window.innerWidth - clickMoveCardSpace)/window.innerWidth
