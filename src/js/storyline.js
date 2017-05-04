@@ -6,16 +6,11 @@ import { lib } from './lib';
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   var self = this;
-  if (typeof dataConfig == 'string') {
-    lib.get(dataConfig)
-      .then(function(response) {
-        self.dataConfig = JSON.parse(response)
-        self.init()
-      })
-  } else {
-    this.dataConfig = dataConfig;
-    this.init();
-  }
+  lib.get(dataConfig)
+    .then(function(response) {
+      self.dataConfig = JSON.parse(response)
+      self.init()
+    })
 }
 
 Storyline.prototype = {
