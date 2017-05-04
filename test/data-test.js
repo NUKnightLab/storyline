@@ -24,9 +24,6 @@ describe('DataJS', () => {
       global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
       requests = [];
 
-      //XMLHttpRequest.onCreate = function (xhr) {
-      //  requests.push(xhr);
-      //};
       const finalData = {
         date:
         [
@@ -85,7 +82,7 @@ describe('DataJS', () => {
         {'date': '02/29/80', 'US Unemployment Rate': 3},
         {'date': '03/31/80', 'US Unemployment Rate': 2},
         {'date': '04/30/80', 'US Unemployment Rate': 3}
-      ]
+      ],
       config = {
         "data": {
           "data_column_name": "US Unemployment Rate",
@@ -97,7 +94,6 @@ describe('DataJS', () => {
           "y_axis_label": ""
         }
       }
-      //code heere//
       stub = sinon.stub(DataFactory.prototype, 'getSlideMarkers')
       results = dataFactoryInstance.createDataObj(dataInput, config)
     })

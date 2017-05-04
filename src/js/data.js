@@ -32,7 +32,8 @@ DataFactory.prototype = {
       var dateParse = d3Time.timeParse(config.data.datetime_format);
       var x = dateParse(data[i][config.data.datetime_column_name]);
       var y = parseFloat(data[i][config.data.data_column_name]);
-      if(isNaN(parseInt(x)) || isNaN(parseInt(y))) {
+      //check if x or y is undefined or null
+      if(!x || !y) {
         var errorMessage = "";
         errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
         errorMessage = isNaN(parseInt(y)) ? "y axis is invalid, check that your y axis column name is correct" : errorMessage
