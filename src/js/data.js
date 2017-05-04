@@ -112,9 +112,9 @@ DataFactory.prototype = {
    * @param {string} file - name of the csv file to read
    * @returns {undefined}
    */
-  get: function(file) {
-    file = file ? file.data.url : undefined
-    return lib.get(file);
+  getCSV: function(context) {
+    let file = context ? context.data.url : undefined
+    return file
   },
 
   /**
@@ -126,7 +126,7 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      self.get(config)
+      lib.get(self.getCSV(config))
         .then(function(response) {
           parse(response, {'columns': true}, function(err, data) {
             resolve(self.createDataObj(data, config))
