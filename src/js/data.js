@@ -132,11 +132,23 @@ DataFactory.prototype = {
             resolve(self.createDataObj(data, config))
           })
         }, function(reason) {
-          var errorMessage = reason + " Check that your csv file path is correct"
-          lib.errorLog({errorMessage})
+          self.errorMessage = reason
+          self.errorLog()
         })
     })
   },
+  errorLog: function() {
+    var mustache = require('mustache');
+     const template =
+       "<div class='error'>" +
+       "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
+       "</div>"
+     var rendered = mustache.render(template, this),
+         parser = new DOMParser(),
+         doc = parser.parseFromString(rendered, "text/html");
+
+     storyline.elem.append(doc.body.children[0])
+  }
 }
 
 module.exports = {
