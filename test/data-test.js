@@ -1,4 +1,5 @@
 import { DataFactory } from '../src/js/data.js';
+import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 import moment from 'moment'
 import sinon from 'sinon';
@@ -49,15 +50,17 @@ describe('DataJS', () => {
       }
 
       exampleData = "Date,US unemployment rate 1/31/80, 6.3 2/29/80 6.3, 3/31/80 6.3";
-      callBack = sinon.stub(dataFactoryInstance, 'get').returns(new Promise(function(resolve, reject) {
+      callBack = sinon.stub(lib, 'get').returns(new Promise(function(resolve, reject) {
         resolve(exampleData);
       }))
 
       createData = sinon.stub(DataFactory.prototype, 'createDataObj').returns(finalData)
     })
-    it('should invoke the get method', () => {
-      dataFactoryInstance.fetchData(config);
-      expect(callBack.called).to.be.true
+    it('should invoke the get lib method with the proper file url', () => {
+      let result = dataFactoryInstance.fetchData(config);
+      sinon.assert.called(callBack)
+      let options = callBack.getCall(0).args[0]
+      expect(options).to.eq('src/assets/dates_unemployment.csv')
     })
     it('should return exampleData from get method', () => {
       dataFactoryInstance.fetchData(config);
