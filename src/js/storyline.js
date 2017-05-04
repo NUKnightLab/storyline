@@ -1,20 +1,17 @@
 import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
+import { lib } from './lib';
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   var self = this;
   if (typeof dataConfig == 'string') {
-    var req = new XMLHttpRequest;
-    req.addEventListener("load", function() {
-      var config = JSON.parse(this.responseText);
-      self.dataConfig = config;
-      self.init();
-    });
-    // TODO: add error handling to request
-    req.open("GET", dataConfig);
-    req.send();
+    lib.get(dataConfig)
+      .then(function(response) {
+        self.dataConfig = JSON.parse(response)
+        self.init()
+      })
   } else {
     this.dataConfig = dataConfig;
     this.init();
