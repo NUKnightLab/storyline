@@ -159,6 +159,7 @@ DataFactory.prototype = {
     var dateParse = d3Time.timeParse(config.data.datetime_format)
     var x = dateParse(date)
     var y = data.feed.entry[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+    y = parseFloat(y)
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
@@ -167,7 +168,10 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
     }
-debugger;
+    markers = this.getSlideMarkers(config.cards);
+
+    var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
+    return dataObj;
   },
 
   getColumnHeaders: function(obj) {

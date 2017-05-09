@@ -7,7 +7,7 @@
   },
   "chart": {
     "datetime_format": "%y",
-    "y_axis_label": "# of flights"
+    "y_axis_label": "Unemployment"
   },
   "start_at_card": 0,
   "cards": [
