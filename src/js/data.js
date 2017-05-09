@@ -114,7 +114,7 @@ DataFactory.prototype = {
    */
   getCSV: function(context) {
     let file = context ? context.data.url : undefined
-    return file
+    return lib.parseSpreadsheetURL(file)
   },
 
   /**
@@ -126,17 +126,57 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      lib.get(self.getCSV(config))
+      var parts = self.getCSV(config)
+      var url = "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json"
+      lib.get(url)
         .then(function(response) {
-          parse(response, {'columns': true}, function(err, data) {
-            resolve(self.createDataObj(data, config))
-          })
+          var data = JSON.parse(response)
+          var headers = self.getColumnHeaders(data.feed.entry[0])
+          resolve(self.createDataFromSheet(data, headers, config))
         }, function(reason) {
           self.errorMessage = reason
           self.errorLog()
         })
     })
   },
+
+  createDataFromSheet: function(data, headers, config) {
+    var d3Time = require('d3-time-format');
+    var output = [],
+        bounds = {
+          minX: null,
+          maxX: null,
+          minY: null,
+          maxY: null
+        },
+        axes = {
+          yLabel: null,
+          timeFormat: null
+        },
+        markers = [];
+    for(var i=0; i<data.feed.entry.length;i++) {
+    var date = data.feed.entry[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
+    var dateParse = d3Time.timeParse(config.data.datetime_format)
+    var x = dateParse(date)
+    var y = data.feed.entry[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+      bounds.minY = this.getMin(y, bounds.minY)
+      bounds.maxY = this.getMax(y, bounds.maxY)
+      bounds.minX = this.getMin(x, bounds.minX)
+      bounds.maxX = this.getMax(x, bounds.maxX)
+      output.push([x, y]);
+      axes.timeFormat = config.chart.datetime_format;
+      axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
+    }
+debugger;
+  },
+
+  getColumnHeaders: function(obj) {
+    var reg = /gsx\$([^]+)/g
+    var all = Object.keys(obj).join(" ");
+    var headers = all.match(reg)
+    return headers[0].replace(/gsx\$/g, '').split(" ")
+  },
+
   errorLog: function() {
     var mustache = require('mustache');
      const template =
