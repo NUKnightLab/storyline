@@ -116,6 +116,12 @@ DataFactory.prototype = {
     var self = this;
     return new Promise(function(resolve, reject) {
       lib.get('/spreadsheets/1amj29A-YdAXQu18PipfgJ6biylaUhYLBxNiP4PpzW5g')
+        .then(function(response) {
+          var res = JSON.parse(response)
+          for(var i=0; i < res.values[0].length; i++) {
+            console.log("columns = " + res.values[0][i])
+          }
+         })
       lib.get(self.getCSV(config))
         .then(function(response) {
           parse(response, {'columns': true}, function(err, data) {

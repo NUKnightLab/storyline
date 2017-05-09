@@ -15,11 +15,10 @@ const app = express();
      sheets.spreadsheets.values.get({
        auth: 'API_KEY',
        spreadsheetId: req.params.id,
-       range: 'A2:B'
+       range: 'dates_unemployment'
      },function(err, response) {
        if(err) {console.log('API returned an error')}
-       console.log(response.values)
-       res.send(response.values)
+       res.send(response)
      })
   })
 
