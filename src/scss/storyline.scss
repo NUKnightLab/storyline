@@ -2,6 +2,9 @@
 @import "fonts";
 @import "variables";
 @import "default";
-@import "line";
-@import "slider";
-@import "chart";
+
+.Storyline {
+  @import "line";
+  @import "slider";
+  @import "chart";
+}
