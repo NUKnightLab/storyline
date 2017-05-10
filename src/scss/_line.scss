@@ -1,62 +1,74 @@
-line {
+.Storyline line {
   z-index: 3;
 }
 
-.tick line {
+.Storyline .tick line {
   stroke: rgb(240, 240, 240);
 }
 
-path {
+.Storyline path {
   stroke: $color-grey--lighter;
   stroke-width: 2px;
   z-index:0;
 }
 
-text {
+.Storyline text {
   font-family: $fontFamily-sansSerif;
   border: 1px solid $color-text-default;
   font-size: $font-size-base - 5;
   color: $color-grey--light;
   fill: $color-grey--light;
+
   @media(min-width: 30em) {
     font-size: $font-size-base - 2;
   }
 }
 
-circle[class^="marker"] {
+.Storyline circle[class^="marker"] {
   z-index: 100;
   cursor: pointer;
   border: 6px solid $color-circle;
   stroke: $color-circle;
   stroke-width: 6px;
   fill: $color-circle;
-
-  &.active {
-    fill: $color-circle-active;
-    border: 6px solid $color-circle-active;
-    stroke: $color-circle-active;
-  }
 }
 
-g[class^="marker-"], g[class^="text-"] {
-  text, path {
-    opacity: 0;
-  }
-  &.active {
-    circle {
-      fill: $color-circle-active;
-      border: 6px solid $color-circle-active;
-      stroke: $color-circle-active;
-    }
-    text {
-      color: $color-circle-active;
-      fill: $color-circle-active;
-      opacity: 1;
-      stroke: $color-circle-active;
-    }
-    path {
-      stroke: $color-circle-active;
-      opacity: 1;
-    }
-  }
+.Storyline circle[class^="marker"].is-active {
+  fill: $color-circle-active;
+  border: 6px solid $color-circle-active;
+  stroke: $color-circle-active;
+}
+
+.Storyline g[class^="marker-"] text,
+.Storyline g[class^="text-"] text,
+.Storyline g[class^="marker-"] path,
+.Storyline g[class^="text-"] path {
+  opacity: 0;
+}
+
+.Storyline g[class^="marker-"].is-active circle,
+.Storyline g[class^="text-"].is-active circle,
+.Storyline g[class^="marker-"].is-active circle,
+.Storyline g[class^="text-"].is-active circle {
+  fill: $color-circle-active;
+  border: 6px solid $color-circle-active;
+  stroke: $color-circle-active;
+}
+
+.Storyline g[class^="marker-"].is-active text,
+.Storyline g[class^="text-"].is-active text,
+.Storyline g[class^="marker-"].is-active text,
+.Storyline g[class^="text-"].is-active text {
+  color: $color-circle-active;
+  fill: $color-circle-active;
+  opacity: 1;
+  stroke: $color-circle-active;
+}
+
+.Storyline g[class^="marker-"].is-active path,
+.Storyline g[class^="text-"].is-active path,
+.Storyline g[class^="marker-"].is-active path,
+.Storyline g[class^="text-"].is-active path {
+  stroke: $color-circle-active;
+  opacity: 1;
 }

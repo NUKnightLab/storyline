@@ -4,6 +4,7 @@ import { Slider } from './slider';
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
+  this.elem.className += " Storyline";
   var self = this;
   if (typeof dataConfig == 'string') {
     var req = new XMLHttpRequest;

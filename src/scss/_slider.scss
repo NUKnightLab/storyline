@@ -1,4 +1,4 @@
-.slider-view {
+.Storyline .slider-view {
   margin: 0 auto;
   position: relative;
   opacity: 0;
@@ -7,7 +7,7 @@
   max-height: 246px;
 }
 
-.slider-card {
+.Storyline .slider-card {
   cursor: pointer;
   float: left;
   max-width: 500px;
@@ -21,88 +21,90 @@
     width: 1000px;
     max-width: none;
   }
-
-  &.active {
-    .slider-content {
-      box-shadow: $shadow-4;
-      border: 1px solid $color-text-default;
-    h3 {
-      background-color: $color-primary;
-      color: $color-bg-default;
-      border-radius: 6px 6px 0 0;
-    }
-    p {
-      color: $color-text-default;
-    }
-    }
-  }
 }
 
-.slider-content {
+.Storyline .slider-card.is-active .slider-content {
+    box-shadow: $shadow-4;
+    border: 1px solid $color-text-default;
+}
+
+.Storyline .slider-card.is-active .slider-content h3 {
+  background-color: $color-primary;
+  color: $color-bg-default;
+  border-radius: 6px 6px 0 0;
+}
+
+.Storyline .slider-card.is-active .slider-content p {
+  color: $color-text-default;
+}
+
+.Storyline .slider-content {
   box-shadow: $shadow-1;
   max-height: 200px;
   overflow: hidden;
   -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
   transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-  h3 {
-    -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    min-height: 38px;
-  }
 }
 
+.Storyline .slider-content h3 {
+  -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+  transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+  min-height: 38px;
+}
 
-.slider-cards {
+.Storyline .slider-cards {
   position: relative;
   margin: 0;
   padding: 0;
   width: max-content;
-
-  &.is-animating {
-    -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-    transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
-  }
 }
 
-.slider-content {
+.Storyline .slider-cards.is-animating {
+  -webkit-transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+  transition: all 1000ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+}
+
+.Storyline .slider-content {
   font-family: $fontFamily-sansSerif;
   border: 1px solid $color-grey--light;
   border-radius: 7px;
   font-size: $font-size-base;
   line-height: $font-line-height;
+}
 
-  & p {
-    text-align: left;
-    padding: 0 10px 0 10px;
-    color: $color-grey--light;
-    font-size: 12px;
+.Storyline .slider-content p {
+  text-align: left;
+  padding: 0 10px 0 10px;
+  color: $color-grey--light;
+  font-size: 12px;
 
-    @media(min-width: 30em) {
-      padding: 0 $spacing-default 0 $spacing-default;
-      font-size: 15px;
-    }
-  }
-  h3 {
-    margin: 0;
-    text-align: left;
-    padding: 5px 10px;
-    font-weight: bold;
-    font-size: $font-size-base;
-    color: $color-grey--light;
-
-    span.h3-date {
-      font-size: $font-size-base;
-      font-weight: normal;
-      display: inline-block;
-      margin-right: 5px;
-      @media(min-width: 30em) {
-        display: block;
-      }
-    }
+  @media(min-width: 30em) {
+    padding: 0 $spacing-default 0 $spacing-default;
+    font-size: 15px;
   }
 }
 
-.nav {
+.Storyline .slider-content h3 {
+  margin: 0;
+  text-align: left;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: $font-size-base;
+  color: $color-grey--light;
+}
+
+.Storyline .slider-content h3 span.h3-date {
+  font-size: $font-size-base;
+  font-weight: normal;
+  display: inline-block;
+  margin-right: 5px;
+
+  @media(min-width: 30em) {
+    display: block;
+  }
+}
+
+.Storyline .nav {
   bottom: 0;
   margin-top: 10px;
   width: 100%;
@@ -110,13 +112,14 @@
   display: block;
   position: absolute;
   text-align: center;
+}
 
-  & ol {
-    margin: 0;
-    padding: 0;
-  }
+.Storyline .nav ol {
+  margin: 0;
+  padding: 0;
+}
 
-  & li {
+.Storyline .nav li {
   top: -5px;
   width: $size-nav-dot;
   height: $size-nav-dot;
@@ -130,12 +133,11 @@
   &:hover {
     cursor: pointer;
   }
+}
 
-  &.active {
-    background-color: $color-grey--dark;
-    width: $size-nav-dot--active;
-    height: $size-nav-dot--active;
-    margin-bottom: 0px;
-  }
-  }
+.Storyline .nav li.is-active {
+  background-color: $color-grey--dark;
+  width: $size-nav-dot--active;
+  height: $size-nav-dot--active;
+  margin-bottom: 0px;
 }

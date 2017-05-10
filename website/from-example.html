@@ -2,16 +2,16 @@
 <html>
 <head>
 	<title>From example</title>
+  <!-- <script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script> -->
+  <script src="http://localhost:8000/dist/js/storyline.js"></script>
+  <!-- <link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css"> -->
+  <link rel="stylesheet" href="http://localhost:8000/dist/css/storyline.css">
 </head>
 <body>
 
-
-<script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script>
-<link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css">
-
 <div id="my-storyline" width="500" height="500"></div>
 <script>
-  var config_url = 'income-cards.json';
+  var config_url = 'https://cdn.knightlab.com/libs/storyline/latest/assets/example.json';
   var storyline = new Storyline('my-storyline', config_url);
 </script>
 

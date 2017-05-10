@@ -70,16 +70,16 @@ Slider.prototype = {
   },
   setActiveCard: function(currentActiveCard, pastActiveCard) {
     this.activeCard = currentActiveCard;
-    if(this.cardsElem.children[pastActiveCard].classList.contains('active')) {
-      this.cardsElem.children[pastActiveCard].classList.remove('active');
-      this.navElem.children[0].children[pastActiveCard].classList.remove('active');
-      storyline.chart.markers[pastActiveCard].classList.remove('active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('active')
+    if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
+      this.cardsElem.children[pastActiveCard].classList.remove('is-active');
+      this.navElem.children[0].children[pastActiveCard].classList.remove('is-active');
+      storyline.chart.markers[pastActiveCard].classList.remove('is-active')
+      storyline.chart.textMarkers[pastActiveCard].classList.remove('is-active')
     }
-    this.cardsElem.children[currentActiveCard].classList.add('active');
-    this.navElem.children[0].children[currentActiveCard].classList.add('active');
-    storyline.chart.markers[currentActiveCard].classList.add('active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('active')
+    this.cardsElem.children[currentActiveCard].classList.add('is-active');
+    this.navElem.children[0].children[currentActiveCard].classList.add('is-active');
+    storyline.chart.markers[currentActiveCard].classList.add('is-active')
+    storyline.chart.textMarkers[currentActiveCard].classList.add('is-active')
   },
   /**
    * sets the width of the document
