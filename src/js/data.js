@@ -113,8 +113,12 @@ DataFactory.prototype = {
    * @returns {undefined}
    */
   getCSV: function(context) {
-    let file = context ? context.data.url : undefined
-    return lib.parseSpreadsheetURL(file)
+    let url = context ? context.data.url : undefined
+    if (url.substring(0,4) == 'http') {
+      var parts = lib.parseSpreadsheetURL(url)
+      return "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json"
+    };
+    if(url.substring(url.length - 3) == 'csv') {return url}
   },
 
   /**
@@ -126,13 +130,20 @@ DataFactory.prototype = {
   fetchData: function(config) {
     var self = this;
     return new Promise(function(resolve, reject) {
-      var parts = self.getCSV(config)
-      var url = "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json"
+      var url = self.getCSV(config)
       lib.get(url)
         .then(function(response) {
-          var data = JSON.parse(response)
-          var headers = self.getColumnHeaders(data.feed.entry[0])
-          resolve(self.createDataFromSheet(data, headers, config))
+          try {
+            var data = JSON.parse(response)
+            var headers = self.getColumnHeaders(data.feed.entry[0])
+            resolve(self.createDataFromSheet(data, headers, config))
+          } catch(e) {
+            //downcase headers//
+            response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
+            parse(response, {'columns': true}, function(err, data) {
+              resolve(self.createDataObj(data, config))
+            })
+          }
         }, function(reason) {
           self.errorMessage = reason
           self.errorLog()

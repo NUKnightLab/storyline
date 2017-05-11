@@ -1,6 +1,6 @@
 {
   "data": {
-    "url": "https://docs.google.com/spreadsheets/d/1amj29A-YdAXQu18PipfgJ6biylaUhYLBxNiP4PpzW5g/edit#gid=1399340410",
+    "url": "./assets/dates_unemployment_1980_2015.csv",
     "data_column_name": "US Unemployment Rate",
     "datetime_format": "%m/%d/%y",
     "datetime_column_name": "date"
