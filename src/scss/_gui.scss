@@ -1,0 +1,48 @@
+.flyout {
+  position: relative;
+  margin-left: 50%;
+  margin-top: 25%;
+
+  &:hover > .flyout-content {
+    left: 0;
+    height:auto;
+    overflow:visible;
+  }
+}
+
+.data-nav > a, .data-nav > li > a {
+  text-decoration: none;
+  color: black;
+  line-height: 1;
+  padding: 1em;
+  background-color: #09f;
+  color: #fff;
+  white-space: nowrap;
+  margin: 0 auto;
+
+  &:hover {
+    background-color:red;
+  }
+
+}
+
+.data-columns > li {
+  list-style: none;
+}
+
+.flyout-content {
+  position:absolute;
+  top:100%;
+  left:-99999px;
+  height:0;
+  padding: 0;
+  overflow:hidden;
+}
+
+.stacked > li{
+  display:list-item;
+}
+
+.stacked > li > a{
+  display:block;
+}

@@ -136,13 +136,15 @@ DataFactory.prototype = {
           try {
             var data = JSON.parse(response)
             var headers = self.getColumnHeaders(data.feed.entry[0])
-            resolve(self.createDataFromSheet(data, headers, config))
+            //resolve(self.createDataFromSheet(data, headers, config))
+            resolve(headers)
           } catch(e) {
             //downcase headers//
             response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
             parse(response, {'columns': true}, function(err, data) {
-              resolve(self.createDataObj(data, config))
+              //resolve(self.createDataObj(data, config))
             })
+            resolve(response.split(/\n/)[0].split(','))
           }
         }, function(reason) {
           self.errorMessage = reason
