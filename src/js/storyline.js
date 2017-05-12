@@ -7,11 +7,9 @@ var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   this.elem.className += " Storyline";
   var self = this;
-  lib.get(dataConfig)
-    .then(function(response) {
-      self.dataConfig = JSON.parse(response)
-      self.init()
-    })
+    self.dataConfig = dataConfig
+    self.init()
+  })
 }
 
 Storyline.prototype = {
