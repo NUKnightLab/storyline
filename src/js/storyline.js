@@ -9,7 +9,6 @@ var Storyline = function(targetId, dataConfig) {
   var self = this;
     self.dataConfig = dataConfig
     self.init()
-  })
 }
 
 Storyline.prototype = {
