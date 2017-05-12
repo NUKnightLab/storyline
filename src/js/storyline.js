@@ -1,7 +1,6 @@
 import { Chart } from './chart';
 import { DataFactory } from './data';
 import { Slider } from './slider';
-import { GUI } from './gui';
 import { lib } from './lib';
 
 var Storyline = function(targetId, dataConfig) {
@@ -21,16 +20,12 @@ Storyline.prototype = {
     this.setDimensions();
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
-      console.log(dataObj)
-      self.gui = new GUI()
-      var templ = self.gui.createGUI(dataObj);
-      self.elem.append(templ)
-      //self.chart = self.initChart(dataObj);
-      //// slider cards include dates so must happen after data is grabbed
-      //self.populateSlideDates(dataObj);
-      //self.slider = self.initSlider();
-      //self.positionChart(self.chart)
-      //self.positionSlider(self.slider)
+      self.chart = self.initChart(dataObj);
+      // slider cards include dates so must happen after data is grabbed
+      self.populateSlideDates(dataObj);
+      self.slider = self.initSlider();
+      self.positionChart(self.chart)
+      self.positionSlider(self.slider)
     });
     PubSub.subscribe('window resized', function(topic, data) {
       self.resetWidth(data);
