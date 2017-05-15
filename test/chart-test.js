@@ -54,8 +54,8 @@ describe('ChartJS', () => {
         [d3Time.timeParse("%m/%d/%Y")("05/30/80"), 2]
       ];
       let markers = [
-        {index: 3, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'},
-        {index: 4, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'}
+        {rowNum: 3, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'},
+        {rowNum: 4, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'}
       ]
       Chart1 = new Chart(
                      {

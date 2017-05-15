@@ -5,6 +5,7 @@ import { lib } from './lib';
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
+  this.elem.className += 'Storyline'
   var self = this;
     self.dataConfig = dataConfig
     self.init()
@@ -44,9 +45,9 @@ Storyline.prototype = {
     return data.fetchData(this.dataConfig);
   },
   initSlider: function(lastActiveCard) {
-    var activeCard = !!lastActiveCard ? lastActiveCard : this.dataConfig.start_at_card
+    var activeCard = !!lastActiveCard ? lastActiveCard : 0
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.dataConfig.cards, activeCard, sliderHeight, this.width);
+    return new Slider(this.data.markers, activeCard, sliderHeight, this.width);
   },
   initChart: function(dataObj) {
     //chart height//
@@ -63,11 +64,11 @@ Storyline.prototype = {
     var d3Time = require('d3-time-format'),
         formatter = d3Time.timeFormat(this.dataConfig.chart.datetime_format);
 
-    for (var card of this.dataConfig.cards) {
+    for (var card of dataObj.markers) {
       if (card.display_date === undefined) {
-        var row = dataObj.data[card.row_number];
+        var row = dataObj.data[card.rowNum];
         // if row is null, we should have checked/errored before here
-        card.display_date = formatter(row[0]);
+        card.displayDate = formatter(row[0]);
       }
     }
   },

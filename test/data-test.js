@@ -189,11 +189,11 @@ describe('DataJS', () => {
   describe('Aggregate slide markers', () => {
     it('should be able to grab markers for slider', () => {
       const slide = {
-          "index": 4,
+          "rowNum": 4,
           "slideTitle": 'Pentagon Militarizes',
           "slideText": 'Some text here'
       }
-      const results = dataFactoryInstance.getSlideMarkers(slide.index, slide.slideTitle, slide.slideText);
+      const results = dataFactoryInstance.getSlideMarkers(slide.rowNum, slide.slideTitle, slide.slideText);
       assert.deepEqual(results, slide)
     })
   })

@@ -98,8 +98,8 @@ DataFactory.prototype = {
    * @param {object} slides - slides from config object
    * @returns {array} markers - a list of row numbers
    */
-  getSlideMarkers: function(index, slideTitle, slideText) {
-    return {index, slideTitle, slideText};
+  getSlideMarkers: function(rowNum, slideTitle, slideText) {
+    return {rowNum, slideTitle, slideText};
   },
 
   /**
