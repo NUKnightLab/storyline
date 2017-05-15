@@ -209,7 +209,7 @@ Slider.prototype = {
       })
       var swipe = new Hammer.Swipe({
         direction: Hammer.DIRECTION_HORIZONTAL,
-        velocity: 0.3
+        velocity: 0.7
       })
 
       pan.recognizeWith(swipe)
