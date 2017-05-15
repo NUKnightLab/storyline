@@ -188,25 +188,13 @@ describe('DataJS', () => {
   })
   describe('Aggregate slide markers', () => {
     it('should be able to grab markers for slider', () => {
-      const slides = [
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 5
-        },
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 7
-        },
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 18
-        }
-      ]
-      const results = dataFactoryInstance.getSlideMarkers(slides);
-      assert.deepEqual(results, [5, 7, 18])
+      const slide = {
+          "index": 4,
+          "slideTitle": 'Pentagon Militarizes',
+          "slideText": 'Some text here'
+      }
+      const results = dataFactoryInstance.getSlideMarkers(slide.index, slide.slideTitle, slide.slideText);
+      assert.deepEqual(results, slide)
     })
   })
   describe('Data Manipulation methods', () => {
