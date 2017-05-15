@@ -165,6 +165,16 @@ Slider.prototype = {
             self.currentOffset = self.offsets[newCard];
             self.goToCard(self.activeCard + 1);
           }
+        case 'swipe':
+          var nextCard = ev.deltaX > 0 ? -1 : 1;
+          percentage = (ev.deltaX/self.sliderWidth) * 100
+          transformPercentage = percentage + self.currentOffset
+          var t = ((self.cardWidth/2)/self.sliderWidth)*100;
+          self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
+          self.setActiveCard(self.activeCard+nextCard, self.activeCard);
+          self.currentOffset = self.offsets[self.activeCard]
+          self.goToCard(self.activeCard)
+          break;
         case 'panleft':
         case 'panright':
           percentage = (ev.deltaX/self.sliderWidth) * 100
@@ -190,14 +200,24 @@ Slider.prototype = {
 
     var createHammer = function(v) {
       var mc = new Hammer.Manager(v, {})
-      mc.add(new Hammer.Pan({
+      var pan = new Hammer.Pan({
         direction: Hammer.DIRECTION_HORIZONTAL,
         threshold: 25
-      }))
-      mc.add(new Hammer.Tap({
+      })
+      var tap = new Hammer.Tap({
         domEvents: true
-      }))
-      mc.on('panleft panright panend tap', handleHammer)
+      })
+      var swipe = new Hammer.Swipe({
+        direction: Hammer.DIRECTION_HORIZONTAL,
+        velocity: 0.3
+      })
+
+      pan.recognizeWith(swipe)
+
+      mc.add(pan)
+      mc.add(tap)
+      mc.add(swipe)
+      mc.on('swipe panleft panright panend tap', handleHammer)
     }
 
     Array.prototype.map.call(this.cardsElem.children, function(content) {
