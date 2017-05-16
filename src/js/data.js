@@ -131,8 +131,8 @@ DataFactory.prototype = {
       lib.get(url)
         .then(function(response) {
           try {
-            var data = JSON.parse(response)
-            var headers = self.getColumnHeaders(data.feed.entry[0])
+            var data = JSON.parse(response).feed.entry
+            var headers = self.getColumnHeaders(data[0])
             resolve(self.createDataFromSheet(data, headers, config))
           } catch(e) {
             //downcase headers//
@@ -164,14 +164,14 @@ DataFactory.prototype = {
         },
         activeSlide,
         markers = [];
-    for(var i=0; i<dataFeed.feed.entry.length;i++) {
-      var slideTitle = dataFeed.feed.entry[i]["gsx$slidetitle"].$t
-      var slideText = dataFeed.feed.entry[i]["gsx$slidetext"].$t
-      var slideActive = dataFeed.feed.entry[i]["gsx$slideactive"].$t
-      var date = dataFeed.feed.entry[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
+    for(var i=0; i<dataFeed.length;i++) {
+      var slideTitle = dataFeed[i]["gsx$slidetitle"].$t
+      var slideText = dataFeed[i]["gsx$slidetext"].$t
+      var slideActive = dataFeed[i]["gsx$slideactive"].$t
+      var date = dataFeed[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
       var dateParse = d3Time.timeParse(config.data.datetime_format)
       var x = dateParse(date)
-      var y = dataFeed.feed.entry[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+      var y = dataFeed[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
       y = parseFloat(y)
         bounds.minY = this.getMin(y, bounds.minY)
         bounds.maxY = this.getMax(y, bounds.maxY)
