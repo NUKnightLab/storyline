@@ -14,7 +14,8 @@ DataFactory.prototype = {
    */
   createDataObj: function(data, config) {
     var d3Time = require('d3-time-format');
-    var output = [],
+    var data = [],
+        activeSlide,
         bounds = {
           minX: null,
           maxX: null,
@@ -44,7 +45,7 @@ DataFactory.prototype = {
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
-      output.push([x, y]);
+      data.push([x, y]);
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
@@ -52,7 +53,7 @@ DataFactory.prototype = {
     }
     markers = this.getSlideMarkers(config.cards);
 
-    var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
+    var dataObj = { data, bounds, axes, markers, activeSlide };
     return dataObj;
   },
 
@@ -147,9 +148,10 @@ DataFactory.prototype = {
     })
   },
 
-  createDataFromSheet: function(data, headers, config) {
+  createDataFromSheet: function(dataFeed, headers, config) {
     var d3Time = require('d3-time-format');
-    var output = [],
+    var data = [],
+        activeSlide,
         bounds = {
           minX: null,
           maxX: null,
@@ -160,29 +162,33 @@ DataFactory.prototype = {
           yLabel: null,
           timeFormat: null
         },
+        activeSlide,
         markers = [];
-    debugger;
-    for(var i=0; i<data.feed.entry.length;i++) {
-      var slideTitle = data.feed.entry[i]["gsx$slidetitle"].$t
-      var slideText = data.feed.entry[i]["gsx$slidetext"].$t
-      var date = data.feed.entry[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
+    for(var i=0; i<dataFeed.feed.entry.length;i++) {
+      var slideTitle = dataFeed.feed.entry[i]["gsx$slidetitle"].$t
+      var slideText = dataFeed.feed.entry[i]["gsx$slidetext"].$t
+      var slideActive = dataFeed.feed.entry[i]["gsx$slideactive"].$t
+      var date = dataFeed.feed.entry[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
       var dateParse = d3Time.timeParse(config.data.datetime_format)
       var x = dateParse(date)
-      var y = data.feed.entry[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+      var y = dataFeed.feed.entry[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
       y = parseFloat(y)
         bounds.minY = this.getMin(y, bounds.minY)
         bounds.maxY = this.getMax(y, bounds.maxY)
         bounds.minX = this.getMin(x, bounds.minX)
         bounds.maxX = this.getMax(x, bounds.maxX)
-        output.push([x, y]);
+        data.push([x, y]);
         axes.timeFormat = config.chart.datetime_format;
         axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
       if(slideTitle.length > 0 || slideText.length > 0) {
+        if(slideActive) {
+          activeSlide = markers.length
+        }
         markers.push(this.getSlideMarkers(i, slideTitle, slideText));
       }
     }
 
-    var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
+    var dataObj = { data, bounds, axes, markers, activeSlide };
     return dataObj;
   },
 

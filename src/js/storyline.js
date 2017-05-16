@@ -45,7 +45,7 @@ Storyline.prototype = {
     return data.fetchData(this.dataConfig);
   },
   initSlider: function(lastActiveCard) {
-    var activeCard = !!lastActiveCard ? lastActiveCard : 0
+    var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeSlide ? this.data.activeSlide : 0
     var sliderHeight = (0.4*this.height)
     return new Slider(this.data.markers, activeCard, sliderHeight, this.width);
   },
