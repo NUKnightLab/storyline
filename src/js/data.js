@@ -1,4 +1,4 @@
-var parse = require('csv-parse');
+var parse = require('csv-parse/lib/sync');
 import {lib} from './lib'
 
 var DataFactory = function() {
@@ -130,16 +130,17 @@ DataFactory.prototype = {
       var url = self.getCSV(config)
       lib.get(url)
         .then(function(response) {
-          try {
-            var data = JSON.parse(response).feed.entry
-            var headers = self.getColumnHeaders(data[0])
-            resolve(self.createDataFromSheet(data, headers, config))
-          } catch(e) {
-            //downcase headers//
-            response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
-            parse(response, {'columns': true}, function(err, data) {
-              resolve(self.createDataObj(data, config))
-            })
+          if(response) {
+            var formattedResponse, headers;
+            try {
+              formattedResponse = JSON.parse(response).feed.entry
+              headers = self.getColumnHeaders(config, formattedResponse[0])
+            } catch(e) {
+              //downcase headers//
+              response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
+              formattedResponse = parse(response, {'columns': true})
+            }
+            resolve(self.createDataFromSheet(formattedResponse, headers, config))
           }
         }, function(reason) {
           self.errorMessage = reason
@@ -192,11 +193,16 @@ DataFactory.prototype = {
     return dataObj;
   },
 
-  getColumnHeaders: function(obj) {
+  getColumnHeaders: function(config, obj) {
     var reg = /gsx\$([^]+)/g
     var all = Object.keys(obj).join(" ");
     var headers = all.match(reg)
-    return headers[0].replace(/gsx\$/g, '').split(" ")
+    headers = headers[0].replace(/gsx\$/g, '').split(" ")
+    var xCol = config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()
+    var yCol = config.data.data_column_name.replace(/\s/g, '').toLowerCase()
+    headers.indexOf(xCol) >= 0 ? xCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    headers.indexOf(yCol) >= 0 ? yCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    return {xCol, yCol}
   },
 
   errorLog: function() {
