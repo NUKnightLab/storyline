@@ -34,6 +34,8 @@ Storyline.prototype = {
       self.slider = self.initSlider();
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
+    }).catch(function(e) {
+      console.log(e.message)
     });
     PubSub.subscribe('window resized', function(topic, data) {
       self.resetWidth(data);

@@ -1,4 +1,5 @@
 import { DataFactory } from '../src/js/data.js';
+import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 import moment from 'moment'
 import sinon from 'sinon';
@@ -24,9 +25,6 @@ describe('DataJS', () => {
       global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
       requests = [];
 
-      //XMLHttpRequest.onCreate = function (xhr) {
-      //  requests.push(xhr);
-      //};
       const finalData = {
         date:
         [
@@ -85,7 +83,7 @@ describe('DataJS', () => {
         {'date': '02/29/80', 'US Unemployment Rate': 3},
         {'date': '03/31/80', 'US Unemployment Rate': 2},
         {'date': '04/30/80', 'US Unemployment Rate': 3}
-      ]
+      ],
       config = {
         "data": {
           "data_column_name": "US Unemployment Rate",
@@ -97,7 +95,6 @@ describe('DataJS', () => {
           "y_axis_label": ""
         }
       }
-      //code heere//
       stub = sinon.stub(DataFactory.prototype, 'getSlideMarkers')
       results = dataFactoryInstance.createDataObj(dataInput, config)
     })
@@ -134,6 +131,57 @@ describe('DataJS', () => {
     })
     afterEach(() => {
       stub.restore();
+    })
+  })
+  describe('Throw error if column names are invalid', () => {
+    let dataInput, config, stub, stubLib;
+    beforeEach(()=> {
+      dataInput = [
+        {'date': '01/31/80', 'US Unemployment Rate': 1},
+        {'date': '02/29/80', 'US Unemployment Rate': 3},
+        {'date': '03/31/80', 'US Unemployment Rate': 2},
+        {'date': '04/30/80', 'US Unemployment Rate': 3}
+      ],
+      stub = sinon.stub(DataFactory.prototype, 'getSlideMarkers')
+      stubLib = sinon.stub(lib, 'errorLog');
+    })
+    it('returns an error message when y column_name is incorrect', () => {
+      config = {
+        "data": {
+          "data_column_name": "US Unemployment",
+          "datetime_format": "%m/%d/%Y",
+          "datetime_column_name": "date"
+        },
+        "chart": {
+          "datetime_format": "",
+          "y_axis_label": ""
+        }
+      }
+      let results = dataFactoryInstance.createDataObj(dataInput, config)
+      sinon.assert.called(stubLib);
+      let options = stubLib.getCall(0).args[0]
+      expect(options.errorMessage).to.equal('y axis is invalid, check that your y axis column name is correct')
+    })
+    it('returns an error message when x column_name is incorrect', () => {
+      config = {
+        "data": {
+          "data_column_name": "US Unemployment Rate",
+          "datetime_format": "%m/%d/%Y",
+          "datetime_column_name": "day"
+        },
+        "chart": {
+          "datetime_format": "",
+          "y_axis_label": ""
+        }
+      }
+      let results = dataFactoryInstance.createDataObj(dataInput, config)
+      sinon.assert.called(stubLib);
+      let options = stubLib.getCall(0).args[0]
+      expect(options.errorMessage).to.equal('x axis is invalid, check that your x axis column name is correct')
+    })
+    afterEach(() => {
+      stub.restore();
+      stubLib.restore();
     })
   })
   describe('Aggregate slide markers', () => {

@@ -1,4 +1,5 @@
 var parse = require('csv-parse');
+import {lib} from './lib'
 
 var DataFactory = function() {
 }
@@ -26,10 +27,19 @@ DataFactory.prototype = {
         },
         markers = [];
 
-    for(var i=0; i<data.length;i++) {
+    var i=0;
+    while(i < data.length) {
       var dateParse = d3Time.timeParse(config.data.datetime_format);
       var x = dateParse(data[i][config.data.datetime_column_name]);
       var y = parseFloat(data[i][config.data.data_column_name]);
+      //check if x or y is undefined or null
+      if(!x || !y) {
+        var errorMessage = "";
+        errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
+        errorMessage = isNaN(parseInt(y)) ? "y axis is invalid, check that your y axis column name is correct" : errorMessage
+        return lib.errorLog({errorMessage})
+        break;
+      }
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
@@ -37,6 +47,8 @@ DataFactory.prototype = {
       output.push([x, y]);
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
+
+      i++;
     }
     markers = this.getSlideMarkers(config.cards);
 
@@ -134,24 +146,11 @@ DataFactory.prototype = {
             resolve(self.createDataObj(data, config))
           })
         }, function(reason) {
-          debugger;
-          self.errorMessage = reason
-          self.errorLog()
+          var errorMessage = reason + " Check that your csv file path is correct"
+          lib.errorLog({errorMessage})
         })
     })
   },
-  errorLog: function() {
-    var mustache = require('mustache');
-    const template =
-      "<div class='error'>" +
-        "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
-      "</div>"
-    var rendered = mustache.render(template, this),
-        parser = new DOMParser(),
-        doc = parser.parseFromString(rendered, "text/html");
-
-    storyline.elem.append(doc.body.children[0])
-  }
 }
 
 module.exports = {
