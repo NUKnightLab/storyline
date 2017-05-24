@@ -79,7 +79,7 @@ var lib = (function() {
   return {
     parseSpreadsheetURL: parseSpreadsheetURL,
     onResize: onResize,
-    errorLog: errorLog
+    errorLog: errorLog,
     get: get
   }
 })();
