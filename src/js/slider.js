@@ -151,7 +151,6 @@ Slider.prototype = {
     this.currentOffset = this.offsetPercent;
     var handleHammer = function(ev) {
       ev.preventDefault();
-      console.log(ev.type);
       switch(ev.type) {
         case 'tap':
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
