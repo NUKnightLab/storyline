@@ -134,20 +134,19 @@ DataFactory.prototype = {
             var formattedResponse, headers;
             try {
               formattedResponse = JSON.parse(response).feed.entry
-              try {
-                headers = self.getColumnHeaders(config, formattedResponse[0])
-              } catch(e) {
-                self.errorMessage = e.message
-                self.errorLog()
-              }
             } catch(e) {
               //downcase headers//
               response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
               formattedResponse = parse(response, {'columns': true})
-              headers = self.getColumnHeaders(config, formattedResponse[0])
-            }
-            if(headers) {
-              resolve(self.createDataFromSheet(formattedResponse, headers, config))
+            } finally {
+              try {
+                headers = self.getColumnHeaders(config, formattedResponse[0])
+                resolve(self.createDataFromSheet(formattedResponse, headers, config))
+              } catch(e) {
+                self.errorMessage = e.message
+                self.errorLog()
+                reject(new Error(e.message))
+              }
             }
           }
         }, function(reason) {
