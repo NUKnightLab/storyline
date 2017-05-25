@@ -2,6 +2,7 @@ var parse = require('csv-parse/lib/sync');
 import {lib} from './lib'
 
 var DataFactory = function() {
+  this.storyline = {elem: document.querySelector('#Storyline')}
 }
 
 DataFactory.prototype = {
@@ -109,7 +110,7 @@ DataFactory.prototype = {
    * @param {string} file - name of the csv file to read
    * @returns {undefined}
    */
-  getCSV: function(context) {
+  getCSVPath: function(context) {
     let url = context ? context.data.url : undefined
     if (url.substring(0,4) == 'http') {
       var parts = lib.parseSpreadsheetURL(url)
@@ -124,10 +125,10 @@ DataFactory.prototype = {
    * @param {object} config - configuration object from json
    * @returns {undefined}
    */
-  fetchData: function(config) {
-    var self = this;
+  fetchSheetData: function(config, context) {
+    var self = context ? context : this;
     return new Promise(function(resolve, reject) {
-      var url = self.getCSV(config)
+      var url = self.getCSVPath(config)
       lib.get(url)
         .then(function(response) {
           if(response) {
@@ -140,8 +141,9 @@ DataFactory.prototype = {
               formattedResponse = parse(response, {'columns': true})
             } finally {
               try {
-                headers = self.getColumnHeaders(config, formattedResponse[0])
-                resolve(self.createDataFromSheet(formattedResponse, headers, config))
+                headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                resolve({headers, formattedResponse})
+              //  resolve(self.createDataFromSheet(formattedResponse, headers, config))
               } catch(e) {
                 self.errorMessage = e.message
                 self.errorLog()
@@ -200,16 +202,18 @@ DataFactory.prototype = {
     return dataObj;
   },
 
-  getColumnHeaders: function(config, obj) {
+  getAllColumnHeaders: function(config, obj) {
+    var formattedHeaders = [];
     var reg = /gsx\$([^]+)/g
     var all = Object.keys(obj).join(" ");
     var headers = all.match(reg)
     headers = headers[0].replace(/gsx\$/g, '').split(" ")
-    var xCol = config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()
-    var yCol = config.data.data_column_name.replace(/\s/g, '').toLowerCase()
-    headers.indexOf(xCol) >= 0 ? xCol : (function() {throw new Error('Error column doesn\'t exist')}())
-    headers.indexOf(yCol) >= 0 ? yCol : (function() {throw new Error('Error column doesn\'t exist')}())
-    return {xCol, yCol}
+    //var xCol = config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()
+    //var yCol = config.data.data_column_name.replace(/\s/g, '').toLowerCase()
+    //headers.indexOf(xCol) >= 0 ? xCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    //headers.indexOf(yCol) >= 0 ? yCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    //return {xCol, yCol}
+    return headers
   },
 
   errorLog: function() {
@@ -222,7 +226,7 @@ DataFactory.prototype = {
          parser = new DOMParser(),
          doc = parser.parseFromString(rendered, "text/html");
 
-     storyline.elem.append(doc.body.children[0])
+     this.storyline.elem.append(doc.body.children[0])
   }
 }
 
