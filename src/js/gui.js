@@ -59,26 +59,31 @@ GUI.prototype = {
     return doc.body.children[0];
   },
 
+  callHandler: function(handler) {
+    handler(this.config, this.data).then(function(dataObj) {
+      var tmpl = this.createTemplate('columnBuilder', dataObj.headers)
+      this.appendTemplate('#Storyline', tmpl)
+    }.bind(this))
+  },
+
   bindEvents: function(elem, handler) {
     var self = this;
+    var elem = document.querySelector(elem)
     elem.onclick = function(){
       self.config.data.url = event.target.previousElementSibling.value
       self.callHandler(handler)
     }
   },
 
-  callHandler: function(handler) {
-    handler(this.config, this.data).then(function(dataObj) {
-      //read headers//
-      var tmpl = this.createTemplate('columnBuilder', dataObj.headers)
-      this.appendTemplate('#Storyline', tmpl)
-    }.bind(this))
-  },
-
+  /**
+   * appends template to the DOM
+   *
+   * @param {String} selector name of a dom node
+   * @param {HTMLElement} rendered template
+   * @returns {undefined}
+   */
   appendTemplate: function(selector, template) {
     document.querySelector(selector).appendChild(template)
-    var loader = document.querySelector('.load-btn')
-    this.bindEvents(loader, this.data.fetchSheetData)
     return;
   }
 }

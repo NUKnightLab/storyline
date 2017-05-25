@@ -46,6 +46,7 @@
     var Gui = new gui.GUI()
     var templ = Gui.createTemplate('urlBuilder')
     Gui.appendTemplate('#Storyline', templ)
+    Gui.bindEvents('.load-btn', Gui.data.fetchSheetData)
   </script>
 </body>
 </html>
