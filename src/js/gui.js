@@ -80,24 +80,26 @@ GUI.prototype = {
     var parentElem = event.target.parentElement.parentElement.parentElement
     var selectedElem = parentElem.querySelector('.data-selected-column')
     var classes = parentElem.classList
-    var columnPos = classes.value.match('-column').index - 1
-    if (classes.value[columnPos] === 'x') {
+    var columnPos;
+    for(var i=0; i<classes.length; i++) {
+      if(classes[i].match('-column') != null) {
+        columnPos = classes[i].match('-column').input
+      }
+    }
+    if (columnPos === 'x-column') {
       self.config.data.datetime_column_name = event.target.text
-    } else if(classes.value[columnPos === 'y']) {
+      self.buildColumnSelector('y-column', self.dataObj.headers)
+    } else if(columnPos === 'y-column') {
       self.config.data.data_column_name = event.target.text
+      self.buildColumnSelector('datetime-format-column', ['MM/DD/YY'])
+    } else if(columnPos === 'datetime-format-column') {
+      debugger
     }
     //plz delete, it should just add an active class and css will reorder//
     selectedElem.innerText = event.target.text
-    //load second column selector//
-    if(classes.value[columnPos] === 'x') {
-      self.buildColumnSelector('y-column', self.dataObj.headers)
-    } else if(classes.value[columnPos] === 'y') {
-      self.buildColumnSelector('datetime-format', ['MM/DD/YY'])
-    }
   },
 
   bindEvents: function(elem) {
-    debugger;
     var self = this;
     var elem = document.querySelectorAll(elem)
     var handler = elem[0].getAttribute('handler');
