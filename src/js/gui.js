@@ -36,15 +36,15 @@ GUI.prototype = {
         "urlBuilder":
           "<div class='data-nav'>" +
            "<input placeholder>" +
-           "<button class='load-btn'>Load Data</button>" +
+           "<button class='load-btn' handler='loadData'>Load Data</button>" +
           "</div>",
         "columnBuilder":
           "<div class='flyout data-nav'>" +
-           "<a href='#'>Columns</a>" +
+           "<a class='data-selected-column' href='#'>Columns</a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#columns}}" +
              "<li>" +
-              "<a href='#'>" +
+              "<a class='data-columns' handler='loadColumn' href='#'>" +
                "{{ . }}" +
               "</a>" +
              "</li>" +
@@ -59,20 +59,54 @@ GUI.prototype = {
     return doc.body.children[0];
   },
 
-  callHandler: function(handler) {
-    handler(this.config, this.data).then(function(dataObj) {
-      var tmpl = this.createTemplate('columnBuilder', dataObj.headers)
+  buildColumnSelector: function(column, dataContext) {
+      var tmpl = this.createTemplate('columnBuilder', dataContext)
+      tmpl.classList.add(column);
       this.appendTemplate('#Storyline', tmpl)
-    }.bind(this))
+      this.bindEvents('.data-columns')
   },
 
-  bindEvents: function(elem, handler) {
-    var self = this;
-    var elem = document.querySelector(elem)
-    elem.onclick = function(){
-      self.config.data.url = event.target.previousElementSibling.value
-      self.callHandler(handler)
+  loadData: function(context) {
+    var self = context;
+    self.config.data.url = event.target.previousElementSibling.value
+    self.data.fetchSheetData(self.config, self.data).then(function(dataObj) {
+      self.dataObj = dataObj
+      self.buildColumnSelector('x-column', this.dataObj.headers)
+    }.bind(self))
+  },
+
+  loadColumn: function(context) {
+    var self = context;
+    var parentElem = event.target.parentElement.parentElement.parentElement
+    var selectedElem = parentElem.querySelector('.data-selected-column')
+    var classes = parentElem.classList
+    var columnPos = classes.value.match('-column').index - 1
+    if (classes.value[columnPos] === 'x') {
+      self.config.data.datetime_column_name = event.target.text
+    } else if(classes.value[columnPos === 'y']) {
+      self.config.data.data_column_name = event.target.text
     }
+    //plz delete, it should just add an active class and css will reorder//
+    selectedElem.innerText = event.target.text
+    //load second column selector//
+    if(classes.value[columnPos] === 'x') {
+      self.buildColumnSelector('y-column', self.dataObj.headers)
+    } else if(classes.value[columnPos] === 'y') {
+      self.buildColumnSelector('datetime-format', ['MM/DD/YY'])
+    }
+  },
+
+  bindEvents: function(elem) {
+    debugger;
+    var self = this;
+    var elem = document.querySelectorAll(elem)
+    var handler = elem[0].getAttribute('handler');
+    handler = Object.keys(self.__proto__).indexOf(handler) > -1 ? self.__proto__[handler] : ''
+    elem.forEach(function(el) {
+      el.onclick = function(){
+        handler(self)
+      }
+    })
   },
 
   /**
