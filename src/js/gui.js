@@ -40,13 +40,15 @@ GUI.prototype = {
 
   const MUSTACHE_TEMPLATES = {
         "urlBuilder":
+          "<form>" +
           "<div class='data-nav'>" +
            "<input placeholder>" +
            "<button class='load-btn' handler='loadData'>Load Data</button>" +
-          "</div>",
+          "</div>" +
+          "</form>",
         "columnBuilder":
           "<div class='flyout data-nav'>" +
-          "<p>Select an {{axis}}</p>" +
+          "<p>Select a column for the {{column}}</p>" +
            "<a class='data-selected-column' href='#'>Columns</a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#headers}}" +
@@ -69,7 +71,7 @@ GUI.prototype = {
   buildColumnSelector: function(column, dataContext) {
       var tmpl = this.createTemplate('columnBuilder', dataContext)
       tmpl.classList.add(column);
-      this.appendTemplate('#Storyline', tmpl)
+      this.appendTemplate('form', tmpl)
       this.bindEvents('.data-columns')
   },
 
@@ -78,7 +80,11 @@ GUI.prototype = {
     self.config.data.url = event.target.previousElementSibling.value
     self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
       self.dataObj = dataObj
-      self.buildColumnSelector('x-column', {axis:'x-column', headers: this.dataObj.headers})
+      self.buildColumnSelector('x-column', {column:'x-column', headers: this.dataObj.headers})
+      self.buildColumnSelector('y-column', {column:'y-column', headers: this.dataObj.headers})
+      self.buildColumnSelector('datetime-format-column', {column:'datetime-format', headers: ['MM/DD/YY']})
+      self.buildColumnSelector('cards-title-column', {column:'card-title', headers: this.dataObj.headers})
+      self.buildColumnSelector('cards-text-column', {column:'card-text', headers: this.dataObj.headers})
     }.bind(self))
   },
 
@@ -86,33 +92,6 @@ GUI.prototype = {
     var self = context;
     var parentElem = event.target.parentElement.parentElement.parentElement
     var selectedElem = parentElem.querySelector('.data-selected-column')
-    var classes = parentElem.classList
-    var columnPos;
-    for(var i=0; i<classes.length; i++) {
-      if(classes[i].match('-column') != null) {
-        columnPos = classes[i].match('-column').input
-      }
-    }
-    if (columnPos === 'x-column') {
-      self.config.data.datetime_column_name = event.target.text
-      self.buildColumnSelector('y-column', self.dataObj.headers)
-    } else if(columnPos === 'y-column') {
-      self.config.data.data_column_name = event.target.text
-      self.buildColumnSelector('datetime-format-column', ['MM/DD/YY'])
-    } else if(columnPos === 'datetime-format-column') {
-      //probably shld convert human readable time to d3time//
-      self.config.data.datetime_format = event.target.text
-      self.buildColumnSelector('cards-title-column', ['slidetitle', 'slidetext', 'slideactive'])
-      self.buildColumnSelector('cards-text-column', ['slidetitle', 'slidetext', 'slideactive'])
-    } else if(columnPos === 'cards-title-column') {
-      self.config.cards.title = event.target.text
-    } else if(columnPos === 'cards-text-column') {
-      self.config.cards.text = event.target.text
-      debugger;
-
-      window.storyline = new Storyline('Storyline', self.config);
-    }
-    //plz delete, it should just add an active class and css will reorder//
     selectedElem.innerText = event.target.text
   },
 
