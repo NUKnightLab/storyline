@@ -143,7 +143,6 @@ DataFactory.prototype = {
               try {
                 headers = self.getAllColumnHeaders(config, formattedResponse[0])
                 resolve({headers, formattedResponse})
-                //resolve(self.createDataFromSheet(formattedResponse, headers, config))
               } catch(e) {
                 self.errorMessage = e.message
                 self.errorLog()
@@ -222,7 +221,7 @@ DataFactory.prototype = {
         bounds.minX = this.getMin(x, bounds.minX)
         bounds.maxX = this.getMax(x, bounds.maxX)
         data.push([x, y]);
-        axes.timeFormat = config.chart.datetime_format;
+        axes.timeFormat = config.chart.datetime_format || '%y';
         axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
       if(slideTitle.length > 0 || slideText.length > 0) {
         if(slideActive) {
