@@ -46,19 +46,20 @@ GUI.prototype = {
           "</div>",
         "columnBuilder":
           "<div class='flyout data-nav'>" +
+          "<p>Select an {{axis}}</p>" +
            "<a class='data-selected-column' href='#'>Columns</a>" +
            "<ul class='flyout-content data-nav stacked'>" +
-            "{{#columns}}" +
+            "{{#headers}}" +
              "<li>" +
               "<a class='data-columns' handler='loadColumn' href='#'>" +
                "{{ . }}" +
               "</a>" +
              "</li>" +
-            "{{/columns}}" +
+            "{{/headers}}" +
            "</ul>" +
           "</div>"
         }
-  var rendered = mustache.render(MUSTACHE_TEMPLATES[template], {columns: columns}),
+  var rendered = mustache.render(MUSTACHE_TEMPLATES[template], columns),
       parser = new DOMParser(),
       doc = parser.parseFromString(rendered, "text/html")
 
@@ -77,7 +78,7 @@ GUI.prototype = {
     self.config.data.url = event.target.previousElementSibling.value
     self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
       self.dataObj = dataObj
-      self.buildColumnSelector('x-column', this.dataObj.headers)
+      self.buildColumnSelector('x-column', {axis:'x-column', headers: this.dataObj.headers})
     }.bind(self))
   },
 
