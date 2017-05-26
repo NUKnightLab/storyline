@@ -42,7 +42,7 @@ Storyline.prototype = {
   },
   grabData: function() {
     var data = new DataFactory;
-    return data.fetchData(this.dataConfig);
+    return data.fetchSheetData(this.dataConfig);
   },
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeSlide ? this.data.activeSlide : 0

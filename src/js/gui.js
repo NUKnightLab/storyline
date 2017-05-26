@@ -3,8 +3,10 @@ import { lib } from './lib'
 import { DataFactory } from './data'
 
 var GUI = function() {
-  //self.storyline = new Storyline()
-  this.storyline = {elem: document.querySelector('#Storyline')}
+  this.storyline = {
+    classObj: Storyline,
+    elem: document.querySelector('#Storyline')
+  }
   this.data = new DataFactory();
   this.config = {
     data: {
@@ -16,6 +18,10 @@ var GUI = function() {
     chart: {
       datetime_format: undefined,
       y_axis_label: undefined
+    },
+    cards: {
+      title: undefined,
+      text: undefined
     }
   }
 }
@@ -69,7 +75,7 @@ GUI.prototype = {
   loadData: function(context) {
     var self = context;
     self.config.data.url = event.target.previousElementSibling.value
-    self.data.fetchSheetData(self.config, self.data).then(function(dataObj) {
+    self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
       self.dataObj = dataObj
       self.buildColumnSelector('x-column', this.dataObj.headers)
     }.bind(self))
@@ -93,7 +99,17 @@ GUI.prototype = {
       self.config.data.data_column_name = event.target.text
       self.buildColumnSelector('datetime-format-column', ['MM/DD/YY'])
     } else if(columnPos === 'datetime-format-column') {
-      debugger
+      //probably shld convert human readable time to d3time//
+      self.config.data.datetime_format = event.target.text
+      self.buildColumnSelector('cards-title-column', ['slidetitle', 'slidetext', 'slideactive'])
+      self.buildColumnSelector('cards-text-column', ['slidetitle', 'slidetext', 'slideactive'])
+    } else if(columnPos === 'cards-title-column') {
+      self.config.cards.title = event.target.text
+    } else if(columnPos === 'cards-text-column') {
+      self.config.cards.text = event.target.text
+      debugger;
+
+      window.storyline = new Storyline('Storyline', self.config);
     }
     //plz delete, it should just add an active class and css will reorder//
     selectedElem.innerText = event.target.text

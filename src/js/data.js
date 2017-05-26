@@ -125,7 +125,7 @@ DataFactory.prototype = {
    * @param {object} config - configuration object from json
    * @returns {undefined}
    */
-  fetchSheetData: function(config, context) {
+  fetchSheetHeaders: function(config, context) {
     var self = context ? context : this;
     return new Promise(function(resolve, reject) {
       var url = self.getCSVPath(config)
@@ -143,7 +143,41 @@ DataFactory.prototype = {
               try {
                 headers = self.getAllColumnHeaders(config, formattedResponse[0])
                 resolve({headers, formattedResponse})
-              //  resolve(self.createDataFromSheet(formattedResponse, headers, config))
+                //resolve(self.createDataFromSheet(formattedResponse, headers, config))
+              } catch(e) {
+                self.errorMessage = e.message
+                self.errorLog()
+                reject(new Error(e.message))
+              }
+            }
+          }
+        }, function(reason) {
+          self.errorMessage = reason
+          self.errorLog()
+        })
+    })
+  },
+  fetchSheetData: function(config, context) {
+    var self = context ? context : this;
+    return new Promise(function(resolve, reject) {
+      var url = self.getCSVPath(config)
+      lib.get(url)
+        .then(function(response) {
+          if(response) {
+            var formattedResponse, headers;
+            try {
+              formattedResponse = JSON.parse(response).feed.entry
+            } catch(e) {
+              //downcase headers//
+              response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
+              formattedResponse = parse(response, {'columns': true})
+            } finally {
+              try {
+                debugger;
+                if(!self.hasColumnHeaders(config)) {
+                  headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                }
+                resolve(self.createDataFromSheet(formattedResponse, headers, config))
               } catch(e) {
                 self.errorMessage = e.message
                 self.errorLog()
@@ -200,6 +234,12 @@ DataFactory.prototype = {
 
     var dataObj = { data, bounds, axes, markers, activeSlide };
     return dataObj;
+  },
+
+  hasColumnHeaders: function(config) {
+    var hasxCol = config.data.datetime_column_name.length > 0;
+    var hasyCol = config.data.data_column_name.length > 0
+    return (hasxCol && hasyCol)
   },
 
   getAllColumnHeaders: function(config, obj) {
