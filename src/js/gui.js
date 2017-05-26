@@ -49,7 +49,7 @@ GUI.prototype = {
         "columnBuilder":
           "<div class='flyout data-nav'>" +
           "<p>Select a column for the {{column}}</p>" +
-           "<a class='data-selected-column' href='#'>Columns</a>" +
+           "<a class='data-selected-column' href='#'></a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#headers}}" +
              "<li>" +
@@ -59,7 +59,9 @@ GUI.prototype = {
              "</li>" +
             "{{/headers}}" +
            "</ul>" +
-          "</div>"
+          "</div>",
+          "StorylineGenerator":
+            "<button class='generate-storyline-btn' handler='generateStoryline'>Create Storyline</div>"
         }
   var rendered = mustache.render(MUSTACHE_TEMPLATES[template], columns),
       parser = new DOMParser(),
@@ -86,6 +88,9 @@ GUI.prototype = {
       self.buildColumnSelector('cards-title-column', {column:'card-title', headers: this.dataObj.headers})
       self.buildColumnSelector('cards-text-column', {column:'card-text', headers: this.dataObj.headers})
     }.bind(self))
+    var tmpl = self.createTemplate('StorylineGenerator')
+    self.appendTemplate('form', tmpl)
+    self.bindEvents('.generate-storyline-btn')
   },
 
   loadColumn: function(context) {
@@ -93,6 +98,15 @@ GUI.prototype = {
     var parentElem = event.target.parentElement.parentElement.parentElement
     var selectedElem = parentElem.querySelector('.data-selected-column')
     selectedElem.innerText = event.target.text
+  },
+
+  generateStoryline: function(context) {
+    var allColumns = document.querySelectorAll('.data-selected-column')
+    for(var i=0; i<allColumns.length; i++) {
+      if(allColumns[i].text.length != 0) {
+        break;
+      }
+    }
   },
 
   bindEvents: function(elem) {

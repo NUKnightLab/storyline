@@ -4,9 +4,16 @@
   margin-top: 5em;
 
   &:hover > .flyout-content {
+    z-index: 1000;
     left: 0;
     height:auto;
     overflow:visible;
+  }
+}
+
+.data-selected-column {
+  &:before {
+    content: 'Columns'
   }
 }
 
