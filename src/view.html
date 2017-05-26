@@ -40,12 +40,13 @@
   <!-- /Twitter Card -->
 </head>
 <body>
+  <div class='form'></div>
   <div id="Storyline" height="568" width="600"></div>
   <script type="text/javascript">
     //do something//
     var Gui = new gui.GUI()
     var templ = Gui.createTemplate('urlBuilder')
-    Gui.appendTemplate('#Storyline', templ)
+    Gui.appendTemplate('.form', templ)
     Gui.bindEvents('.load-btn')
   </script>
 </body>
