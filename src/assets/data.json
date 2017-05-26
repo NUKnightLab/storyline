@@ -1,13 +1,13 @@
 {
   "data": {
-    "url": "./assets/time_no_day.csv",
-    "data_column_name": "number of flights",
-    "datetime_format": "%H:%M",
-    "datetime_column_name": "time"
+    "url": "https://docs.google.com/spreadsheets/d/1amj29A-YdAXQu18PipfgJ6biylaUhYLBxNiP4PpzW5g/pubhtml",
+    "data_column_name": "US Unemployment Rate",
+    "datetime_format": "%m/%d/%y",
+    "datetime_column_name": "date"
   },
   "chart": {
-    "datetime_format": "%I %p",
-    "y_axis_label": "# of flights"
+    "datetime_format": "%y",
+    "y_axis_label": "Unemployment"
   },
   "start_at_card": 0,
   "cards": [

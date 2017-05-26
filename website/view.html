@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Storyline JS</title>
-  <script src="./js/storyline.js"></script>
+  <script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script>
+  <script src="https://cdn.knightlab.com/libs/storyline/latest/js/gui.js"></script>
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css">
   <link rel="stylesheet" href="https://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css"/>
-  <link rel="stylesheet" href="./css/storyline.css">
   <!-- Meta -->
   <meta name="keywords" content="Keywords, separated, by, commas">
   <meta name="description" content="DESCRIPTION OF PAGE CONTENT">
@@ -39,18 +40,14 @@
   <!-- /Twitter Card -->
 </head>
 <body>
-  <div id="storyline" height="568" width="600"></div>
+  <div class='form'></div>
+  <div id="Storyline" height="568" width="600"></div>
   <script type="text/javascript">
-    var req = new XMLHttpRequest();
-    req.open("GET", "/assets/data.json", true);
-    req.onload = function() {
-      if(req.status == 200) {
-        window.storyline = new Storyline('storyline', JSON.parse(req.response));
-      } else {
-        Error(req.statusText)
-      }
-    }
-    req.send()
+    //do something//
+    var Gui = new gui.GUI()
+    var templ = Gui.createTemplate('urlBuilder')
+    Gui.appendTemplate('.form', templ)
+    Gui.bindEvents('.load-btn')
   </script>
 </body>
 </html>

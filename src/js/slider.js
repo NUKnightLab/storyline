@@ -151,7 +151,6 @@ Slider.prototype = {
     this.currentOffset = this.offsetPercent;
     var handleHammer = function(ev) {
       ev.preventDefault();
-      console.log(ev.type);
       switch(ev.type) {
         case 'tap':
           var clickMoveCardSpace = (window.innerWidth - self.cardWidth - (2*self.MARGIN))/2
@@ -241,9 +240,9 @@ const MUSTACHE_TEMPLATES = {
        "{{#cards}}" +
        "<div class='slider-card {{class}}'>" +
          "<div class='slider-content'>" +
-           "<h3><span class='h3-date'>{{ display_date }}</span>" +
-           "{{ title }}</h3>" +
-           "<p>{{ text }}<p>" +
+           "<h3><span class='h3-date'>{{ displayDate }}</span>" +
+           "{{ slideTitle }}</h3>" +
+           "<p>{{ slideText }}<p>" +
          "</div>" +
        "</div>" +
        "{{/cards}}" +

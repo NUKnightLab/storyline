@@ -189,7 +189,7 @@ Chart.prototype = {
     this.markers.map(function(marker) {
       var point, x, y, mark, label;
 
-      point = self.data[marker]
+      point = self.data[marker.rowNum]
       x = ((point[0].valueOf() * self.SCALEX) + self.translateX);
       y = self.height - ((point[1] * self.SCALEY) + self.translateY);
       label = point[1]

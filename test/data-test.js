@@ -47,15 +47,17 @@ describe('DataJS', () => {
       }
 
       exampleData = "Date,US unemployment rate 1/31/80, 6.3 2/29/80 6.3, 3/31/80 6.3";
-      callBack = sinon.stub(dataFactoryInstance, 'get').returns(new Promise(function(resolve, reject) {
+      callBack = sinon.stub(lib, 'get').returns(new Promise(function(resolve, reject) {
         resolve(exampleData);
       }))
 
       createData = sinon.stub(DataFactory.prototype, 'createDataObj').returns(finalData)
     })
-    it('should invoke the get method', () => {
-      dataFactoryInstance.fetchData(config);
-      expect(callBack.called).to.be.true
+    it('should invoke the get lib method with the proper file url', () => {
+      let result = dataFactoryInstance.fetchData(config);
+      sinon.assert.called(callBack)
+      let options = callBack.getCall(0).args[0]
+      expect(options).to.eq('src/assets/dates_unemployment.csv')
     })
     it('should return exampleData from get method', () => {
       dataFactoryInstance.fetchData(config);
@@ -79,14 +81,14 @@ describe('DataJS', () => {
     let dataInput, config, instance, stub, results;
     beforeEach(() => {
       dataInput = [
-        {'date': '01/31/80', 'US Unemployment Rate': 1},
-        {'date': '02/29/80', 'US Unemployment Rate': 3},
-        {'date': '03/31/80', 'US Unemployment Rate': 2},
-        {'date': '04/30/80', 'US Unemployment Rate': 3}
-      ],
+        {'date': '01/31/80', 'us unemployment rate': 1},
+        {'date': '02/29/80', 'us unemployment rate': 3},
+        {'date': '03/31/80', 'us unemployment rate': 2},
+        {'date': '04/30/80', 'us unemployment rate': 3}
+      ]
       config = {
         "data": {
-          "data_column_name": "US Unemployment Rate",
+          "data_column_name": "us unemployment rate",
           "datetime_format": "%m/%d/%Y",
           "datetime_column_name": "date"
         },
@@ -110,7 +112,7 @@ describe('DataJS', () => {
     })
     it('should collect y axis value US Unemployment Rate in data object', () => {
       for(var i in dataInput) {
-        expect(results.data[i][1]).to.eql(dataInput[i]["US Unemployment Rate"])
+        expect(results.data[i][1]).to.eql(dataInput[i]["us unemployment rate"])
       }
     })
     it('should return the earliest date in bounds', () => {
@@ -186,25 +188,13 @@ describe('DataJS', () => {
   })
   describe('Aggregate slide markers', () => {
     it('should be able to grab markers for slider', () => {
-      const slides = [
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 5
-        },
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 7
-        },
-        {
-          "title": "Some Text",
-          "text": "Additional Text Here",
-          "row_number": 18
-        }
-      ]
-      const results = dataFactoryInstance.getSlideMarkers(slides);
-      assert.deepEqual(results, [5, 7, 18])
+      const slide = {
+          "rowNum": 4,
+          "slideTitle": 'Pentagon Militarizes',
+          "slideText": 'Some text here'
+      }
+      const results = dataFactoryInstance.getSlideMarkers(slide.rowNum, slide.slideTitle, slide.slideText);
+      assert.deepEqual(results, slide)
     })
   })
   describe('Data Manipulation methods', () => {

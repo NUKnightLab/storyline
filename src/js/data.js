@@ -1,7 +1,8 @@
-var parse = require('csv-parse');
+var parse = require('csv-parse/lib/sync');
 import {lib} from './lib'
 
 var DataFactory = function() {
+  this.storyline = {elem: document.querySelector('#Storyline')}
 }
 
 DataFactory.prototype = {
@@ -14,7 +15,8 @@ DataFactory.prototype = {
    */
   createDataObj: function(data, config) {
     var d3Time = require('d3-time-format');
-    var output = [],
+    var data = [],
+        activeSlide,
         bounds = {
           minX: null,
           maxX: null,
@@ -44,7 +46,7 @@ DataFactory.prototype = {
       bounds.maxY = this.getMax(y, bounds.maxY)
       bounds.minX = this.getMin(x, bounds.minX)
       bounds.maxX = this.getMax(x, bounds.maxX)
-      output.push([x, y]);
+      data.push([x, y]);
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
@@ -52,7 +54,7 @@ DataFactory.prototype = {
     }
     markers = this.getSlideMarkers(config.cards);
 
-    var dataObj = { 'data': output, 'bounds': bounds, 'axes': axes, 'markers': markers };
+    var dataObj = { data, bounds, axes, markers, activeSlide };
     return dataObj;
   },
 
@@ -98,12 +100,8 @@ DataFactory.prototype = {
    * @param {object} slides - slides from config object
    * @returns {array} markers - a list of row numbers
    */
-  getSlideMarkers: function(slides) {
-    var markers = [];
-    slides.map(function(slide, index) {
-      markers.push(slide.row_number)
-    })
-    return markers;
+  getSlideMarkers: function(rowNum, slideTitle, slideText) {
+    return {rowNum, slideTitle, slideText};
   },
 
   /**
@@ -112,23 +110,13 @@ DataFactory.prototype = {
    * @param {string} file - name of the csv file to read
    * @returns {undefined}
    */
-  get: function(file) {
-    file = file ? file.data.url : undefined
-    return new Promise(function(resolve, reject) {
-      var req = new XMLHttpRequest();
-      req.open("GET", file, true)
-      req.onload = function() {
-        if(req.status == 200) {
-          resolve(req.response);
-        } else {
-          reject(Error(req.statusText));
-        }
-      }
-      req.onerror = function() {
-        reject(Error("Network Error"));
-      };
-      req.send();
-    });
+  getCSVPath: function(context) {
+    let url = context ? context.data.url : undefined
+    if (url.substring(0,4) == 'http') {
+      var parts = lib.parseSpreadsheetURL(url)
+      return "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json"
+    };
+    if(url.substring(url.length - 3) == 'csv') {return url}
   },
 
   /**
@@ -137,20 +125,148 @@ DataFactory.prototype = {
    * @param {object} config - configuration object from json
    * @returns {undefined}
    */
-  fetchData: function(config) {
-    var self = this;
+  fetchSheetHeaders: function(config, context) {
+    var self = context ? context : this;
     return new Promise(function(resolve, reject) {
-      self.get(config)
+      var url = self.getCSVPath(config)
+      lib.get(url)
         .then(function(response) {
-          parse(response, {'columns': true}, function(err, data) {
-            resolve(self.createDataObj(data, config))
-          })
+          if(response) {
+            var formattedResponse, headers;
+            try {
+              formattedResponse = JSON.parse(response).feed.entry
+            } catch(e) {
+              //downcase headers//
+              response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
+              formattedResponse = parse(response, {'columns': true})
+            } finally {
+              try {
+                headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                resolve({headers, formattedResponse})
+              } catch(e) {
+                self.errorMessage = e.message
+                self.errorLog()
+                reject(new Error(e.message))
+              }
+            }
+          }
         }, function(reason) {
-          var errorMessage = reason + " Check that your csv file path is correct"
-          lib.errorLog({errorMessage})
+          self.errorMessage = reason
+          self.errorLog()
         })
     })
   },
+  fetchSheetData: function(config, context) {
+    var self = context ? context : this;
+    return new Promise(function(resolve, reject) {
+      var url = self.getCSVPath(config)
+      lib.get(url)
+        .then(function(response) {
+          if(response) {
+            var formattedResponse, headers;
+            try {
+              formattedResponse = JSON.parse(response).feed.entry
+            } catch(e) {
+              //downcase headers//
+              response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
+              formattedResponse = parse(response, {'columns': true})
+            } finally {
+              try {
+                debugger;
+                if(!self.hasColumnHeaders(config)) {
+                  headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                }
+                resolve(self.createDataFromSheet(formattedResponse, headers, config))
+              } catch(e) {
+                self.errorMessage = e.message
+                self.errorLog()
+                reject(new Error(e.message))
+              }
+            }
+          }
+        }, function(reason) {
+          self.errorMessage = reason
+          self.errorLog()
+        })
+    })
+  },
+
+  createDataFromSheet: function(dataFeed, headers, config) {
+    var d3Time = require('d3-time-format');
+    var data = [],
+        activeSlide,
+        bounds = {
+          minX: null,
+          maxX: null,
+          minY: null,
+          maxY: null
+        },
+        axes = {
+          yLabel: null,
+          timeFormat: null
+        },
+        activeSlide,
+        markers = [];
+    for(var i=0; i<dataFeed.length;i++) {
+      var slideTitle = dataFeed[i]["gsx$slidetitle"].$t
+      var slideText = dataFeed[i]["gsx$slidetext"].$t
+      var slideActive = dataFeed[i]["gsx$slideactive"].$t
+      var date = dataFeed[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
+      var dateParse = d3Time.timeParse(config.data.datetime_format)
+      var x = dateParse(date)
+      var y = dataFeed[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+      y = parseFloat(y)
+        bounds.minY = this.getMin(y, bounds.minY)
+        bounds.maxY = this.getMax(y, bounds.maxY)
+        bounds.minX = this.getMin(x, bounds.minX)
+        bounds.maxX = this.getMax(x, bounds.maxX)
+        data.push([x, y]);
+        axes.timeFormat = config.chart.datetime_format || '%y';
+        axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
+      if(slideTitle.length > 0 || slideText.length > 0) {
+        if(slideActive) {
+          activeSlide = markers.length
+        }
+        markers.push(this.getSlideMarkers(i, slideTitle, slideText));
+      }
+    }
+
+    var dataObj = { data, bounds, axes, markers, activeSlide };
+    return dataObj;
+  },
+
+  hasColumnHeaders: function(config) {
+    var hasxCol = config.data.datetime_column_name.length > 0;
+    var hasyCol = config.data.data_column_name.length > 0
+    return (hasxCol && hasyCol)
+  },
+
+  getAllColumnHeaders: function(config, obj) {
+    var formattedHeaders = [];
+    var reg = /gsx\$([^]+)/g
+    var all = Object.keys(obj).join(" ");
+    var headers = all.match(reg)
+    headers = headers[0].replace(/gsx\$/g, '').split(" ")
+    //var xCol = config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()
+    //var yCol = config.data.data_column_name.replace(/\s/g, '').toLowerCase()
+    //headers.indexOf(xCol) >= 0 ? xCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    //headers.indexOf(yCol) >= 0 ? yCol : (function() {throw new Error('Error column doesn\'t exist')}())
+    //return {xCol, yCol}
+    return headers
+  },
+
+  errorLog: function() {
+    var mustache = require('mustache');
+     const template =
+       "<div class='error'>" +
+       "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
+       "</div>"
+     var rendered = mustache.render(template, this),
+         parser = new DOMParser(),
+         doc = parser.parseFromString(rendered, "text/html");
+
+     this.storyline.elem.append(doc.body.children[0])
+  }
 }
 
 module.exports = {
