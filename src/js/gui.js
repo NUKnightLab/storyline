@@ -85,7 +85,7 @@ GUI.prototype = {
       self.dataObj = dataObj
       self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers})
       self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers})
-      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: ['MM/DD/YY']})
+      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: ['MM/DD/YY', 'MM/DD/YYYY', 'DD/MM/YY', 'DD/MM/YYYY']})
       self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers})
       self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers})
     }.bind(self))
@@ -117,7 +117,19 @@ GUI.prototype = {
         var classes = allColumns[i].classList
         for(var j=0; j<classes.length; j++) {
           if(data.indexOf(classes[j]) > -1){
-            self.config.data[classes[j]] = allColumns[i].text
+            var text = allColumns[i].text
+            if(classes[j] === 'datetime_format') {
+              if(text === 'MM/DD/YY') {
+                text = '%m/%d/%y'
+              } else if(text === 'MM/DD/YYYY') {
+                text = '%m/%d/%Y'
+              } else if(text === 'DD/MM/YY') {
+                text = '%d/%m/%y'
+              } else if(text === 'DD/MM/YYYY') {
+                text = '%d/%m/%Y'
+              }
+            }
+            self.config.data[classes[j]] = text
             selectedCols++
           }
         }
