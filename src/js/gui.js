@@ -3,6 +3,8 @@ import { lib } from './lib'
 import { DataFactory } from './data'
 
 var GUI = function() {
+  this.preLoaded = false;
+  this.storylineExists = false;
   this.storyline = {
     classObj: Storyline,
     elem: document.querySelector('#Storyline')
@@ -42,7 +44,7 @@ GUI.prototype = {
         "urlBuilder":
           "<form>" +
           "<div class='data-nav'>" +
-           "<input placeholder>" +
+           "<input type='text' placeholder='place link to spreadsheet here'>" +
            "<button class='load-btn' handler='loadData'>Load Data</button>" +
           "</div>" +
           "</form>",
@@ -61,7 +63,9 @@ GUI.prototype = {
            "</ul>" +
           "</div>",
           "StorylineGenerator":
-            "<button class='generate-storyline-btn' handler='generateStoryline'>Create Storyline</div>"
+            "<div>" +
+              "<button class='generate-storyline-btn' handler='generateStoryline'>Create Storyline</div>" +
+            "</div>"
         }
   var rendered = mustache.render(MUSTACHE_TEMPLATES[template], columns),
       parser = new DOMParser(),
@@ -78,8 +82,10 @@ GUI.prototype = {
   },
 
   loadData: function(context) {
-    event.preventDefault()
+    event.preventDefault();
     var self = context;
+    if(!self.preLoaded) {
+    event.target.className += ' disabled'
     self.config.data.url = event.target.previousElementSibling.value
     self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
       self.dataObj = dataObj
@@ -92,18 +98,28 @@ GUI.prototype = {
     var tmpl = self.createTemplate('StorylineGenerator')
     self.appendTemplate('form', tmpl)
     self.bindEvents('.generate-storyline-btn')
+
+    self.preLoaded = true
+    } else {
+      var errorMessage = 'Error, data has already been loaded'
+      lib.errorLog({errorMessage})
+    }
   },
 
   loadColumn: function(context) {
     var self = context;
     var parentElem = event.target.parentElement.parentElement.parentElement
     var selectedElem = parentElem.querySelector('.data-selected-column')
+    selectedElem.className += ' selected'
     selectedElem.innerText = event.target.text
   },
 
   generateStoryline: function(context) {
     event.preventDefault();
     var self = context;
+    event.target.className += ' disabled'
+
+    if(!self.storylineExists) {
     var data = Object.keys(self.config.data).concat(Object.keys(self.config.cards))
     var allColumns = document.querySelectorAll('.data-selected-column')
     var selectedCols = 0
@@ -137,6 +153,11 @@ GUI.prototype = {
       if(selectedCols === 5) {
         window.storyline = new Storyline('Storyline', self.config)
       }
+    }
+    self.storylineExists = true;
+    } else {
+      var errorMessage = 'Error, only one storyline allowed'
+      lib.errorLog({errorMessage})
     }
   },
 

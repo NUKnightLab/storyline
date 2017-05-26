@@ -1,7 +1,38 @@
+form {
+  margin: 0 auto;
+  padding: 3em;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  top: 0;
+  left: 3em;
+}
+
+.data-nav {
+  & input {
+    vertical-align: top;
+    width: 70%;
+    border-radius: 6px;
+    outline: none;
+    line-height: 14px;
+    font-size: 14px;
+    padding: 0.88889rem 1.77778rem 0.94444rem 1.77778rem;
+    margin-right: 6px;
+    background: transparent;
+    border: 2px solid #535a83;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+  }
+}
+
 .flyout {
   position: relative;
   margin-left: 50%;
-  margin-top: 5em;
+  margin-top: 3em;
 
   &:hover > .flyout-content {
     z-index: 1000;
@@ -12,8 +43,10 @@
 }
 
 .data-selected-column {
-  &:before {
-    content: 'Columns'
+  &:not(.selected){
+    &:before {
+      content: 'Columns'
+    }
   }
 }
 
@@ -52,4 +85,57 @@
 
 .stacked > li > a{
   display:block;
+}
+
+// Buttons
+button {
+  margin:0;
+  padding:0;
+  box-shadow:none;
+  text-shadow:none;
+  border:0;
+  &:hover {
+    box-shadow:none;
+    text-shadow:none;
+    background: transparent;
+  }
+}
+
+html input[type="button"], // 1
+input[type="reset"],
+input[type="submit"],
+button, .button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  font-family:$fontFamily-sansSerif;
+  font-size: 0.88889rem;
+  background-color: transparent;
+  position:relative;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.88889rem 1.77778rem 0.94444rem 1.77778rem;
+  vertical-align: middle;
+  border-radius: 4px;
+  border:3px solid $color-grey--lighter;
+  color:  $color-grey--darker;
+  box-shadow:none;
+  margin-bottom:1rem;
+  text-rendering: optimizeLegibility;
+  overflow:hidden;
+
+  background-image: none;
+
+  &:hover {
+    color: $color-grey--darker;
+    border-color: $color-grey--light;
+    background-color: lighten($color-grey--lightest, 5%);
+    border-color: darken($color-grey--lightest, 10%);
+  }
+  &.disabled {
+    background-color:$color-grey--lighter;
+    cursor: default;
+    text-shadow:none;
+  }
 }

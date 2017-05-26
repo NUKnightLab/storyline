@@ -4,6 +4,7 @@
 // Ex: @color-grayLight--highlightMenu: rgb(51, 51, 50);
 
 $font-size-base: 15px !default;
+$fontFamily-sansSerif: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 // Spacing // --------------------------------------------------
 $spacing-default: 15px !default;
@@ -18,3 +19,19 @@ $shadow-5: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0  6px 30px 5px rgba(0, 0, 0, 0.
 $bp-sm: 30em;
 $bp-md: 43.75em;
 $bp-lg: 64em;
+
+// Colors // --------------------------------------------------
+$color-amount--light: 11%;
+$color-amount--lighter: 22%;
+$color-amount--lightest: 33%;
+$color-amount--dark: 11%;
+$color-amount--darker: 22%;
+$color-amount--darkest: 33%;
+
+$color-grey: #9C9C9C !default;
+$color-grey--light: lighten($color-grey, $color-amount--light);
+$color-grey--lighter: lighten($color-grey, $color-amount--lighter);
+$color-grey--lightest: lighten($color-grey, $color-amount--lightest);
+$color-grey--dark: darken($color-grey, $color-amount--dark);
+$color-grey--darker: darken($color-grey, $color-amount--darker);
+$color-grey--darkest: darken($color-grey, $color-amount--darkest);

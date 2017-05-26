@@ -17,7 +17,13 @@ var lib = (function() {
 
   function errorLog(context) {
     var mustache = require('mustache');
+
     var storylineElem = document.querySelector('#Storyline')
+    var errorMessageElem = storylineElem.querySelector('.error-message')
+    var hasErrorMessage = errorMessageElem != null
+    if(hasErrorMessage) {
+      errorMessageElem.innerHTML = context.errorMessage
+    } else {
     const template =
       "<div class='error'>" +
         "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
@@ -25,8 +31,8 @@ var lib = (function() {
     var rendered = mustache.render(template, context),
         parser = new DOMParser(),
         doc = parser.parseFromString(rendered, "text/html");
-
     storylineElem.append(doc.body.children[0])
+    }
   }
 
   function get(url) {
