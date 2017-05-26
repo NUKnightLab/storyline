@@ -49,7 +49,7 @@ GUI.prototype = {
         "columnBuilder":
           "<div class='flyout data-nav'>" +
           "<p>Select a column for the {{column}}</p>" +
-           "<a class='data-selected-column' href='#'></a>" +
+           "<a class='data-selected-column {{column}}' href='#'></a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#headers}}" +
              "<li>" +
@@ -78,15 +78,16 @@ GUI.prototype = {
   },
 
   loadData: function(context) {
+    event.preventDefault()
     var self = context;
     self.config.data.url = event.target.previousElementSibling.value
     self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
       self.dataObj = dataObj
-      self.buildColumnSelector('x-column', {column:'x-column', headers: this.dataObj.headers})
-      self.buildColumnSelector('y-column', {column:'y-column', headers: this.dataObj.headers})
-      self.buildColumnSelector('datetime-format-column', {column:'datetime-format', headers: ['MM/DD/YY']})
-      self.buildColumnSelector('cards-title-column', {column:'card-title', headers: this.dataObj.headers})
-      self.buildColumnSelector('cards-text-column', {column:'card-text', headers: this.dataObj.headers})
+      self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers})
+      self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers})
+      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: ['MM/DD/YY']})
+      self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers})
+      self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers})
     }.bind(self))
     var tmpl = self.createTemplate('StorylineGenerator')
     self.appendTemplate('form', tmpl)
@@ -101,10 +102,28 @@ GUI.prototype = {
   },
 
   generateStoryline: function(context) {
+    event.preventDefault();
+    var self = context;
+    var data = Object.keys(self.config.data).concat(Object.keys(self.config.cards))
     var allColumns = document.querySelectorAll('.data-selected-column')
+    var selectedCols = 0
     for(var i=0; i<allColumns.length; i++) {
-      if(allColumns[i].text.length != 0) {
-        break;
+      if(allColumns[i].text.length === 0) {
+        var errorMessage = 'Error, Please select an option for column'
+        lib.errorLog({errorMessage})
+          break;
+      } else {
+        //grab column data//
+        var classes = allColumns[i].classList
+        for(var j=0; j<classes.length; j++) {
+          if(data.indexOf(classes[j]) > -1){
+            self.config.data[classes[j]] = allColumns[i].text
+            selectedCols++
+          }
+        }
+      }
+      if(selectedCols === 5) {
+        window.storyline = new Storyline('Storyline', self.config)
       }
     }
   },

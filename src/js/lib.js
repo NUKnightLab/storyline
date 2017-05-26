@@ -17,6 +17,7 @@ var lib = (function() {
 
   function errorLog(context) {
     var mustache = require('mustache');
+    var storylineElem = document.querySelector('#Storyline')
     const template =
       "<div class='error'>" +
         "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
@@ -25,7 +26,7 @@ var lib = (function() {
         parser = new DOMParser(),
         doc = parser.parseFromString(rendered, "text/html");
 
-    storyline.elem.append(doc.body.children[0])
+    storylineElem.append(doc.body.children[0])
   }
 
   function get(url) {
