@@ -9,8 +9,25 @@
 
 <div id="my-storyline" width="500" height="500"></div>
 <script>
-  var config_url = 'income-cards.json';
-  var storyline = new Storyline('my-storyline', config_url);
+  var config = {
+	  "data": {
+	    "url": "https://docs.google.com/spreadsheets/d/1Q4nb3acIGX7LjNO86xKkoxrvOylnO8mbjnfL6zyAYYQ/pubhtml",
+	    "datetime_format": "%Y-%m-%d",
+	    "datetime_column_name": "date",
+	    "data_column_name": "income"
+	  },
+	  "chart": {
+	    "datetime_format": "%Y",
+	    "y_axis_label": "Income"
+	  },
+	  "start_at_card": 1,
+		cards: {
+				title: 'title',
+				text: 'text'
+		}
+	}
+
+  var storyline = new Storyline('my-storyline', config);
 </script>
 
 
