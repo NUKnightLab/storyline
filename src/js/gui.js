@@ -46,7 +46,7 @@ const DATETIME_HEADERS = Object.keys(DATETIME_FORMATS);
  * correct place in the storyline config object, translating values along the way when
  * necessary.
  */
-const COLUMN_HANDLERS = {
+const COLUMN_EXTRACTORS = {
   data_column_name: function(config, value) {
     config.data.data_column_name = value;
   },
@@ -182,8 +182,8 @@ GUI.prototype = {
 
   extractColumnValue: function(column) {
     var colname = column.attributes['colname'].value;
-    if (colname in COLUMN_HANDLERS) {
-      COLUMN_HANDLERS[colname](this.config, column.text);
+    if (colname in COLUMN_EXTRACTORS) {
+      COLUMN_EXTRACTORS[colname](this.config, column.text);
       return true;
     }
     return false;
