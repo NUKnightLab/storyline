@@ -228,13 +228,32 @@ DataFactory.prototype = {
 
     var gsx_data_column_name = constructAndTestGSXColumn(config.data.data_column_name, dataFeed[0]);
     var gsx_datetime_column_name = constructAndTestGSXColumn(config.data.datetime_column_name, dataFeed[0]);
-    var gsx_title_column_name = constructAndTestGSXColumn(config.cards.title, dataFeed[0]);
-    var gsx_text_column_name = constructAndTestGSXColumn(config.cards.text, dataFeed[0]);
+    var gsx_title_column_name = (config.cards.title) ? constructAndTestGSXColumn(config.cards.title, dataFeed[0]) : null;
+    var gsx_text_column_name = (config.cards.text) ? constructAndTestGSXColumn(config.cards.text, dataFeed[0]) : null;
+
+    var card_lookup = null;
+    if (!(gsx_title_column_name && gsx_text_column_name)) {
+      // assume that the cards are passed in using the original format
+      card_lookup = {}
+      for (var i = 0; i < config.cards.length; i++) {
+        var card = config.cards[i];
+        card_lookup[card.row_number] = card;
+      }
+    }
 
     for(var i=0; i<dataFeed.length;i++) {
-      var slideTitle = dataFeed[i][gsx_title_column_name].$t
-      var slideText = dataFeed[i][gsx_text_column_name].$t
-      var slideActive = (dataFeed[i]["gsx$slideactive"]) ? dataFeed[i]["gsx$slideactive"].$t : false;
+      var slideTitle = '', slideText = '', slideActive = false;
+      if (!card_lookup) {
+        slideTitle = dataFeed[i][gsx_title_column_name].$t
+        slideText = dataFeed[i][gsx_text_column_name].$t
+        slideActive = (dataFeed[i]["gsx$slideactive"]) ? dataFeed[i]["gsx$slideactive"].$t : false;
+      } else if (card_lookup[i]) {
+        slideTitle = card_lookup[i].title;
+        slideText = card_lookup[i].text;
+        if (config.start_at_card) {
+          slideActive = (config.start_at_card == i);
+        }
+      }
       var date = dataFeed[i][gsx_datetime_column_name].$t
       var dateParse = d3Time.timeParse(config.data.datetime_format)
       var x = dateParse(date)
@@ -286,16 +305,22 @@ DataFactory.prototype = {
   },
 
   errorLog: function() {
-    var mustache = require('mustache');
-     const template =
-       "<div class='error'>" +
-       "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
-       "</div>"
-     var rendered = mustache.render(template, this),
-         parser = new DOMParser(),
-         doc = parser.parseFromString(rendered, "text/html");
+    if (this.storyline.elem) {
+      var mustache = require('mustache');
+       const template =
+         "<div class='error'>" +
+         "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
+         "</div>"
+       var rendered = mustache.render(template, this),
+           parser = new DOMParser(),
+           doc = parser.parseFromString(rendered, "text/html");
 
-     this.storyline.elem.append(doc.body.children[0])
+       this.storyline.elem.append(doc.body.children[0])
+    } else {
+      console.warn("data.js errorLog: no storyline element available for logging");
+      console.error(this.errorMessage);
+
+    }
   }
 }
 
