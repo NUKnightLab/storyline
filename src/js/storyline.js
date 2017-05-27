@@ -5,7 +5,7 @@ import { lib } from './lib';
 
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
-  this.elem.className += 'Storyline'
+  this.elem.className += 'storyline-wrapper'
   var self = this;
     self.dataConfig = dataConfig
     self.init()

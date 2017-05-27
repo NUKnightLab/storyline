@@ -3,7 +3,8 @@
 @import "variables";
 @import "default";
 
-.Storyline {
+.storyline-wrapper {
+  @import "reset";
   @import "line";
   @import "slider";
   @import "chart";
