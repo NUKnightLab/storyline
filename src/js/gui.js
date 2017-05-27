@@ -81,9 +81,11 @@ GUI.prototype = {
   const MUSTACHE_TEMPLATES = {
         "urlBuilder":
           "<form>" +
-          "<div class='data-nav'>" +
-           "<input type='text' placeholder='place link to spreadsheet here'>" +
-           "<button class='load-btn' handler='loadData'>Load Data</button>" +
+          "<h2>Create a Storyline</h2>" +
+          "<div class='data-nav input-group-label'>" +
+          "<label class='input-group-addon' for='spreadsheet_url'>Google Spreadsheet URL</label>" +
+           "<input type='text' id='spreadsheet_url' name='spreadsheet_url' placeholder='place link to spreadsheet here'>" +
+           "<button id='load-btn' class='button-complement' handler='loadData'>Load</button>" +
           "</div>" +
           "</form>",
         "columnBuilder":
@@ -102,7 +104,7 @@ GUI.prototype = {
           "</div>",
           "StorylineGenerator":
             "<div>" +
-              "<button class='generate-storyline-btn' handler='generateStoryline'>Create Storyline</div>" +
+              "<button class='generate-storyline-btn button-secondary' handler='generateStoryline'>Create Storyline</div>" +
             "</div>"
         }
   var rendered = mustache.render(MUSTACHE_TEMPLATES[template], columns),
@@ -121,24 +123,26 @@ GUI.prototype = {
   },
 
   loadData: function(context) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     var self = context;
-    var url = event.target.previousElementSibling.value.trim();
-    if(url && !self.preLoaded) {
-      event.target.className += ' disabled'
-      self.config.data.url = event.target.previousElementSibling.value
-      self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
-        self.dataObj = dataObj
-        self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers, label: "Select date/time column"})
-        self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS, label: "How are your dates formatted?"})
-        self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers, label: "Select data column"})
-        self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers, label: "Select card title column"})
-        self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers, label: "Select card text column"})
-      }.bind(self))
-      var tmpl = self.createTemplate('StorylineGenerator')
-      self.appendTemplate('form', tmpl)
-      self.bindEvents('.generate-storyline-btn')
-      self.preLoaded = true
+    if(!self.preLoaded) {
+      var url = document.getElementById('spreadsheet_url').value.trim();
+      if (url) { // for now just quietly ignore trigger if no URL
+        document.getElementById('load-btn').className += ' disabled'
+        self.config.data.url = url;
+        self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
+          self.dataObj = dataObj
+          self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers, label: "Select date/time column"})
+          self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS, label: "How are your dates formatted?"})
+          self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers, label: "Select data column"})
+          self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers, label: "Select card title column"})
+          self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers, label: "Select card text column"})
+        }.bind(self))
+        var tmpl = self.createTemplate('StorylineGenerator')
+        self.appendTemplate('form', tmpl)
+        self.bindEvents('.generate-storyline-btn')
+        self.preLoaded = true
+      }
     } else {
       var errorMessage = 'Error, data has already been loaded'
       lib.errorLog({errorMessage})

@@ -10,7 +10,12 @@ form {
   left: 3em;
 }
 
+#load-btn {
+  margin-top: 1em;
+}
+
 .data-nav {
+  font-size: smaller;
   & input {
     vertical-align: top;
     width: 70%;
@@ -31,7 +36,7 @@ form {
 
 .flyout {
   position: relative;
-  margin-left: 50%;
+  // margin-left: 50%;
   margin-top: 3em;
 
   &:hover > .flyout-content {
@@ -51,6 +56,7 @@ form {
 }
 
 .data-nav > a, .data-nav > li > a {
+  text-shadow: none;
   text-decoration: none;
   color: black;
   line-height: 1;

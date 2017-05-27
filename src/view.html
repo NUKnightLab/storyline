@@ -7,6 +7,7 @@
   <script src="./js/storyline.js"></script>
   <script src="./js/gui.js"></script>
   <link rel="stylesheet" href="https://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css"/>
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/orangeline/latest/css/orangeline.min.css"/>
   <link rel="stylesheet" href="./css/storyline.css">
   <!-- Meta -->
   <meta name="keywords" content="Keywords, separated, by, commas">
@@ -43,11 +44,11 @@
   <div class='form'></div>
   <div id="Storyline" height="568" width="600"></div>
   <script type="text/javascript">
-    //do something//
     var Gui = new gui.GUI()
     var templ = Gui.createTemplate('urlBuilder')
     Gui.appendTemplate('.form', templ)
-    Gui.bindEvents('.load-btn')
+    Gui.bindEvents('#load-btn')
+    document.getElementById('spreadsheet_url').addEventListener('change',function() {Gui.loadData(Gui)});
   </script>
 </body>
 </html>
