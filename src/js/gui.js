@@ -88,7 +88,7 @@ GUI.prototype = {
           "</form>",
         "columnBuilder":
           "<div class='flyout data-nav'>" +
-          "<p>Select a column for the {{column}}</p>" +
+          "<p>{{label}}</p>" +
            "<a class='data-selected-column' colname='{{column}}' href='#'></a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#headers}}" +
@@ -113,6 +113,7 @@ GUI.prototype = {
   },
 
   buildColumnSelector: function(column, dataContext) {
+      dataContext.label = dataContext.label || 'Select a column for the ' + dataContext.  column;
       var tmpl = this.createTemplate('columnBuilder', dataContext)
       tmpl.classList.add(column);
       this.appendTemplate('form', tmpl)
@@ -122,22 +123,22 @@ GUI.prototype = {
   loadData: function(context) {
     event.preventDefault();
     var self = context;
-    if(!self.preLoaded) {
-    event.target.className += ' disabled'
-    self.config.data.url = event.target.previousElementSibling.value
-    self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
-      self.dataObj = dataObj
-      self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers})
-      self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers})
-      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS})
-      self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers})
-      self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers})
-    }.bind(self))
-    var tmpl = self.createTemplate('StorylineGenerator')
-    self.appendTemplate('form', tmpl)
-    self.bindEvents('.generate-storyline-btn')
-
-    self.preLoaded = true
+    var url = event.target.previousElementSibling.value.trim();
+    if(url && !self.preLoaded) {
+      event.target.className += ' disabled'
+      self.config.data.url = event.target.previousElementSibling.value
+      self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
+        self.dataObj = dataObj
+        self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers, label: "Select date/time column"})
+        self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS, label: "How are your dates formatted?"})
+        self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers, label: "Select data column"})
+        self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers, label: "Select card title column"})
+        self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers, label: "Select card text column"})
+      }.bind(self))
+      var tmpl = self.createTemplate('StorylineGenerator')
+      self.appendTemplate('form', tmpl)
+      self.bindEvents('.generate-storyline-btn')
+      self.preLoaded = true
     } else {
       var errorMessage = 'Error, data has already been loaded'
       lib.errorLog({errorMessage})
