@@ -57,18 +57,23 @@ Storyline.prototype = {
   /**
    * For each slide configuration object, if no display_date is specified,
    * fill it in based on the data set.
-   *
+   * @TODO document why this is here even though it's about cards and so might be expected in slider.js
    * @returns {undefined}
    */
   populateSlideDates: function(dataObj) {
     var d3Time = require('d3-time-format'),
-        formatter = d3Time.timeFormat(this.dataConfig.chart.datetime_format);
+        formatString = (this.dataConfig.chart && this.dataConfig.chart.datetime_format)
+                  ? this.dataConfig.chart.datetime_format
+                  : this.dataConfig.data.datetime_format,
+        formatter = d3Time.timeFormat(formatString);
 
     for (var card of dataObj.markers) {
       if (card.display_date === undefined) {
         var row = dataObj.data[card.rowNum];
         // if row is null, we should have checked/errored before here
         card.displayDate = formatter(row[0]);
+      } else {
+        card.displayDate = card.display_date; // we have format variation between config styles and template styles so copy it over.
       }
     }
   },
