@@ -28,6 +28,20 @@ var GUI = function() {
   }
 }
 
+/**
+ * Keys are offered in UI as choices; values are equivalent versions which will actually parse.
+ */
+const DATETIME_FORMATS = {
+  'MM/DD/YY': '%m/%d/%y',
+  'MM/DD/YYYY': '%m/%d/%Y',
+  'DD/MM/YY': '%d/%m/%y',
+  'DD/MM/YYYY': '%d/%m/%Y',
+  'YYYY': '%Y'
+}
+
+var DATETIME_HEADERS = [];
+for (var k in DATETIME_FORMATS) { DATETIME_HEADERS.push(k) }
+
 GUI.prototype = {
   /**
    *
@@ -91,7 +105,7 @@ GUI.prototype = {
       self.dataObj = dataObj
       self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers})
       self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers})
-      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: ['MM/DD/YY', 'MM/DD/YYYY', 'DD/MM/YY', 'DD/MM/YYYY']})
+      self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS})
       self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers})
       self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers})
     }.bind(self))
@@ -135,14 +149,8 @@ GUI.prototype = {
           if(data.indexOf(classes[j]) > -1){
             var text = allColumns[i].text
             if(classes[j] === 'datetime_format') {
-              if(text === 'MM/DD/YY') {
-                text = '%m/%d/%y'
-              } else if(text === 'MM/DD/YYYY') {
-                text = '%m/%d/%Y'
-              } else if(text === 'DD/MM/YY') {
-                text = '%d/%m/%y'
-              } else if(text === 'DD/MM/YYYY') {
-                text = '%d/%m/%Y'
+              if (text in DATETIME_FORMATS) {
+                text = DATETIME_FORMATS[text]
               }
             }
             self.config.data[classes[j]] = text
