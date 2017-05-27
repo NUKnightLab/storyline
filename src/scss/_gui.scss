@@ -15,7 +15,6 @@ form {
 }
 
 .data-nav {
-  font-size: smaller;
   & input {
     vertical-align: top;
     width: 70%;
@@ -36,8 +35,7 @@ form {
 
 .flyout {
   position: relative;
-  // margin-left: 50%;
-  margin-top: 3em;
+  margin: 1.5em 0;
 
   &:hover > .flyout-content {
     z-index: 1000;
@@ -50,9 +48,13 @@ form {
 .data-selected-column {
   &:not(.selected){
     &:before {
-      content: 'Columns'
+      content: 'Select'
     }
   }
+}
+
+.data-nav > p {
+  margin-bottom: .5rem;
 }
 
 .data-nav > a, .data-nav > li > a {
@@ -60,7 +62,7 @@ form {
   text-decoration: none;
   color: black;
   line-height: 1;
-  padding: 1em;
+  padding: .5em;
   background-color: #09f;
   color: #fff;
   white-space: nowrap;
@@ -144,4 +146,8 @@ button, .button {
     cursor: default;
     text-shadow:none;
   }
+}
+
+#generate-storyline-btn {
+  margin: 0;
 }

@@ -27,6 +27,19 @@ footer, header, hgroup, menu, nav, section {
 ol, ul {
 	list-style: none;
 }
+
+ol>li,ul>li {
+	&:before {
+		content: '';
+		content: none;
+	}
+
+	&:after {
+		content: '';
+		content: none;
+	}
+}
+
 blockquote, q {
 	quotes: none;
 }

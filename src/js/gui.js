@@ -82,7 +82,7 @@ GUI.prototype = {
         "urlBuilder":
           "<form>" +
           "<h2>Create a Storyline</h2>" +
-          "<div class='data-nav input-group-label'>" +
+          "<div class='input-group-label'>" +
           "<label class='input-group-addon' for='spreadsheet_url'>Google Spreadsheet URL</label>" +
            "<input type='text' id='spreadsheet_url' name='spreadsheet_url' placeholder='place link to spreadsheet here'>" +
            "<button id='load-btn' class='button-complement' handler='loadData'>Load</button>" +
@@ -103,9 +103,7 @@ GUI.prototype = {
            "</ul>" +
           "</div>",
           "StorylineGenerator":
-            "<div>" +
-              "<button class='generate-storyline-btn button-secondary' handler='generateStoryline'>Create Storyline</div>" +
-            "</div>"
+            "<button id='generate-storyline-btn' class='button-secondary' handler='generateStoryline'>Create Storyline</div>"
         }
   var rendered = mustache.render(MUSTACHE_TEMPLATES[template], columns),
       parser = new DOMParser(),
@@ -137,11 +135,11 @@ GUI.prototype = {
           self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers, label: "Select data column"})
           self.buildColumnSelector('cards-title-column', {column:'title', headers: this.dataObj.headers, label: "Select card title column"})
           self.buildColumnSelector('cards-text-column', {column:'text', headers: this.dataObj.headers, label: "Select card text column"})
+          var tmpl = self.createTemplate('StorylineGenerator')
+          self.appendTemplate('form', tmpl)
+          self.bindEvents('#generate-storyline-btn')
+          self.preLoaded = true
         }.bind(self))
-        var tmpl = self.createTemplate('StorylineGenerator')
-        self.appendTemplate('form', tmpl)
-        self.bindEvents('.generate-storyline-btn')
-        self.preLoaded = true
       }
     } else {
       var errorMessage = 'Error, data has already been loaded'
@@ -177,6 +175,7 @@ GUI.prototype = {
         if(selectedCols === 5) {
           window.storyline = new Storyline('Storyline', self.config)
           self.storylineExists = true;
+          setTimeout(500, function() {window.location.hash = 'Storyline';});
         }
       }
     } else {
