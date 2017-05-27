@@ -5,6 +5,22 @@ var DataFactory = function() {
   this.storyline = {elem: document.querySelector('#Storyline')}
 }
 
+/**
+ * Simple function to convert a config value into a Google Spreadsheet row key,
+ * and verify that it's valid for given row before getting deeper into the data.
+ *
+ * @param {string} config_column_name - a value as specified in a storymap config
+ * @param {object} testRow - a row from reading the google spreadsheet which is expected to have this column
+ */
+function constructAndTestGSXColumn(config_column_name, testRow) {
+  var col_name = "gsx$" + config_column_name.replace(/\s/g, '').toLowerCase();
+    if (!testRow[col_name]) {
+      throw {message:"Missing column [" + config_column_name + "]" }
+    }
+    return col_name;
+
+}
+
 DataFactory.prototype = {
   /**
    * runs through data and grabs significant values for drawing line
@@ -105,12 +121,14 @@ DataFactory.prototype = {
   },
 
   /**
-   * requests contents from a given csv file
+   * requests contents from a given csv file (@TODO or Google spreadsheet? only Google spreadsheet?)
    *
    * @param {string} file - name of the csv file to read
-   * @returns {undefined}
+   * @returns {string} the URL to a Google Spreadsheet or a CSV or undefined if various conditions aren't met
    */
   getCSVPath: function(context) {
+    // this should throw an exception if context is undefined since the immediate next line would throw an error.
+    // also consider passing exactly the parameter which is needed for clarity instead of the whole context
     let url = context ? context.data.url : undefined
     if (url.substring(0,4) == 'http') {
       var parts = lib.parseSpreadsheetURL(url)
@@ -128,7 +146,7 @@ DataFactory.prototype = {
   fetchSheetHeaders: function(config, context) {
     var self = context ? context : this;
     return new Promise(function(resolve, reject) {
-      var url = self.getCSVPath(config)
+      var url = self.getCSVPath(config) // url could be undefined. handle more deliberately.
       lib.get(url)
         .then(function(response) {
           if(response) {
@@ -172,7 +190,6 @@ DataFactory.prototype = {
               formattedResponse = parse(response, {'columns': true})
             } finally {
               try {
-                debugger;
                 if(!self.hasColumnHeaders(config)) {
                   headers = self.getAllColumnHeaders(config, formattedResponse[0])
                 }
@@ -207,14 +224,21 @@ DataFactory.prototype = {
         },
         activeSlide,
         markers = [];
+
+
+    var gsx_data_column_name = constructAndTestGSXColumn(config.data.data_column_name, dataFeed[0]);
+    var gsx_datetime_column_name = constructAndTestGSXColumn(config.data.datetime_column_name, dataFeed[0]);
+    var gsx_title_column_name = constructAndTestGSXColumn(config.cards.title, dataFeed[0]);
+    var gsx_text_column_name = constructAndTestGSXColumn(config.cards.text, dataFeed[0]);
+
     for(var i=0; i<dataFeed.length;i++) {
-      var slideTitle = dataFeed[i]["gsx$slidetitle"].$t
-      var slideText = dataFeed[i]["gsx$slidetext"].$t
-      var slideActive = dataFeed[i]["gsx$slideactive"].$t
-      var date = dataFeed[i]["gsx$" + config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()].$t
+      var slideTitle = dataFeed[i][gsx_title_column_name].$t
+      var slideText = dataFeed[i][gsx_text_column_name].$t
+      var slideActive = (dataFeed[i]["gsx$slideactive"]) ? dataFeed[i]["gsx$slideactive"].$t : false;
+      var date = dataFeed[i][gsx_datetime_column_name].$t
       var dateParse = d3Time.timeParse(config.data.datetime_format)
       var x = dateParse(date)
-      var y = dataFeed[i]["gsx$" + config.data.data_column_name.replace(/\s/g, '').toLowerCase()].$t
+      var y = dataFeed[i][gsx_data_column_name].$t
       y = parseFloat(y)
         bounds.minY = this.getMin(y, bounds.minY)
         bounds.maxY = this.getMax(y, bounds.maxY)
@@ -236,11 +260,17 @@ DataFactory.prototype = {
   },
 
   hasColumnHeaders: function(config) {
-    var hasxCol = config.data.datetime_column_name.length > 0;
-    var hasyCol = config.data.data_column_name.length > 0
+    var hasxCol = config.data.datetime_column_name && config.data.datetime_column_name.length > 0;
+    var hasyCol = config.data.data_column_name && config.data.data_column_name.length > 0
     return (hasxCol && hasyCol)
   },
 
+  /**
+   * Extract the available column headers to use in offering choices to users in the GUI.
+   * Currently assumes Google Spreadsheet.
+   * @param {object} config - not currently used
+   * @param {object} obj - a typical "row" from the Google Spreadsheet which has column names
+   */
   getAllColumnHeaders: function(config, obj) {
     var formattedHeaders = [];
     var reg = /gsx\$([^]+)/g
