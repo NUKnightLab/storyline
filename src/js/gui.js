@@ -39,8 +39,33 @@ const DATETIME_FORMATS = {
   'YYYY': '%Y'
 }
 
-var DATETIME_HEADERS = [];
-for (var k in DATETIME_FORMATS) { DATETIME_HEADERS.push(k) }
+const DATETIME_HEADERS = Object.keys(DATETIME_FORMATS);
+
+/**
+ * For each column offered, provide a handler that knows how to move its value into the
+ * correct place in the storyline config object, translating values along the way when
+ * necessary.
+ */
+const COLUMN_HANDLERS = {
+  data_column_name: function(config, value) {
+    config.data.data_column_name = value;
+  },
+  datetime_column_name: function(config, value) {
+    config.data.datetime_column_name = value;
+  },
+  datetime_format: function(config, value) {
+    if (value in DATETIME_FORMATS) {
+      value = DATETIME_FORMATS[value]
+    }
+    config.data.datetime_format = value;
+  },
+  title: function(config, value) {
+    config.cards.title = value;
+  },
+  text: function(config, value) {
+    config.cards.text = value;
+  }
+}
 
 GUI.prototype = {
   /**
@@ -53,7 +78,6 @@ GUI.prototype = {
   createTemplate: function(template, columns) {
   var mustache = require('mustache');
   var columns  = columns ? columns : ''
-
   const MUSTACHE_TEMPLATES = {
         "urlBuilder":
           "<form>" +
@@ -65,7 +89,7 @@ GUI.prototype = {
         "columnBuilder":
           "<div class='flyout data-nav'>" +
           "<p>Select a column for the {{column}}</p>" +
-           "<a class='data-selected-column {{column}}' href='#'></a>" +
+           "<a class='data-selected-column' colname='{{column}}' href='#'></a>" +
            "<ul class='flyout-content data-nav stacked'>" +
             "{{#headers}}" +
              "<li>" +
@@ -132,41 +156,37 @@ GUI.prototype = {
     event.preventDefault();
     var self = context;
     event.target.className += ' disabled'
-
     if(!self.storylineExists) {
-    var data = Object.keys(self.config.data).concat(Object.keys(self.config.cards))
-    var allColumns = document.querySelectorAll('.data-selected-column')
-    var selectedCols = 0
-    for(var i=0; i<allColumns.length; i++) {
-      if(allColumns[i].text.length === 0) {
-        var errorMessage = 'Error, Please select an option for column'
-        lib.errorLog({errorMessage})
-          break;
-      } else {
-        //grab column data//
-        var classes = allColumns[i].classList
-        for(var j=0; j<classes.length; j++) {
-          if(data.indexOf(classes[j]) > -1){
-            var text = allColumns[i].text
-            if(classes[j] === 'datetime_format') {
-              if (text in DATETIME_FORMATS) {
-                text = DATETIME_FORMATS[text]
-              }
-            }
-            self.config.data[classes[j]] = text
-            selectedCols++
-          }
+      var allColumns = document.querySelectorAll('.data-selected-column')
+      var selectedCols = 0
+
+      for(var i=0; i<allColumns.length; i++) {
+        var colname = allColumns[i].attributes['colname'].value;
+        if(allColumns[i].text.length === 0) {
+          var errorMessage = 'Error, Please select an option for column ' + colname;
+          lib.errorLog({errorMessage})
+            break;
+        } else {
+          self.extractColumnValue(allColumns[i]) && selectedCols++;
+        }
+        if(selectedCols === 5) {
+          window.storyline = new Storyline('Storyline', self.config)
+          self.storylineExists = true;
         }
       }
-      if(selectedCols === 5) {
-        window.storyline = new Storyline('Storyline', self.config)
-      }
-    }
-    self.storylineExists = true;
     } else {
       var errorMessage = 'Error, only one storyline allowed'
       lib.errorLog({errorMessage})
     }
+  },
+
+  extractColumnValue: function(column) {
+    var colname = column.attributes['colname'].value;
+    if (colname in COLUMN_HANDLERS) {
+      COLUMN_HANDLERS[colname](this.config, column.text);
+      return true;
+    }
+    return false;
   },
 
   bindEvents: function(elem) {
