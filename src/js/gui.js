@@ -29,14 +29,15 @@ var GUI = function() {
 }
 
 /**
- * Keys are offered in UI as choices; values are equivalent versions which will actually parse.
+ * For user friendliness, we want our keys to be formatted according to today's date.
  */
-const DATETIME_FORMATS = {
-  'MM/DD/YY': '%m/%d/%y',
-  'MM/DD/YYYY': '%m/%d/%Y',
-  'DD/MM/YY': '%d/%m/%y',
-  'DD/MM/YYYY': '%d/%m/%Y',
-  'YYYY': '%Y'
+var d3Time = require('d3-time-format');
+
+const TODAY = new Date()
+const FORMAT_STRINGS = [ '%Y', '%Y-%m-%d', '%m/%d/%y', '%m/%d/%Y', '%d/%m/%y', '%d/%m/%Y'];
+var DATETIME_FORMATS = {}
+for (var x of FORMAT_STRINGS) {
+  DATETIME_FORMATS[d3Time.timeFormat(x)(TODAY)] = x;
 }
 
 const DATETIME_HEADERS = Object.keys(DATETIME_FORMATS);
