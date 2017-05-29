@@ -91,17 +91,13 @@ GUI.prototype = {
           "</form>",
         "columnBuilder":
           "<div class='flyout data-nav'>" +
-          "<p>{{label}}</p>" +
-           "<a class='data-selected-column' colname='{{column}}' href='#'></a>" +
-           "<ul class='flyout-content data-nav stacked'>" +
-            "{{#headers}}" +
-             "<li>" +
-              "<a class='data-columns' handler='loadColumn' href='#'>" +
-               "{{ . }}" +
-              "</a>" +
-             "</li>" +
-            "{{/headers}}" +
-           "</ul>" +
+          "<label for='{{column}}'>{{label}}</label>" +
+            "<select class='column-selector' handler='loadColumn' name='{{column}}' id={{column}}>" +
+              "<option value=''> -- select -- </option>" +
+              "{{#headers}}" +
+               "<option value='{{ . }}'>{{ . }}</option>" +
+               "{{/headers}}" +
+             "</select>" +
           "</div>",
           "StorylineGenerator":
             "<button id='generate-storyline-btn' class='button-secondary' handler='generateStoryline'>Create Storyline</div>"
@@ -128,6 +124,7 @@ GUI.prototype = {
       self.preLoaded = true
       var url = document.getElementById('spreadsheet_url').value.trim();
       if (url) { // for now just quietly ignore trigger if no URL
+        console.log(url);
         document.getElementById('load-btn').className += ' disabled'
         self.config.data.url = url;
         self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
@@ -153,11 +150,12 @@ GUI.prototype = {
   },
 
   loadColumn: function(context) {
-    var self = context;
-    var parentElem = event.target.parentElement.parentElement.parentElement
-    var selectedElem = parentElem.querySelector('.data-selected-column')
-    selectedElem.className += ' selected'
-    selectedElem.innerText = event.target.text
+    //
+    // var self = context;
+    // var parentElem = event.target.parentElement.parentElement.parentElement
+    // var selectedElem = parentElem.querySelector('.data-selected-column')
+    // selectedElem.className += ' selected'
+    // selectedElem.innerText = event.target.text
   },
 
   generateStoryline: function(context) {
@@ -165,17 +163,18 @@ GUI.prototype = {
     var self = context;
     event.target.className += ' disabled'
     if(!self.storylineExists) {
-      var allColumns = document.querySelectorAll('.data-selected-column')
+      var allColumns = document.querySelectorAll('select.column-selector')
       var selectedCols = 0
 
       for(var i=0; i<allColumns.length; i++) {
-        var colname = allColumns[i].attributes['colname'].value;
-        if(allColumns[i].text.length === 0) {
+        var colname = allColumns[i].name;
+        var value = allColumns[i].value;
+        if(value.length === 0) {
           var errorMessage = 'Error, Please select an option for column ' + colname;
           lib.errorLog({errorMessage})
             break;
         } else {
-          self.extractColumnValue(allColumns[i]) && selectedCols++;
+          self.extractColumnValue(colname, value) && selectedCols++;
         }
         if(selectedCols === 5) {
           window.storyline = new Storyline('Storyline', self.config)
@@ -188,26 +187,30 @@ GUI.prototype = {
       lib.errorLog({errorMessage})
     }
   },
-
-  extractColumnValue: function(column) {
-    var colname = column.attributes['colname'].value;
+  /**
+   * For a given column, get its value, convert it if necessary, and store it for making the storyline.
+   */
+  extractColumnValue: function(colname, value) {
     if (colname in COLUMN_EXTRACTORS) {
-      COLUMN_EXTRACTORS[colname](this.config, column.text);
+      COLUMN_EXTRACTORS[colname](this.config, value);
       return true;
     }
     return false;
   },
 
-  bindEvents: function(elem) {
+  bindEvents: function(selector) {
     var self = this;
-    var elem = document.querySelectorAll(elem)
-    var handler = elem[0].getAttribute('handler');
-    handler = Object.keys(self.__proto__).indexOf(handler) > -1 ? self.__proto__[handler] : ''
-    elem.forEach(function(el) {
-      el.onclick = function(){
-        handler(self)
-      }
-    })
+    var elem = document.querySelectorAll(selector)
+    if (elem && elem.length && elem.length > 0) {
+      elem.forEach(function(el) {
+        var handler = el.getAttribute('handler');
+        handler = Object.keys(self.__proto__).indexOf(handler) > -1 ? self.__proto__[handler] : ''
+        el.onclick = function(){
+          handler(self)
+        }
+    })} else {
+      console.log("bindEvents: empty selection for " + selector);
+    }
   },
 
   /**
