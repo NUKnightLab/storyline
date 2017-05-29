@@ -165,6 +165,7 @@ Slider.prototype = {
             self.currentOffset = self.offsets[newCard];
             self.goToCard(self.activeCard + 1);
           }
+        break;
         case 'swipe':
           var nextCard = ev.deltaX > 0 ? -1 : 1;
           percentage = (ev.deltaX/self.sliderWidth) * 100;
