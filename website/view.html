@@ -43,6 +43,7 @@
     var templ = Gui.createTemplate('urlBuilder')
     Gui.appendTemplate('.form', templ)
     document.getElementById('spreadsheet_url').addEventListener('change',function() {Gui.loadData(Gui)});
+    document.querySelector('form').addEventListener('submit',function(e) { e.preventDefault(); Gui.loadData(Gui)});
   </script>
 </body>
 </html>
