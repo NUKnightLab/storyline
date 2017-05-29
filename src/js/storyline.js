@@ -14,6 +14,7 @@ var Storyline = function(targetId, dataConfig) {
 Storyline.prototype = {
   init: function() {
     var self = this;
+    this.validateConfig();
     this.setDimensions();
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
@@ -27,6 +28,16 @@ Storyline.prototype = {
     PubSub.subscribe('window resized', function(topic, data) {
       self.resetWidth(data);
     })
+  },
+  /**
+   * Perform any necessary data validation or cleanup ASAP so we can error out cleanly if things won't work.
+   * @TODO There are almost definitely more checks to add here.
+   */
+  validateConfig: function() {
+    // we need chart.datetime_format for the x axis and for cards so use input datetime format as a fallback.
+    if (!this.dataConfig.chart) { this.dataConfig.chart = {} }
+    if (!this.dataConfig.chart.datetime_format) { this.dataConfig.chart.datetime_format = this.dataConfig.data.datetime_format }
+
   },
   resetWidth: function(newWidth) {
     this.width = newWidth;
@@ -62,6 +73,7 @@ Storyline.prototype = {
    */
   populateSlideDates: function(dataObj) {
     var d3Time = require('d3-time-format'),
+        // this may be unduly complicated if our validation works correctly
         formatString = (this.dataConfig.chart && this.dataConfig.chart.datetime_format)
                   ? this.dataConfig.chart.datetime_format
                   : this.dataConfig.data.datetime_format,
