@@ -42,7 +42,6 @@
     var Gui = new gui.GUI()
     var templ = Gui.createTemplate('urlBuilder')
     Gui.appendTemplate('.form', templ)
-    Gui.bindEvents('#load-btn')
     document.getElementById('spreadsheet_url').addEventListener('change',function() {Gui.loadData(Gui)});
   </script>
 </body>

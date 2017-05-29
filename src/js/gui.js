@@ -86,7 +86,7 @@ GUI.prototype = {
           "<div class='input-group-label'>" +
           "<label class='input-group-addon' for='spreadsheet_url'>Google Spreadsheet URL</label>" +
            "<input type='text' id='spreadsheet_url' name='spreadsheet_url' placeholder='place link to spreadsheet here'>" +
-           "<button id='load-btn' class='button-complement' handler='loadData'>Load</button>" +
+           "<button id='load-btn' class='button-complement'>Load</button>" +
           "</div>" +
           "</form>",
         "columnBuilder":
@@ -125,11 +125,13 @@ GUI.prototype = {
     if (event) event.preventDefault();
     var self = context;
     if(!self.preLoaded) {
+      self.preLoaded = true
       var url = document.getElementById('spreadsheet_url').value.trim();
       if (url) { // for now just quietly ignore trigger if no URL
         document.getElementById('load-btn').className += ' disabled'
         self.config.data.url = url;
         self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
+          console.log('fetch');
           self.dataObj = dataObj
           self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers, label: "Select date/time column"})
           self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS, label: "How are your dates formatted?"})
@@ -139,12 +141,14 @@ GUI.prototype = {
           var tmpl = self.createTemplate('StorylineGenerator')
           self.appendTemplate('form', tmpl)
           self.bindEvents('#generate-storyline-btn')
-          self.preLoaded = true
-        }.bind(self))
+        }.bind(self),
+      function(reason) {
+        console.log('fetchSheetHeaders reject, reason: ',reason)
+        self.preLoaded = false;
+      })
       }
     } else {
-      var errorMessage = 'Error, data has already been loaded'
-      lib.errorLog({errorMessage})
+      console.log("preLoaded is true, not repeating");
     }
   },
 
