@@ -58,7 +58,7 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeSlide ? this.data.activeSlide : 0
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.data.markers, activeCard, sliderHeight, this.width);
+    return new Slider(this.data.cards, activeCard, sliderHeight, this.width);
   },
   initChart: function(dataObj) {
     //chart height//
@@ -79,9 +79,9 @@ Storyline.prototype = {
                   : this.dataConfig.data.datetime_format,
         formatter = d3Time.timeFormat(formatString);
 
-    for (var card of dataObj.markers) {
+    for (var card of dataObj.cards) {
       if (card.display_date === undefined) {
-        var row = dataObj.data[card.rowNum];
+        var row = dataObj.data[card.rowNumber];
         // if row is null, we should have checked/errored before here
         card.displayDate = formatter(row[0]);
       } else {

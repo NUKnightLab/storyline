@@ -49,10 +49,10 @@ const DATETIME_HEADERS = Object.keys(DATETIME_FORMATS);
  */
 const COLUMN_EXTRACTORS = {
   data_column_name: function(config, value) {
-    config.data.data_column_name = value;
+    config.data.data_column_name = "gsx$" + value;
   },
   datetime_column_name: function(config, value) {
-    config.data.datetime_column_name = value;
+    config.data.datetime_column_name = "gsx$" + value;
   },
   datetime_format: function(config, value) {
     if (value in DATETIME_FORMATS) {
@@ -61,10 +61,10 @@ const COLUMN_EXTRACTORS = {
     config.data.datetime_format = value;
   },
   title: function(config, value) {
-    config.cards.title = value;
+    config.cards.title = "gsx$" + value;
   },
   text: function(config, value) {
-    config.cards.text = value;
+    config.cards.text = "gsx$" + value;
   }
 }
 
@@ -92,7 +92,7 @@ GUI.prototype = {
         "columnBuilder":
           "<div class='flyout data-nav'>" +
           "<label for='{{column}}'>{{label}}</label>" +
-            "<select class='column-selector' handler='loadColumn' name='{{column}}' id={{column}}>" +
+            "<select class='column-selector' name='{{column}}' id={{column}}>" +
               "<option value=''> -- select -- </option>" +
               "{{#headers}}" +
                "<option value='{{ . }}'>{{ . }}</option>" +
@@ -149,18 +149,11 @@ GUI.prototype = {
     }
   },
 
-  loadColumn: function(context) {
-    //
-    // var self = context;
-    // var parentElem = event.target.parentElement.parentElement.parentElement
-    // var selectedElem = parentElem.querySelector('.data-selected-column')
-    // selectedElem.className += ' selected'
-    // selectedElem.innerText = event.target.text
-  },
-
   generateStoryline: function(context) {
     event.preventDefault();
+    //clear timeout//
     var self = context;
+    clearTimeout(self.t)
     event.target.className += ' disabled'
     if(!self.storylineExists) {
       var allColumns = document.querySelectorAll('select.column-selector')
@@ -174,9 +167,14 @@ GUI.prototype = {
           lib.errorLog({errorMessage})
             break;
         } else {
-          self.extractColumnValue(colname, value) && selectedCols++;
+          self.extractColumnValue(colname, value)
+          selectedCols++;
         }
         if(selectedCols === 5) {
+          debugger;
+          //var slides = self.data.createDataObj(self.dataObj.formattedResponse, self.config)
+          //self.config.cards = slides
+          //build out slides//
           window.storyline = new Storyline('Storyline', self.config)
           self.storylineExists = true;
           setTimeout(500, function() {window.location.hash = 'Storyline';});

@@ -5,22 +5,6 @@ var DataFactory = function() {
   this.storyline = {elem: document.querySelector('#Storyline')}
 }
 
-/**
- * Simple function to convert a config value into a Google Spreadsheet row key,
- * and verify that it's valid for given row before getting deeper into the data.
- *
- * @param {string} config_column_name - a value as specified in a storymap config
- * @param {object} testRow - a row from reading the google spreadsheet which is expected to have this column
- */
-function constructAndTestGSXColumn(config_column_name, testRow) {
-  var col_name = "gsx$" + config_column_name.replace(/\s/g, '').toLowerCase();
-    if (!testRow[col_name]) {
-      throw {message:"Missing column [" + config_column_name + "]" }
-    }
-    return col_name;
-
-}
-
 DataFactory.prototype = {
   /**
    * runs through data and grabs significant values for drawing line
@@ -29,10 +13,11 @@ DataFactory.prototype = {
    * @param {object} config -  data object from config file
    * @returns {object} dataObj - data needed for creating a new chart
    */
-  createDataObj: function(data, config) {
+  createDataObj: function(dataObj, config) {
     var d3Time = require('d3-time-format');
     var data = [],
-        activeSlide,
+        cards = [],
+        activeCard,
         bounds = {
           minX: null,
           maxX: null,
@@ -46,11 +31,28 @@ DataFactory.prototype = {
         markers = [];
 
     var i=0;
-    while(i < data.length) {
+    while(i < dataObj.length) {
       var dateParse = d3Time.timeParse(config.data.datetime_format);
-      var x = dateParse(data[i][config.data.datetime_column_name]);
-      var y = parseFloat(data[i][config.data.data_column_name]);
+      var x = dataObj[i][config.data.datetime_column_name]
+      var y = dataObj[i][config.data.data_column_name];
+      x = typeof x === typeof {} ? dateParse(Object.values(x)[0]) : dateParse(x);
+      y = typeof y === typeof {} ? parseFloat(Object.values(y)[0]) : parseFloat(y);
       //check if x or y is undefined or null
+      if(config.cards.title != undefined) {
+        var cardTitle = Object.values(dataObj[i][config.cards.title])[0]
+        var cardText = Object.values(dataObj[i][config.cards.text])[0]
+        if(cardTitle.length > 0 && cardText.length > 0) {
+          var rowNumber = i
+          cards.push({rowNumber, cardTitle, cardText})
+        } else if(config.cards.length > 0) {
+          config.cards.map(function(card) {
+            var cardTitle = card.title
+            var cardText = card.text
+            var rowNumber = card.row_number
+            cards.push({rowNumber, cardTitle, cardText})
+          })
+        }
+      }
       if(!x || !y) {
         var errorMessage = "";
         errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
@@ -68,9 +70,8 @@ DataFactory.prototype = {
 
       i++;
     }
-    markers = this.getSlideMarkers(config.cards);
 
-    var dataObj = { data, bounds, axes, markers, activeSlide };
+    var dataObj = { data, bounds, axes, cards, activeCard };
     return dataObj;
   },
 
@@ -117,6 +118,7 @@ DataFactory.prototype = {
    * @returns {array} markers - a list of row numbers
    */
   getSlideMarkers: function(rowNum, slideTitle, slideText) {
+    debugger;
     return {rowNum, slideTitle, slideText};
   },
 
@@ -193,7 +195,7 @@ DataFactory.prototype = {
                 if(!self.hasColumnHeaders(config)) {
                   headers = self.getAllColumnHeaders(config, formattedResponse[0])
                 }
-                resolve(self.createDataFromSheet(formattedResponse, headers, config))
+                resolve(self.createDataObj(formattedResponse, config))
               } catch(e) {
                 self.errorMessage = e.message
                 self.errorLog()
@@ -206,76 +208,6 @@ DataFactory.prototype = {
           self.errorLog()
         })
     })
-  },
-
-  createDataFromSheet: function(dataFeed, headers, config) {
-    var d3Time = require('d3-time-format');
-    var data = [],
-        activeSlide,
-        bounds = {
-          minX: null,
-          maxX: null,
-          minY: null,
-          maxY: null
-        },
-        axes = {
-          yLabel: null,
-          timeFormat: null
-        },
-        activeSlide,
-        markers = [];
-
-
-    var gsx_data_column_name = constructAndTestGSXColumn(config.data.data_column_name, dataFeed[0]);
-    var gsx_datetime_column_name = constructAndTestGSXColumn(config.data.datetime_column_name, dataFeed[0]);
-    var gsx_title_column_name = (config.cards.title) ? constructAndTestGSXColumn(config.cards.title, dataFeed[0]) : null;
-    var gsx_text_column_name = (config.cards.text) ? constructAndTestGSXColumn(config.cards.text, dataFeed[0]) : null;
-
-    var card_lookup = null;
-    if (!(gsx_title_column_name && gsx_text_column_name)) {
-      // assume that the cards are passed in using the original format
-      card_lookup = {}
-      for (var i = 0; i < config.cards.length; i++) {
-        var card = config.cards[i];
-        card_lookup[card.row_number] = card;
-      }
-    }
-
-    for(var i=0; i<dataFeed.length;i++) {
-      var slideTitle = '', slideText = '', slideActive = false;
-      if (!card_lookup) {
-        slideTitle = dataFeed[i][gsx_title_column_name].$t
-        slideText = dataFeed[i][gsx_text_column_name].$t
-        slideActive = (dataFeed[i]["gsx$slideactive"]) ? dataFeed[i]["gsx$slideactive"].$t : false;
-      } else if (card_lookup[i]) {
-        slideTitle = card_lookup[i].title;
-        slideText = card_lookup[i].text;
-        if (config.start_at_card) {
-          slideActive = (config.start_at_card == i);
-        }
-      }
-      var date = dataFeed[i][gsx_datetime_column_name].$t
-      var dateParse = d3Time.timeParse(config.data.datetime_format)
-      var x = dateParse(date)
-      var y = dataFeed[i][gsx_data_column_name].$t
-      y = parseFloat(y)
-        bounds.minY = this.getMin(y, bounds.minY)
-        bounds.maxY = this.getMax(y, bounds.maxY)
-        bounds.minX = this.getMin(x, bounds.minX)
-        bounds.maxX = this.getMax(x, bounds.maxX)
-        data.push([x, y]);
-        axes.timeFormat = config.chart.datetime_format || '%y';
-        axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
-      if(slideTitle.length > 0 || slideText.length > 0) {
-        if(slideActive) {
-          activeSlide = markers.length
-        }
-        markers.push(this.getSlideMarkers(i, slideTitle, slideText));
-      }
-    }
-
-    var dataObj = { data, bounds, axes, markers, activeSlide };
-    return dataObj;
   },
 
   hasColumnHeaders: function(config) {
