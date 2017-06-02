@@ -221,6 +221,19 @@ GUI.prototype = {
   appendTemplate: function(selector, template) {
     document.querySelector(selector).appendChild(template)
     return;
+  },
+
+  autofill: function() {
+    document.querySelector('input').value = 'https://docs.google.com/spreadsheets/d/1amj29A-YdAXQu18PipfgJ6biylaUhYLBxNiP4PpzW5g/edit#gid=1399340410'
+    document.querySelector('#load-btn').click()
+    this.t = setTimeout(function() {
+      var selects = document.querySelectorAll('select');
+
+      var vals = ['date', d3Time.timeFormat('%m/%d/%y')(new Date()), 'usunemploymentrate', 'slidetitle', 'slidetext'];
+      for(var i=0; i<selects.length;i++) {
+        selects[i].value = vals[i]
+      }
+    },1000)
   }
 }
 
