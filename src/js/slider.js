@@ -1,7 +1,8 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, startIndex, height, width) {
+var Slider = function(cards, config, startIndex, height, width) {
   this.activeCard = startIndex;
+  this.config = config;
   this.cards = cards;
   this.MARGIN = 10;
   this.NAV_HEIGHT = 16 + 10; // actual height + margin height//
@@ -16,6 +17,7 @@ Slider.prototype = {
     //mustache should have something about iterating over index//
     for(var i in this.cards) {
       this.cards[i].index = i
+      this.populateSlideDates(this.cards[i])
     }
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
@@ -104,6 +106,16 @@ Slider.prototype = {
     for(var i = 0; i < this.cards.length; i++) {
       this.cardsElem.children[i].children[0].style.height = (this.height - this.NAV_HEIGHT - this.MARGIN*2) + "px";
       this.cardsElem.children[i].style.width = w + "px";
+    }
+  },
+  populateSlideDates: function(card) {
+    var d3Time = require('d3-time-format');
+
+    if(!this.config.chart.datetime_format) {
+      card.display_date
+    } else {
+      var formatter = d3Time.timeFormat(this.config.chart.datetime_format);
+      card.display_date = formatter(card.display_date)
     }
   },
   goToCard: function(number) {
@@ -241,9 +253,9 @@ const MUSTACHE_TEMPLATES = {
        "{{#cards}}" +
        "<div class='slider-card {{class}}'>" +
          "<div class='slider-content'>" +
-           "<h3><span class='h3-date'>{{ displayDate }}</span>" +
-           "{{ cardTitle }}</h3>" +
-           "<p>{{ cardText }}<p>" +
+           "<h3><span class='h3-date'>{{ display_date }}</span>" +
+           "{{ title }}</h3>" +
+           "<p>{{ text }}<p>" +
          "</div>" +
        "</div>" +
        "{{/cards}}" +

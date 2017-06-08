@@ -49,10 +49,10 @@ const DATETIME_HEADERS = Object.keys(DATETIME_FORMATS);
  */
 const COLUMN_EXTRACTORS = {
   data_column_name: function(config, value) {
-    config.data.data_column_name = "gsx$" + value;
+    config.data.data_column_name = value;
   },
   datetime_column_name: function(config, value) {
-    config.data.datetime_column_name = "gsx$" + value;
+    config.data.datetime_column_name = value;
   },
   datetime_format: function(config, value) {
     if (value in DATETIME_FORMATS) {
@@ -61,10 +61,10 @@ const COLUMN_EXTRACTORS = {
     config.data.datetime_format = value;
   },
   title: function(config, value) {
-    config.cards.title = "gsx$" + value;
+    config.cards.title = value;
   },
   text: function(config, value) {
-    config.cards.text = "gsx$" + value;
+    config.cards.text = value;
   }
 }
 
@@ -124,12 +124,13 @@ GUI.prototype = {
       self.preLoaded = true
       var url = document.getElementById('spreadsheet_url').value.trim();
       if (url) { // for now just quietly ignore trigger if no URL
-        console.log(url);
         document.getElementById('load-btn').className += ' disabled'
         self.config.data.url = url;
         self.data.fetchSheetHeaders(self.config, self.data).then(function(dataObj) {
-          console.log('fetch');
           self.dataObj = dataObj
+          self.dataObj.headers.map(function(header, index) {
+            self.dataObj.headers[index] = header.replace(/gsx\$/g, '')
+          })
           self.buildColumnSelector('x-column', {column:'datetime_column_name', headers: this.dataObj.headers, label: "Select date/time column"})
           self.buildColumnSelector('datetime-format-column', {column:'datetime_format', headers: DATETIME_HEADERS, label: "How are your dates formatted?"})
           self.buildColumnSelector('y-column', {column:'data_column_name', headers: this.dataObj.headers, label: "Select data column"})
@@ -171,10 +172,6 @@ GUI.prototype = {
           selectedCols++;
         }
         if(selectedCols === 5) {
-          debugger;
-          //var slides = self.data.createDataObj(self.dataObj.formattedResponse, self.config)
-          //self.config.cards = slides
-          //build out slides//
           window.storyline = new Storyline('Storyline', self.config)
           self.storylineExists = true;
           setTimeout(500, function() {window.location.hash = 'Storyline';});

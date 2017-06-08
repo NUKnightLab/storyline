@@ -9,7 +9,7 @@ var Chart = function(dataObj, width, height, margin) {
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
-    this.markers = dataObj.cards;
+    this.markers = dataObj.markers;
     this.margin = margin || { 'top': 10, 'right': 30, 'bottom': 20, 'left': 30 };
     this.width = width - this.margin.right - this.margin.left;
     this.lineWidth = this.width - 40;
@@ -189,7 +189,7 @@ Chart.prototype = {
     this.markers.map(function(marker) {
       var point, x, y, mark, label;
 
-      point = self.data[marker.rowNumber]
+      point = self.data[marker.row_number]
       x = ((point[0].valueOf() * self.SCALEX) + self.translateX);
       y = self.height - ((point[1] * self.SCALEY) + self.translateY);
       label = point[1]

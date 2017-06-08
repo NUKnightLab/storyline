@@ -30,29 +30,35 @@ DataFactory.prototype = {
         },
         markers = [];
 
-    var i=0;
-    while(i < dataObj.length) {
+    var card_lookup = null;
+    if (!(config.cards.title && config.cards.text)) {
+      card_lookup = {}
+      for (var i = 0; i < config.cards.length; i++) {
+        var card = config.cards[i];
+        card_lookup[card.row_number] = card;
+      }
+    }
+
+    for(var i=0; i<dataObj.length; i++) {
+      var slideTitle = '', slideText = '', slideActive = false;
+      if (!card_lookup) {
+        slideTitle = dataObj[i][config.cards.title].$t
+        slideText = dataObj[i][config.cards.text].$t
+        slideActive = (dataObj[i]["gsx$slideactive"]) ? dataObj[i]["gsx$slideactive"].$t : false;
+      } else if (card_lookup[i]) {
+        slideTitle = card_lookup[i].title;
+        slideText = card_lookup[i].text;
+        if (config.start_at_card) {
+          slideActive = (config.start_at_card == i);
+        }
+      }
       var dateParse = d3Time.timeParse(config.data.datetime_format);
       var x = dataObj[i][config.data.datetime_column_name]
       var y = dataObj[i][config.data.data_column_name];
       x = typeof x === typeof {} ? dateParse(Object.values(x)[0]) : dateParse(x);
       y = typeof y === typeof {} ? parseFloat(Object.values(y)[0]) : parseFloat(y);
       //check if x or y is undefined or null
-      if(config.cards.title != undefined) {
-        var cardTitle = Object.values(dataObj[i][config.cards.title])[0]
-        var cardText = Object.values(dataObj[i][config.cards.text])[0]
-        if(cardTitle.length > 0 && cardText.length > 0) {
-          var rowNumber = i
-          cards.push({rowNumber, cardTitle, cardText})
-        } else if(config.cards.length > 0) {
-          config.cards.map(function(card) {
-            var cardTitle = card.title
-            var cardText = card.text
-            var rowNumber = card.row_number
-            cards.push({rowNumber, cardTitle, cardText})
-          })
-        }
-      }
+
       if(!x || !y) {
         var errorMessage = "";
         errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
@@ -68,10 +74,12 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
-      i++;
+      (slideTitle.length > 0 && slideText.length > 0) ? markers.push({row_number: i, display_date: x, title: slideTitle, text: slideText}) : null
     }
 
-    var dataObj = { data, bounds, axes, cards, activeCard };
+
+
+    var dataObj = { data, bounds, axes, markers, activeCard };
     return dataObj;
   },
 
@@ -118,7 +126,6 @@ DataFactory.prototype = {
    * @returns {array} markers - a list of row numbers
    */
   getSlideMarkers: function(rowNum, slideTitle, slideText) {
-    debugger;
     return {rowNum, slideTitle, slideText};
   },
 
@@ -161,7 +168,7 @@ DataFactory.prototype = {
               formattedResponse = parse(response, {'columns': true})
             } finally {
               try {
-                headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                headers = self.getAllColumnHeaders(formattedResponse[0])
                 resolve({headers, formattedResponse})
               } catch(e) {
                 self.errorMessage = e.message
@@ -192,8 +199,8 @@ DataFactory.prototype = {
               formattedResponse = parse(response, {'columns': true})
             } finally {
               try {
-                if(!self.hasColumnHeaders(config)) {
-                  headers = self.getAllColumnHeaders(config, formattedResponse[0])
+                if(!self.hasValidHeaders(config, formattedResponse[0])) {
+                  config = self.setColumnHeadersToGSX(config)
                 }
                 resolve(self.createDataObj(formattedResponse, config))
               } catch(e) {
@@ -210,10 +217,17 @@ DataFactory.prototype = {
     })
   },
 
-  hasColumnHeaders: function(config) {
-    var hasxCol = config.data.datetime_column_name && config.data.datetime_column_name.length > 0;
-    var hasyCol = config.data.data_column_name && config.data.data_column_name.length > 0
-    return (hasxCol && hasyCol)
+  /**
+   * checks that the headers match the response headers
+   *
+   * @param {Object} config
+   * @param {Object} response
+   * @returns {Boolean}
+   */
+  hasValidHeaders: function(config, response) {
+    var isDatetimeColValid = !!response[config.data.datetime_column_name];
+    var isDataColValid = !!response[config.data.data_column_name]
+    return (isDatetimeColValid && isDataColValid)
   },
 
   /**
@@ -222,18 +236,34 @@ DataFactory.prototype = {
    * @param {object} config - not currently used
    * @param {object} obj - a typical "row" from the Google Spreadsheet which has column names
    */
-  getAllColumnHeaders: function(config, obj) {
+  getAllColumnHeaders: function(response) {
     var formattedHeaders = [];
     var reg = /gsx\$([^]+)/g
-    var all = Object.keys(obj).join(" ");
-    var headers = all.match(reg)
-    headers = headers[0].replace(/gsx\$/g, '').split(" ")
-    //var xCol = config.data.datetime_column_name.replace(/\s/g, '').toLowerCase()
-    //var yCol = config.data.data_column_name.replace(/\s/g, '').toLowerCase()
-    //headers.indexOf(xCol) >= 0 ? xCol : (function() {throw new Error('Error column doesn\'t exist')}())
-    //headers.indexOf(yCol) >= 0 ? yCol : (function() {throw new Error('Error column doesn\'t exist')}())
-    //return {xCol, yCol}
+    var all = Object.keys(response).join(" ");
+    var headers = all.match(reg)[0].split(" ")
     return headers
+  },
+
+  setColumnHeadersToGSX: function(config) {
+    let configSubset = null;
+    if(config.cards.length > 0) {
+      configSubset = { data: config.data }
+    } else {
+      configSubset = { data: config.data, cards: config.cards }
+    }
+    let formattedConfig = {}
+    for(var key in configSubset) {
+      let formattedHeaders = {}
+      Object.keys(configSubset[key]).map(function(header) {
+        if(header === 'url' || header === 'datetime_format') {
+          formattedHeaders[header] = configSubset[key][header]
+        } else {
+          formattedHeaders[header] = "gsx$" + configSubset[key][header].replace(/\s/g, '').toLowerCase()
+        }
+      })
+      config[key] = formattedHeaders
+    }
+    return config;
   },
 
   errorLog: function() {
@@ -247,12 +277,27 @@ DataFactory.prototype = {
            parser = new DOMParser(),
            doc = parser.parseFromString(rendered, "text/html");
 
-       this.storyline.elem.append(doc.body.children[0])
-    } else {
+
       console.warn("data.js errorLog: no storyline element available for logging");
       console.error(this.errorMessage);
 
     }
+  },
+
+   /**
+   * Simple function to convert a config value into a Google Spreadsheet row key,
+   * and verify that it's valid for given row before getting deeper into the data.
+   *
+   * @param {string} config_column_name - a value as specified in a storymap config
+   * @param {object} testRow - a row from reading the google spreadsheet which is expected to have this column
+   */
+  constructAndTestGSXColumn: function(config_column_name, testRow) {
+    var col_name = "gsx$" + config_column_name.replace(/\s/g, '').toLowerCase();
+      if (!testRow[col_name]) {
+        throw {message:"Missing column [" + config_column_name + "]" }
+      }
+      return col_name;
+
   }
 }
 

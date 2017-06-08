@@ -19,8 +19,6 @@ Storyline.prototype = {
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;
       self.chart = self.initChart(dataObj);
-      // slider cards include dates so must happen after data is grabbed
-      self.populateSlideDates(dataObj);
       self.slider = self.initSlider();
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
@@ -58,36 +56,11 @@ Storyline.prototype = {
   initSlider: function(lastActiveCard) {
     var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeSlide ? this.data.activeSlide : 0
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.data.cards, activeCard, sliderHeight, this.width);
+    return new Slider(this.data.markers, this.dataConfig, activeCard, sliderHeight, this.width);
   },
   initChart: function(dataObj) {
-    //chart height//
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
     return new Chart(dataObj, this.width, chartHeight, this.margin)
-  },
-  /**
-   * For each slide configuration object, if no display_date is specified,
-   * fill it in based on the data set.
-   * @TODO document why this is here even though it's about cards and so might be expected in slider.js
-   * @returns {undefined}
-   */
-  populateSlideDates: function(dataObj) {
-    var d3Time = require('d3-time-format'),
-        // this may be unduly complicated if our validation works correctly
-        formatString = (this.dataConfig.chart && this.dataConfig.chart.datetime_format)
-                  ? this.dataConfig.chart.datetime_format
-                  : this.dataConfig.data.datetime_format,
-        formatter = d3Time.timeFormat(formatString);
-
-    for (var card of dataObj.cards) {
-      if (card.display_date === undefined) {
-        var row = dataObj.data[card.rowNumber];
-        // if row is null, we should have checked/errored before here
-        card.displayDate = formatter(row[0]);
-      } else {
-        card.displayDate = card.display_date; // we have format variation between config styles and template styles so copy it over.
-      }
-    }
   },
   /**
    * checks browser size and if mobile, overrides input dimensions
