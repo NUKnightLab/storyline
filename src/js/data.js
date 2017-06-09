@@ -2,7 +2,6 @@ var parse = require('csv-parse/lib/sync');
 import {lib} from './lib'
 
 var DataFactory = function() {
-  this.storyline = {elem: document.querySelector('#Storyline')}
 }
 
 DataFactory.prototype = {
@@ -74,7 +73,7 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
-      (slideTitle.length > 0 && slideText.length > 0) ? markers.push({row_number: i, display_date: x, title: slideTitle, text: slideText}) : null
+      (slideTitle.length > 0 && slideText.length > 0) ? markers.push({rowNumber: i, displayDate: x, slideTitle, slideText}) : null
     }
 
 
@@ -120,16 +119,6 @@ DataFactory.prototype = {
   },
 
   /**
-   * gets significant row numbers from the slides object in the dataset
-   *
-   * @param {object} slides - slides from config object
-   * @returns {array} markers - a list of row numbers
-   */
-  getSlideMarkers: function(rowNum, slideTitle, slideText) {
-    return {rowNum, slideTitle, slideText};
-  },
-
-  /**
    * requests contents from a given csv file (@TODO or Google spreadsheet? only Google spreadsheet?)
    *
    * @param {string} file - name of the csv file to read
@@ -171,15 +160,14 @@ DataFactory.prototype = {
                 headers = self.getAllColumnHeaders(formattedResponse[0])
                 resolve({headers, formattedResponse})
               } catch(e) {
-                self.errorMessage = e.message
-                self.errorLog()
-                reject(new Error(e.message))
+                var errorMessage = e.message
+                lib.errorLog({errorMessage})
+                reject(new Error(errorMessage))
               }
             }
           }
         }, function(reason) {
-          self.errorMessage = reason
-          self.errorLog()
+          lib.errorLog({reason})
         })
     })
   },
@@ -204,15 +192,14 @@ DataFactory.prototype = {
                 }
                 resolve(self.createDataObj(formattedResponse, config))
               } catch(e) {
-                self.errorMessage = e.message
-                self.errorLog()
-                reject(new Error(e.message))
+                var errorMessage = e.message;
+                lib.errorLog({errorMessage})
+                reject(new Error(errorMessage))
               }
             }
           }
         }, function(reason) {
-          self.errorMessage = reason
-          self.errorLog()
+          lib.errorLog(reason)
         })
     })
   },
@@ -264,24 +251,6 @@ DataFactory.prototype = {
       config[key] = formattedHeaders
     }
     return config;
-  },
-
-  errorLog: function() {
-    if (this.storyline.elem) {
-      var mustache = require('mustache');
-       const template =
-         "<div class='error'>" +
-         "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
-         "</div>"
-       var rendered = mustache.render(template, this),
-           parser = new DOMParser(),
-           doc = parser.parseFromString(rendered, "text/html");
-
-
-      console.warn("data.js errorLog: no storyline element available for logging");
-      console.error(this.errorMessage);
-
-    }
   },
 
    /**

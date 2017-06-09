@@ -112,10 +112,10 @@ Slider.prototype = {
     var d3Time = require('d3-time-format');
 
     if(!this.config.chart.datetime_format) {
-      card.display_date
+      card.displayDate
     } else {
       var formatter = d3Time.timeFormat(this.config.chart.datetime_format);
-      card.display_date = formatter(card.display_date)
+      card.displayDate = formatter(card.displayDate)
     }
   },
   goToCard: function(number) {
@@ -253,9 +253,9 @@ const MUSTACHE_TEMPLATES = {
        "{{#cards}}" +
        "<div class='slider-card {{class}}'>" +
          "<div class='slider-content'>" +
-           "<h3><span class='h3-date'>{{ display_date }}</span>" +
-           "{{ title }}</h3>" +
-           "<p>{{ text }}<p>" +
+           "<h3><span class='h3-date'>{{ displayDate }}</span>" +
+           "{{ slideTitle }}</h3>" +
+           "<p>{{ slideText }}<p>" +
          "</div>" +
        "</div>" +
        "{{/cards}}" +
