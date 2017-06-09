@@ -26,6 +26,38 @@ Chart.prototype = {
     this.drawAxes(d3);
     this.drawLine();
     this.drawMarkers();
+    this.redrawConnector();
+  },
+  redrawConnector: function() {
+    ///good luck monday morning////
+    var self = this;
+    PubSub.subscribe('card moved', function(topic, data) {
+      //take note of direction of movement//
+      if(data != undefined) {
+        var newMarker = self.markers[data.new].querySelector('circle')
+        //forward movement//
+        var move = data.new > data.prev ? 1 : -1
+        if(data.new - move >= 0) {
+        var oldMarker = self.markers[data.new - move].querySelector('circle')
+          var marker2 = {
+            x: oldMarker.getAttribute("cx"),
+            y: oldMarker.getAttribute("cy")
+          }
+          self.connectors[data.new-move].setAttribute('d', 'M' + marker2.x + " " + marker2.y + " L" + (self.slidertopX - 480) + " " + self.slidertopY);
+        }
+
+
+        var marker1 = {
+          x: newMarker.getAttribute("cx"),
+          y: newMarker.getAttribute("cy")
+        }
+        self.connectors[data.new].setAttribute('d', 'M' + marker1.x + " " + marker1.y + " L" + self.slidertopX + " " + self.slidertopY);
+      }
+      //self.connectors[data].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + self.slidertopX + " " + self.slidertopY);
+
+      //self.slidertopX
+      //self.slidertopY
+    })
   },
   drawAxes: function(d3) {
     var self = this;
@@ -120,9 +152,11 @@ Chart.prototype = {
     var self = this,
         markersArray = this.aggregateMarkers();
 
-    self.textMarkers = [],
+    self.textMarkers = [];
     self.markers = [];
-    markersArray.map(function(marker) {
+    self.connectors = [];
+
+    markersArray.map(function(marker, index) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -133,9 +167,9 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
-      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30;
-      var slidertopY = self.height+self.margin.bottom+1;
-      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
+      self.slidertopX = (self.width+self.margin.right+self.margin.left)/2;
+      self.slidertopY = self.height+self.margin.bottom+1 // so line hides behind card//;
+      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX  + (480 * index)) + " " + self.slidertopY);
       connector.setAttribute('fill', '#FF1744');
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
@@ -149,14 +183,15 @@ Chart.prototype = {
       markerElem.appendChild(circle);
       textElem.appendChild(text);
 
+    self.elem.appendChild(markerElem)
+
     self.textMarkers.push(textElem);
     self.markers.push(markerElem);
-    self.elem.appendChild(markerElem)
+    self.connectors.push(connector);
     })
     self.textMarkers.map(function(textItem) {
       self.elem.appendChild(textItem)
     })
-
   },
   /**
    * Collect data points as a string
