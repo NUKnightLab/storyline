@@ -54,19 +54,19 @@ describe('DataJS', () => {
       createData = sinon.stub(DataFactory.prototype, 'createDataObj').returns(finalData)
     })
     it('should invoke the get lib method with the proper file url', () => {
-      let result = dataFactoryInstance.fetchData(config);
+      let result = dataFactoryInstance.fetchSheetData(config);
       sinon.assert.called(callBack)
       let options = callBack.getCall(0).args[0]
       expect(options).to.eq('src/assets/dates_unemployment.csv')
     })
     it('should return exampleData from get method', () => {
-      dataFactoryInstance.fetchData(config);
+      dataFactoryInstance.fetchSheetData(config);
       callBack().then(function(result) {
         expect(result).to.eq(exampleData)
       })
     })
     it('should resolve with a final data object', () => {
-      const result = dataFactoryInstance.fetchData(config)
+      const result = dataFactoryInstance.fetchSheetData(config)
       result.then(function(result){
         expect(result).to.eq(finalData)
       })
@@ -78,7 +78,7 @@ describe('DataJS', () => {
     })
   })
   describe('Create a dataObject from input data and config', () => {
-    let dataInput, config, instance, stub, results;
+    let dataInput, config, instance, results;
     beforeEach(() => {
       dataInput = [
         {'date': '01/31/80', 'us unemployment rate': 1},
@@ -95,9 +95,9 @@ describe('DataJS', () => {
         "chart": {
           "datetime_format": "",
           "y_axis_label": ""
-        }
+        },
+        "cards": []
       }
-      stub = sinon.stub(DataFactory.prototype, 'getSlideMarkers')
       results = dataFactoryInstance.createDataObj(dataInput, config)
     })
     it('should convert dates to datetime objects', () => {
@@ -132,11 +132,10 @@ describe('DataJS', () => {
       assert.isOk(results.bounds.maxX, new Date(month, date, year))
     })
     afterEach(() => {
-      stub.restore();
     })
   })
   describe('Throw error if column names are invalid', () => {
-    let dataInput, config, stub, stubLib;
+    let dataInput, config, stub;
     beforeEach(()=> {
       dataInput = [
         {'date': '01/31/80', 'US Unemployment Rate': 1},
@@ -144,8 +143,7 @@ describe('DataJS', () => {
         {'date': '03/31/80', 'US Unemployment Rate': 2},
         {'date': '04/30/80', 'US Unemployment Rate': 3}
       ],
-      stub = sinon.stub(DataFactory.prototype, 'getSlideMarkers')
-      stubLib = sinon.stub(lib, 'errorLog');
+      stub = sinon.stub(lib, 'errorLog');
     })
     it('returns an error message when y column_name is incorrect', () => {
       config = {
@@ -157,11 +155,12 @@ describe('DataJS', () => {
         "chart": {
           "datetime_format": "",
           "y_axis_label": ""
-        }
+        },
+        "cards": []
       }
       let results = dataFactoryInstance.createDataObj(dataInput, config)
-      sinon.assert.called(stubLib);
-      let options = stubLib.getCall(0).args[0]
+      sinon.assert.called(stub);
+      let options = stub.getCall(0).args[0]
       expect(options.errorMessage).to.equal('y axis is invalid, check that your y axis column name is correct')
     })
     it('returns an error message when x column_name is incorrect', () => {
@@ -174,27 +173,16 @@ describe('DataJS', () => {
         "chart": {
           "datetime_format": "",
           "y_axis_label": ""
-        }
+        },
+        "cards": []
       }
       let results = dataFactoryInstance.createDataObj(dataInput, config)
-      sinon.assert.called(stubLib);
-      let options = stubLib.getCall(0).args[0]
+      sinon.assert.called(stub);
+      let options = stub.getCall(0).args[0]
       expect(options.errorMessage).to.equal('x axis is invalid, check that your x axis column name is correct')
     })
     afterEach(() => {
       stub.restore();
-      stubLib.restore();
-    })
-  })
-  describe('Aggregate slide markers', () => {
-    it('should be able to grab markers for slider', () => {
-      const slide = {
-          "rowNum": 4,
-          "slideTitle": 'Pentagon Militarizes',
-          "slideText": 'Some text here'
-      }
-      const results = dataFactoryInstance.getSlideMarkers(slide.rowNum, slide.slideTitle, slide.slideText);
-      assert.deepEqual(results, slide)
     })
   })
   describe('Data Manipulation methods', () => {
