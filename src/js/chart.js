@@ -29,34 +29,33 @@ Chart.prototype = {
     this.redrawConnector();
   },
   redrawConnector: function() {
-    ///good luck monday morning////
     var self = this;
     PubSub.subscribe('card moved', function(topic, data) {
       //take note of direction of movement//
-      if(data != undefined) {
+      if(data.new != undefined && data.prev != undefined && data.new != data.prev) {
         var newMarker = self.markers[data.new].querySelector('circle')
         //forward movement//
         var move = data.new > data.prev ? 1 : -1
         if(data.new - move >= 0) {
-        var oldMarker = self.markers[data.new - move].querySelector('circle')
-          var marker2 = {
-            x: oldMarker.getAttribute("cx"),
-            y: oldMarker.getAttribute("cy")
+          for(var i=0; i<self.markers.length; i++) {
+            var marker = self.markers[i].querySelector('circle')
+            if(i != data.new) {
+            var diff = data.new - i
+            var marker = {
+              x: marker.getAttribute("cx"),
+              y: marker.getAttribute("cy")
+            }
+            self.connectors[i].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX - (480*diff)) + " " + self.slidertopY);
+            } else {
+              var marker = {
+                x: marker.getAttribute("cx"),
+                y: marker.getAttribute("cy")
+              }
+              self.connectors[i].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + self.slidertopX + " " + self.slidertopY);
+            }
           }
-          self.connectors[data.new-move].setAttribute('d', 'M' + marker2.x + " " + marker2.y + " L" + (self.slidertopX - 480) + " " + self.slidertopY);
         }
-
-
-        var marker1 = {
-          x: newMarker.getAttribute("cx"),
-          y: newMarker.getAttribute("cy")
-        }
-        self.connectors[data.new].setAttribute('d', 'M' + marker1.x + " " + marker1.y + " L" + self.slidertopX + " " + self.slidertopY);
       }
-      //self.connectors[data].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + self.slidertopX + " " + self.slidertopY);
-
-      //self.slidertopX
-      //self.slidertopY
     })
   },
   drawAxes: function(d3) {
