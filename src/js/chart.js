@@ -45,7 +45,12 @@ Chart.prototype = {
               x: marker.getAttribute("cx"),
               y: marker.getAttribute("cy")
             }
+            self.connectors[i].classList.add('is-animating')
             self.connectors[i].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX - (480*diff)) + " " + self.slidertopY);
+            clearTimeout(timer);
+            var timer = setTimeout(function() {
+              self.connectors[i].classList.remove('is-animating')
+            })
             } else {
               var marker = {
                 x: marker.getAttribute("cx"),
@@ -170,6 +175,7 @@ Chart.prototype = {
       self.slidertopY = self.height+self.margin.bottom+1 // so line hides behind card//;
       connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX  + (480 * index)) + " " + self.slidertopY);
       connector.setAttribute('fill', '#FF1744');
+      connector.setAttribute('class', 'connector-' + self.connectors.length)
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
