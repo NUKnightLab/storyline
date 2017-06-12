@@ -71,6 +71,7 @@ Slider.prototype = {
     }
   },
   setActiveCard: function(currentActiveCard, pastActiveCard) {
+    PubSub.publish('card moved', {new: currentActiveCard, prev: pastActiveCard})
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('is-active');
