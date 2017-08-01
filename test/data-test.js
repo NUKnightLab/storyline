@@ -22,6 +22,7 @@ describe('DataJS', () => {
   describe('fetchData', () => {
     let exampleData, callBack, createData;
     beforeEach(() => {
+      global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
       requests = [];
 
       const finalData = {
