@@ -23,19 +23,24 @@ var lib = (function() {
     var mustache = require('mustache');
 
     var storylineElem = document.querySelector('#Storyline')
-    var errorMessageElem = storylineElem.querySelector('.error-message')
-    var hasErrorMessage = errorMessageElem != null
-    if(hasErrorMessage) {
-      errorMessageElem.innerHTML = context.errorMessage
+    if (storylineElem) {
+      var errorMessageElem = storylineElem.querySelector('.error-message')
+      var hasErrorMessage = errorMessageElem != null
+      if(hasErrorMessage) {
+        errorMessageElem.innerHTML = context.errorMessage
+      } else {
+      const template =
+        "<div class='error'>" +
+          "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
+        "</div>"
+      var rendered = mustache.render(template, context),
+          parser = new DOMParser(),
+          doc = parser.parseFromString(rendered, "text/html");
+      storylineElem.append(doc.body.children[0])
+      }
     } else {
-    const template =
-      "<div class='error'>" +
-        "<h3><span class='error-message'>{{ errorMessage }}</span></h3>" +
-      "</div>"
-    var rendered = mustache.render(template, context),
-        parser = new DOMParser(),
-        doc = parser.parseFromString(rendered, "text/html");
-    storylineElem.append(doc.body.children[0])
+      console.log('lib.errorLog deprecated. No Storyline element found. Find a different way to pass this error.')
+      console.log(context);
     }
   }
 

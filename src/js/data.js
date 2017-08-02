@@ -62,8 +62,7 @@ DataFactory.prototype = {
         var errorMessage = "";
         errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
         errorMessage = isNaN(parseInt(y)) ? "y axis is invalid, check that your y axis column name is correct" : errorMessage
-        return lib.errorLog({errorMessage})
-        break;
+        throw new DataError(errorMessage);
       }
       bounds.minY = this.getMin(y, bounds.minY)
       bounds.maxY = this.getMax(y, bounds.maxY)
@@ -196,7 +195,6 @@ DataFactory.prototype = {
                 resolve(self.createDataObj(formattedResponse, config))
               } catch(e) {
                 var errorMessage = e.message;
-                lib.errorLog({errorMessage})
                 reject(new Error(errorMessage))
               }
             }
@@ -273,6 +271,13 @@ DataFactory.prototype = {
 
   }
 }
+
+var DataError = function(message) {
+  this.name = 'DataError';
+  this.message = message || '';
+  this.stack = (new Error()).stack;
+};
+
 
 module.exports = {
   DataFactory
