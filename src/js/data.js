@@ -292,6 +292,13 @@ DataFactory.prototype = {
   }
 }
 
+var DataError = function(message) {
+  this.name = 'DataError';
+  this.message = message || '';
+  this.stack = (new Error()).stack;
+};
+
+
 module.exports = {
   DataFactory
 }
