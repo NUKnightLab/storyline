@@ -19,7 +19,7 @@ In this stage of StorylineJS's development, you must write your own configuratio
 
 ## Running a local webserver
 
-This is the first potential barrier for beginners. If you don't clear this hurdle, it may be too early for you to do much with StorylineJS. Typically we use node's `http-server` or python's `python -m SimpleHTTPServer` or `python3 -m http.server`. Or you could try [MAMP](https://www.mamp.info/en/downloads/). 
+This is the first potential barrier for beginners. If you don't clear this hurdle, it may be too early for you to do much with StorylineJS. Typically we use node's `http-server` or python's `python -m SimpleHTTPServer` or `python3 -m http.server`. Or you could try [MAMP](https://www.mamp.info/en/downloads/).
 
 ## The simplest test
 
@@ -76,9 +76,4 @@ Here are more details about those:
 
 DEVELOPING
 ----------
-After checking out the repository, run
-
-    npm install
-    npm run start
-
-This should get you a locally running webserver which supports viewing a sample storyline and which supports automatic recompilation as code changes.
+If you're interested in working on this code, see [DEVELOPING.md](DEVELOPING.md)
