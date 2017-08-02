@@ -6,9 +6,14 @@ import { lib } from './lib';
 var Storyline = function(targetId, dataConfig) {
   this.elem = document.getElementById(targetId);
   this.elem.className += 'storyline-wrapper'
-  var self = this;
+  try {
+    var self = this;
     self.dataConfig = dataConfig
     self.init()
+  } catch(e) {
+    this.showMessage("Error!");
+    console.log(e);
+  }
 }
 
 Storyline.prototype = {
@@ -22,6 +27,11 @@ Storyline.prototype = {
       self.slider = self.initSlider();
       self.positionChart(self.chart)
       self.positionSlider(self.slider)
+    },
+    function(reason) {
+      var msg = reason.message || "Something went wrong.";
+      self.showMessage(msg)
+      console.log("Storyline init error", reason);
     });
     PubSub.subscribe('window resized', function(topic, data) {
       self.resetWidth(data);
@@ -73,6 +83,30 @@ Storyline.prototype = {
     //slider has a max height of 246px so let chart take up the additional space//
     if(0.4*this.height > 246) {
       this.chartHeight = this.height - 246;
+    }
+  },
+  showMessage: function(msg) {
+    var mustache = require('mustache');
+
+    var errorMessageElem = this.elem.querySelector('.error-message')
+    var hasErrorMessage = errorMessageElem != null
+    if(hasErrorMessage) {
+      errorMessageElem.innerHTML = msg;
+    } else {
+    const template =
+      "<div class='error'>" +
+        "<h3><span class='error-message'>{{ msg }}</span></h3>" +
+      "</div>"
+    var rendered = mustache.render(template, {msg: msg}),
+        parser = new DOMParser(),
+        doc = parser.parseFromString(rendered, "text/html");
+    this.elem.append(doc.body.children[0]);
+    }
+  },
+  hideMessage: function() {
+    var err = this.elem.querySelector('.error');
+    if (err) {
+      this.elem.removeChild(err);
     }
   },
   attr: function(dimension, value) {
