@@ -58,13 +58,14 @@ Slider.prototype = {
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event, self) {
         var classes = event.target.classList;
-
-        for(var i in classes) {
-          if(classes[i].indexOf("-") != -1) {
-            var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-            var pastActiveCard = storyline.slider.activeCard
-            storyline.slider.goToCard(currentActiveCard)
-            return false;
+        if(classes.length > 0) {
+          for(var i in classes) {
+            if(classes[i].indexOf("-") != -1) {
+              var currentActiveCard = parseFloat(classes[i].split("-")[1]);
+              var pastActiveCard = storyline.slider.activeCard
+              storyline.slider.goToCard(currentActiveCard)
+              return false;
+            }
           }
         }
       }
