@@ -7,3 +7,4 @@ window.Storyline = Storyline;
 var throttled = throttle(lib.onResize, 250, { 'trailing': false });
 
 window.onresize = throttled
+window.onload = lib.onLoad

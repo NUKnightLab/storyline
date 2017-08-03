@@ -10,9 +10,13 @@ var lib = (function() {
     if(prevWidth == undefined) {
       prevWidth = currentWidth;
     }
-    if(prevWidth != window.innerWidth) {
+    else {
       PubSub.publish('window resized', currentWidth)
     }
+  }
+
+  function onLoad() {
+    prevWidth = window.innerWidth;
   }
 
   function errorLog(context) {
@@ -86,6 +90,7 @@ var lib = (function() {
   return {
     parseSpreadsheetURL: parseSpreadsheetURL,
     onResize: onResize,
+    onLoad: onLoad,
     errorLog: errorLog,
     get: get
   }
