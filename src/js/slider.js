@@ -71,7 +71,7 @@ Slider.prototype = {
       }
     }
   },
-  setActiveCard: function(currentActiveCard, pastActiveCard) {
+  setActiveCard: function(pastActiveCard, currentActiveCard) {
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('is-active');
@@ -128,7 +128,7 @@ Slider.prototype = {
     } else if(number > this.cards.length - 1) {
       this.activeCard = number - 1
     } else {
-      this.setActiveCard(number, this.activeCard)
+      this.setActiveCard(this.activeCard, number)
       this.activeCard = number;
     }
 
@@ -180,31 +180,24 @@ Slider.prototype = {
           }
         break;
         case 'swipe':
-          var nextCard = ev.deltaX > 0 ? -1 : 1;
-          percentage = (ev.deltaX/self.sliderWidth) * 100;
-          transformPercentage = percentage + self.currentOffset;
-          var t = ((self.cardWidth/2)/self.sliderWidth)*100;
-          if (transformPercentage <= self.offsets[0] &&
-              transformPercentage >=self.offsets[self.offsets.length-1]) {
-            self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
-            self.setActiveCard(self.activeCard+nextCard, self.activeCard);
-            self.currentOffset = self.offsets[self.activeCard];
-          }
-          self.goToCard(self.activeCard);
+          console.log('swipe')
           break;
         case 'panleft':
         case 'panright':
+          var direction = null;
+          if(ev.direction === 2) {
+            direction = 1
+          } else if(ev.direction === 4) {
+            direction = -1
+          }
           percentage = (ev.deltaX/self.sliderWidth) * 100
           transformPercentage = percentage + self.currentOffset
-          //make a check if first or last card to prevent crazy space//
-          var t = ((self.cardWidth/2)/self.sliderWidth)*100;
-          if(percentage > -100 && percentage < 20) {
+          if(inBounds(transformPercentage)) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
-            for(var i=0; i < self.offsets.length; i++) {
-              if(transformPercentage >= self.offsets[i] - t) {
-                self.setActiveCard(i, self.activeCard);
-                break;
-              }
+            var left = self.cardsElem.children[self.activeCard].getBoundingClientRect().left
+            var leftWithCard = left + self.cardWidth
+            if(leftWithCard <= (self.width* 0.5) || left >= (self.width* 0.5)) {
+              self.setActiveCard(self.activeCard, self.activeCard+direction)
             }
           }
           break;
@@ -213,6 +206,13 @@ Slider.prototype = {
           self.goToCard(self.activeCard)
           break;
       }
+    }
+
+    var inBounds = function(percentage) {
+      var notTooFarRight = percentage < self.offsets[0] + 10,
+          notTooFarLeft = percentage > self.offsets[self.offsets.length - 1] - 10;
+
+      return notTooFarRight && notTooFarLeft;
     }
 
     var createHammer = function(v) {
@@ -226,7 +226,8 @@ Slider.prototype = {
       })
       var swipe = new Hammer.Swipe({
         direction: Hammer.DIRECTION_HORIZONTAL,
-        velocity: 0.7
+        velocity: 0.5,
+        threshold: 250
       })
 
       pan.recognizeWith(swipe)
