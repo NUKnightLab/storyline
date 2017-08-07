@@ -278,7 +278,11 @@ var DataError = function(message) {
   this.stack = (new Error()).stack;
 };
 
+DataError.prototype.toString = function() {
+  return this.name + ": " + this.message;
+}
 
 module.exports = {
-  DataFactory
+  DataFactory,
+  DataError
 }
