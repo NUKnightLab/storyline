@@ -1,4 +1,4 @@
-import { DataFactory } from '../src/js/data.js';
+import { DataFactory, DataError } from '../src/js/data.js';
 import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 import moment from 'moment'
@@ -158,10 +158,9 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      let results = dataFactoryInstance.createDataObj(dataInput, config)
-      sinon.assert.called(stub);
-      let options = stub.getCall(0).args[0]
-      expect(options.errorMessage).to.equal('y axis is invalid, check that your y axis column name is correct')
+      expect(function() {
+        dataFactoryInstance.createDataObj(dataInput, config);
+      }).to.throw(DataError, /y axis.+invalid/);
     })
     it('returns an error message when x column_name is incorrect', () => {
       config = {
@@ -176,10 +175,9 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      let results = dataFactoryInstance.createDataObj(dataInput, config)
-      sinon.assert.called(stub);
-      let options = stub.getCall(0).args[0]
-      expect(options.errorMessage).to.equal('x axis is invalid, check that your x axis column name is correct')
+      expect(function() {
+        dataFactoryInstance.createDataObj(dataInput, config);
+      }).to.throw(DataError, /x axis.+invalid/);
     })
     afterEach(() => {
       stub.restore();
