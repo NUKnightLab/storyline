@@ -1,4 +1,4 @@
-import { DataFactory } from '../src/js/data.js';
+import { DataFactory, DataError } from '../src/js/data.js';
 import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 import moment from 'moment'
