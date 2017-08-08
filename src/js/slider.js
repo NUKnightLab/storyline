@@ -1,6 +1,6 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(cards, config, startIndex, height, width) {
+var Slider = function(markers, cards, config, startIndex, height, width) {
   this.activeCard = startIndex;
   this.config = config;
   this.cards = cards;
@@ -16,7 +16,7 @@ Slider.prototype = {
     //create index key in slides for use in class naming by index in nav//
     //mustache should have something about iterating over index//
     for(var i in this.cards) {
-      this.cards[i].index = i
+      this.cards[i].rowNumber = i
       this.populateSlideDates(this.cards[i])
     }
     this.cardsElem = this.renderTemplate('slider-cards-template', this)

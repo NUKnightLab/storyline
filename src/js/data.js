@@ -30,10 +30,10 @@ DataFactory.prototype = {
         markers = [];
 
     var card_lookup = null;
-    if (!(config.cards.title && config.cards.text)) {
+    if (config.slider.cards != undefined) {
       card_lookup = {}
-      for (var i = 0; i < config.cards.length; i++) {
-        var card = config.cards[i];
+      for (var i = 0; i < config.slider.cards.length; i++) {
+        var card = config.slider.cards[i];
         card_lookup[card.row_number] = card;
       }
     }
@@ -41,14 +41,14 @@ DataFactory.prototype = {
     for(var i=0; i<dataObj.length; i++) {
       var slideTitle = '', slideText = '', slideActive = false;
       if (!card_lookup) {
-        slideTitle = dataObj[i][config.cards.title].$t
-        slideText = dataObj[i][config.cards.text].$t
-        slideActive = (dataObj[i]["gsx$slideactive"]) ? dataObj[i]["gsx$slideactive"].$t : false;
+        slideTitle = dataObj[i][config.slider.title].$t
+        slideText = dataObj[i][config.slider.text].$t
+        slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card].$t : false;
       } else if (card_lookup[i]) {
         slideTitle = card_lookup[i].title;
         slideText = card_lookup[i].text;
-        if (config.start_at_card) {
-          slideActive = (config.start_at_card == i);
+        if (config.slider.start_at_card) {
+          slideActive = (config.slider.start_at_card == i);
         }
       }
       var dateParse = d3Time.timeParse(config.data.datetime_format);
@@ -73,12 +73,15 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
-      (slideTitle.length > 0 && slideText.length > 0) ? markers.push({rowNumber: i, displayDate: x, slideTitle, slideText}) : null
+      if(slideTitle.length > 0 && slideText.length > 0) {
+        var displayDate = x
+        var rowNumber = i
+        cards.push({displayDate, slideTitle, slideText, rowNumber})
+        markers.push({rowNumber, displayDate, slideTitle, slideText})
+      }
     }
 
-
-
-    var dataObj = { data, bounds, axes, markers, activeCard };
+    var dataObj = { data, cards, bounds, axes, markers, activeCard };
     return dataObj;
   },
 
@@ -187,7 +190,7 @@ DataFactory.prototype = {
               formattedResponse = parse(response, {'columns': true})
             } finally {
               try {
-                if(!self.hasValidHeaders(config, formattedResponse[0])) {
+                if(self.dataisinGSX(config, formattedResponse[0])) {
                   config = self.setColumnHeadersToGSX(config)
                 }
                 resolve(self.createDataObj(formattedResponse, config))
@@ -211,10 +214,10 @@ DataFactory.prototype = {
    * @param {Object} response
    * @returns {Boolean}
    */
-  hasValidHeaders: function(config, response) {
-    var isDatetimeColValid = !!response[config.data.datetime_column_name];
-    var isDataColValid = !!response[config.data.data_column_name]
-    return (isDatetimeColValid && isDataColValid)
+  dataisinGSX: function(config, response) {
+    var isDatetimeColinGSX = !!response["gsx$" + config.data.datetime_column_name.replace(/\s+/g, '').toLowerCase()];
+    var isDataColinGSX = !!response["gsx$" + config.data.data_column_name.replace(/\s+/g, '').toLowerCase()]
+    return (isDatetimeColinGSX && isDataColinGSX)
   },
 
   /**
@@ -233,10 +236,11 @@ DataFactory.prototype = {
 
   setColumnHeadersToGSX: function(config) {
     let configSubset = null;
-    if(config.cards.length > 0) {
+    if(config.slider.cards != undefined) {
+      //need to refactor//
       configSubset = { data: config.data }
     } else {
-      configSubset = { data: config.data, cards: config.cards }
+      configSubset = { data: config.data, slider: config.slider }
     }
     let formattedConfig = {}
     for(var key in configSubset) {
