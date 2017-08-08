@@ -60,6 +60,7 @@ DataFactory.prototype = {
 
       if(!x || !y) {
         var errorMessage = "";
+        // TODO: if both are wrong, report both instead of overriding one error with the other.
         errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
         errorMessage = isNaN(parseInt(y)) ? "y axis is invalid, check that your y axis column name is correct" : errorMessage
         throw new DataError(errorMessage);
