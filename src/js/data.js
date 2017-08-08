@@ -163,14 +163,12 @@ DataFactory.prototype = {
                 headers = self.getAllColumnHeaders(formattedResponse[0])
                 resolve({headers, formattedResponse})
               } catch(e) {
-                var errorMessage = e.message
-                lib.errorLog({errorMessage})
-                reject(new Error(errorMessage))
+                reject(e);
               }
             }
           }
         }, function(reason) {
-          lib.errorLog({reason})
+          reject(reason);
         })
     })
   },
@@ -195,13 +193,15 @@ DataFactory.prototype = {
                 }
                 resolve(self.createDataObj(formattedResponse, config))
               } catch(e) {
-                var errorMessage = e.message;
-                reject(new Error(errorMessage))
+                if (!e.message) {
+                  e = { message: e };
+                }
+                reject(e) // leave error handling to promise caller
               }
             }
           }
         }, function(reason) {
-          lib.errorLog(reason)
+          reject(reason);  // leave error handling to promise caller
         })
     })
   },

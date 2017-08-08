@@ -142,8 +142,7 @@ describe('DataJS', () => {
         {'date': '02/29/80', 'US Unemployment Rate': 3},
         {'date': '03/31/80', 'US Unemployment Rate': 2},
         {'date': '04/30/80', 'US Unemployment Rate': 3}
-      ],
-      stub = sinon.stub(lib, 'errorLog');
+      ]
     })
     it('returns an error message when y column_name is incorrect', () => {
       config = {
@@ -158,9 +157,7 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      expect(function() {
-        dataFactoryInstance.createDataObj(dataInput, config);
-      }).to.throw(DataError, /y axis.+invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(DataError, /invalid/);
     })
     it('returns an error message when x column_name is incorrect', () => {
       config = {
@@ -175,12 +172,9 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      expect(function() {
-        dataFactoryInstance.createDataObj(dataInput, config);
-      }).to.throw(DataError, /x axis.+invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(DataError, /invalid/);
     })
     afterEach(() => {
-      stub.restore();
     })
   })
   describe('Data Manipulation methods', () => {
