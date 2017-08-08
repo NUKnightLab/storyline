@@ -16,6 +16,7 @@ var lib = (function() {
   }
 
   function errorLog(context) {
+    console.log('lib.errorLog deprecated.  Find a different way to pass this error.')
     var mustache = require('mustache');
 
     var storylineElem = document.querySelector('#Storyline')
@@ -35,7 +36,7 @@ var lib = (function() {
       storylineElem.append(doc.body.children[0])
       }
     } else {
-      console.log('lib.errorLog deprecated. No Storyline element found. Find a different way to pass this error.')
+      console.log('No Storyline element found.')
       console.log(context);
     }
   }
@@ -52,9 +53,15 @@ var lib = (function() {
         }
       }
       req.onerror = function() {
-        reject(Error("Network Error"));
+        console.error(`lib.get: Error fetching ${url}`);
+        reject(Error(`Network Error`));
       }
-      req.send();
+      try {
+        req.send();
+      } catch(e) {
+        console.log('lib.get req.send error', e)
+        reject(e);
+      }
     })
   }
 

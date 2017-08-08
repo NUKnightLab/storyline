@@ -59,6 +59,11 @@ Storyline.prototype = {
     this.positionChart(this.chart)
     this.positionSlider(this.slider)
   },
+  /**
+   * Prepare a promise to fetch the data which will be used to draw the chart.
+   * @returns {Promise} a promise to deliver a 'dataObject' if successfully resolved. ]
+   * @TODO Better document the properties of a `dataObject`
+   */
   grabData: function() {
     var data = new DataFactory;
     return data.fetchSheetData(this.dataConfig);
