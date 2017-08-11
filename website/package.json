@@ -1,0 +1,32 @@
+{
+  "name": "storylinejs-website",
+  "version": "1.0.0",
+  "description": "The website describing StorylineJS to the public, and helping them create embeddable storylines.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NUKnightLab/storyline.git"
+  },
+  "scripts": {
+    "start": "parallelshell 'webpack --watch' 'npm run watch' 'npm run server'",
+    "prestart": "npm run clean && webpack && npm run compile",
+    "dist": "webpack -p && npm run compile && npm run sass",
+    "clean": "rimraf dist/",
+    "watch": "node tasks/watch.js",
+    "server": "http-server ./dist -c-1",
+    "compile": "npm run copy && npm run sass",
+    "copy": "mkdir -p dist && ncp src/web/ dist/ --stopOnErr",
+    "sass": "node-sass -o dist/css -q --output-style compact src/scss/"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar": "^1.7.0",
+    "http-server": "^0.10.0",
+    "ncp": "^2.0.0",
+    "node-sass": "^4.5.3",
+    "parallelshell": "^3.0.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-middleware": "^1.12.0"
+  }
+}
