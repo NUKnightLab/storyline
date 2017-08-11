@@ -1,0 +1,17 @@
+#storyline-config {
+  display: none;
+}
+
+#create-button-wrapper {
+  display: none;
+}
+
+.error-message select, .error-message input, .error-message label {
+  border-color:red;
+}
+
+.error-message p {
+  color: #DF4E13;
+  font-size: 80%;
+  line-height: 1.2944 !important;
+}

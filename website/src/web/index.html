@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    StorylineJS
+  </title>
+  <link rel="stylesheet" href="https://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css" />
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/orangeline/latest/css/orangeline.css" />
+  <link rel="stylesheet" href="/css/website.css" />
+
+  <!-- favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/manifest.json">
+  <link rel="mask-icon" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff" />
+  <!-- /favicons -->
+
+  <!-- Meta -->
+  <meta name="keywords" content="story, news, chart, annotate, create, make, journalism, line-chart" />
+  <meta name="description" content="Tell the story behind the numbers." />
+  <!-- /Meta -->
+
+  <!-- Open Graph -->
+  <meta property="fb:app_id" content="963588407028336" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Storyline" />
+  <meta property="og:description" content="Tell the story behind the numbers." />
+  <meta property="og:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
+  <meta property="og:url" content="https://storyline.knightlab.com" />
+  <meta property="og:site_name" content="Storyline JS" />
+  <!-- /Open Graph -->
+
+  <!-- Twitter Card -->
+  <meta name="twitter:title" content="Storyline" />
+  <meta name="twitter:description" content="Tell the story behind the numbers." />
+  <meta name="twitter:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
+  <meta name="twitter:site" content="@knightlab" />
+  <meta name="twitter:creator" content="@knightlab" />
+  <!-- /Twitter Card -->
+
+  <script src="https://cdn.knightlab.com/libs/orangeline/latest/js/main.js" charset="utf-8"></script>
+  <script src="/js/website.js" charset="utf-8"></script>
+
+</head>
+
+
+<body>
+  <nav id="navbar-product-top" class="navbar navbar-dark">
+    <ul>
+      <li class="logo">
+        <a href="http://knightlab.com">
+          <img src="https://cdn.knightlab.com/libs/orangeline/latest/assets/knightlab-dark.png" />
+        </a>
+      </li>
+    </ul>
+    <div class="nav-mobile-menu">
+      <button class="button-plain">
+        <span class="icon-menu"></span>
+      </button>
+    </div>
+    <ul class="nav-right navbar-nav">
+      <li><a class="button button-dark button-small-tablet button-active" href="http://knightlab.northwestern.edu/projects/">Projects</a></li>
+      <li><a class="button button-dark button-small-tablet" href="https://studio.knightlab.com/">Class</a></li>
+      <li><a class="button button-dark button-small-tablet" href="https://devicelab.knightlab.com">Device Lab</a></li>
+      <li><a class="button button-dark button-small-tablet" href="http://knightlab.northwestern.edu/posts/">Posts</a></li>
+      <li><a class="button button-dark button-small-tablet" href="http://openlab.knightlab.com/">Community</a></li>
+      <li><a class="button button-dark button-small-tablet" href="http://knightlab.northwestern.edu/about/">About</a></li>
+    </ul>
+  </nav>
+
+  <header class="header-product">
+    <h1 class="product-logo product-logo-large">
+        Storyline <span>JS</span>
+    </h1>
+    <h2 class="product-tagline">Tell the story behind the numbers.</h2>
+    <a class="button button-secondary button-large button-small-phone" href="#make">Make a Storyline</a>
+    <nav id="navbar-secondary" class="navbar navbar-subnav column-hide-phone">
+      <ul>
+        <li class="logo">
+          <h2 class="product-logo product-logo-smallest">Storyline <span>JS</span></h2>
+        </li>
+      </ul>
+      <ul>
+        <li><a class="button" href="#overview">Overview</a></li>
+        <li><a class="button" href="#help">Get Started</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <article id="product-body">
+    <section id="demo" class="container-fluid">
+      <div class="product-demo">
+        <iframe src="from-example.html" style="width: 100%; height: 500px" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
+      </div>
+    </section>
+    <section id="overview" class="container">
+      <div class="grid-size-2 grid-size-1-phone">
+        <div class="grid-item">
+          <h3 style="margin-top:0;">Introducing Storyline</h3>
+          <p>Storyline is an open-source tool that enables anyone to build an annotated, interactive line chart. Note that <strong>this tool is in beta</strong>. That means it’s a work in progress. We’re floating our unfinished work to get feedback and see if people find it useful before we build the easy-to-use authoring tools that make this a better fit for beginners.</p>
+          <p>To make Storyline as flexible as possible, we've just included the chart, axis labels, and cards. Headlines, context, more specifics on the data sources and credits--we expect you'll include what you want outside of Storyline. We built the chart up top using <a href="https://fred.stlouisfed.org/series/MEHOINUSA672N" target="_blank">Real Median Household Income data from FRED</a>.</p>
+        </div>
+        <div class="grid-item">
+          <h3 style="margin-top:0;">Current limitations</h3>
+          <ol>
+            <li>We’re focused on line charts for now. The x-axis will accept only time/date formats.</li>
+            <li>Our mobile-first design requires you to keep it short. No more than 12 cards per story, titles limited to 54 characters, and paragraphs limited to 200 characters.</li>
+            <li>Storyline works best with fewer than 800 data points.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+    <section class="section-color section-color-complement" id="make">
+        <div class="container">
+            <h2>Make a Storyline</h2>
+            <p>
+                Storyline JS works on any site or blog. Make your own in just a couple of steps.
+            </p>
+
+            <ol class="instructional-steps">
+
+                <li class="step grid">
+                    <div class="step-number column-2">
+                        <h6>Prepare your data</h6>
+                    </div>
+                    <div class="step-details column-10">
+                        <p>At the heart of each storyline is a line chart.
+                           To make a storyline with this tool, <strong>you will need to put
+                             a spreadsheet with the data for your chart on Google Sheets.</strong>
+                           (It's possible to make a storyline without using Google Sheets, but it is more complicated and requires some coding.)
+                        </p>
+                        <p>
+                          Your sheet needs to have at least <strong>two columns</strong>: a <em>date/time</em> column and a <em>data</em> column. (If it has more than two columns, that's no problem.) There should be a header row with labels for those columns, but the labels can be anything you like. <strong>If your data doesn't already have a header row, add one</strong> and give your columns titles.
+                        </p>
+                        <p>
+                          If you started with your data already on Google Sheets, you can go to the next section. If you need help knowing how to put your Excel spreadsheet or CSV file on Google Sheets, read on...
+                        </p>
+                    </div>
+                </li>
+                <li class="step grid">
+                    <div class="step-number column-2">
+                        <h6>Tell your story</h6>
+                    </div>
+                    <div class="step-details column-10">
+                        <p>
+                          Along with a chart, the other part of a storyline is a series of cards explaining details about various points in your data. Each card has a <em>title</em>, <em>text</em>, and a <em>date</em>. The date comes from a column already in your data, but you'll need to <strong>add two columns</strong> for the title and text.
+                        </p>
+                        <p>
+                          Go to your Google spreadsheet and add column headers. You can name them anything, but we recommend keeping it simple and using <em>title</em> and <em>text</em>.
+                        </p>
+                        <p>Once you have those columns, find the rows for the data you want to explain, and fill in the appropriate information in the new columns. Leave those cells blank for rows where you don't have anything to say.</p>
+                    </div>
+                </li>
+                <li class="step grid">
+                    <div class="step-number column-2">
+                        <h6>Publish to the web</h6>
+                    </div>
+                    <div class="step-details column-10">
+
+                        <div class="grid">
+                            <div class="grid-item">
+                                <p>Under the File menu, select “Publish to the Web.”</p>
+                                <img class="img-shadow"  src="http://timeline.knightlab.com/static/img/make/publish_to_web_small.png" />
+                                <p>In the next window, click the blue "publish" button. When asked, "Are you sure…?" click OK.</p>
+                                <p>Now, copy the URL that appears in the center of the window. You'll use this in the next step.</p>
+                            </div>
+                            <div class="grid-item">
+                                <img class="img-shadow"  src="http://timeline.knightlab.com/static/img/make/publish_to_web_button_small.png" />
+                                <img class="img-shadow"  src="http://timeline.knightlab.com/static/img/make/publish_to_web_url_small.png" />
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+                <li class="step grid">
+                    <div class="step-number column-2">
+                        <h6>Generate your Storyline</h6>
+                    </div>
+                    <div class="step-details column-10">
+                        <p>Copy/paste spreadsheet URL into the box below to generate your storyline.
+                        <em>(Make sure you've published the spreadsheet.)</em></p>
+                        <form id="configure-form">
+                            <div id="spreadsheet_url_wrapper" class="input-group-label">
+                                <label class="input-group-addon" for="spreadsheet_url">Google Spreadsheet URL</label>
+                                <input type="text" id="spreadsheet_url" name="spreadsheet_url" placeholder="place link to spreadsheet here">
+                                <button id="load-btn" class="button button-secondary" style="margin-top:.9rem;">Load</button>
+                            </div>
+                            <div id="storyline-config" class="panel">
+                                <h3>Tell us more about how your spreadsheet is formatted.</h3>
+                                <div class="grid grid-left">
+                                    <div class="column-4" style="text-align:right;">
+                                        <h5>Time</h5>
+                                    </div>
+                                    <div class="column-4">
+                                        <div class="flyout data-nav x-column">
+                                            <label for="datetime_column_name">Select date/time column</label>
+                                            <select class="column-selector" handler="loadColumn" name="datetime_column_name" id="datetime_column_name">
+                                                <option value=""> -- select -- </option>
+                                                <option value="year">year</option>
+                                                <option value="annualtemp">annualtemp</option>
+                                                <option value="title">title</option>
+                                                <option value="text">text</option>
+                                                <option value="slideactive">slideactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="column-4">
+                                        <div class="flyout data-nav datetime-format-column">
+                                            <label for="datetime_format">How are your dates formatted?</label>
+                                            <select class="column-selector" handler="loadColumn" name="datetime_format" id="datetime_format">
+                                                <!-- Can we use actual dates/times from the spreadsheet here (makes it less abstract) -->
+                                                <option value="2017">2017</option>
+                                                <option value="2017-06-15">2017-06-15</option>
+                                                <option value="06/15/17">06/15/17</option>
+                                                <option value="06/15/2017">06/15/2017</option>
+                                                <option value="15/06/17">15/06/17</option>
+                                                <option value="15/06/2017">15/06/2017</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="column-4" style="text-align:right;">
+                                        <h5>Data</h5>
+                                    </div>
+                                    <div class="column-8">
+                                        <div class="flyout data-nav y-column">
+                                            <label for="data_column_name">Select data column</label>
+                                            <select class="column-selector" handler="loadColumn" name="data_column_name" id="data_column_name">
+                                                <option value=""> -- select -- </option>
+                                                <option value="year">year</option>
+                                                <option value="annualtemp">annualtemp</option>
+                                                <option value="title">title</option>
+                                                <option value="text">text</option>
+                                                <option value="slideactive">slideactive</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="column-4" style="text-align:right;">
+                                        <h5>Story Cards</h5>
+                                    </div>
+                                    <div class="column-4">
+                                        <div class="flyout data-nav cards-title-column">
+                                            <label for="title">Which column has the card titles?</label>
+                                            <select class="column-selector" handler="loadColumn" name="title" id="title">
+                                                <option value=""> -- select -- </option>
+                                                <option value="year">year</option>
+                                                <option value="annualtemp">annualtemp</option>
+                                                <option value="title">title</option>
+                                                <option value="text">text</option>
+                                                <option value="slideactive">slideactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="column-4">
+                                        <div class="flyout data-nav cards-text-column">
+                                            <label for="text">Which column has the card text?</label>
+                                            <select style="border-color:red" class="column-selector" handler="loadColumn" name="text" id="text">
+                                                <option value=""> -- select -- </option>
+                                                <option value="year">year</option>
+                                                <option value="annualtemp">annualtemp</option>
+                                                <option value="title">title</option>
+                                                <option value="text">text</option>
+                                                <option value="slideactive">slideactive</option>
+                                            </select>
+                                        </div>
+                                        <p class="small text-color-primary">This is an example of an error for the text column for now until more work is done in Orangeline.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="create-button-wrapper" class="grid">
+                                <button style="text-align:center" id="generate-storyline-btn" class="button button-secondary button-large" handler="generateStoryline">Create Storyline</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </li>
+
+                <li class="step grid">
+                    <div class="step-number column-2">
+                        <h6>Share your Storyline</h6>
+                    </div>
+                    <div class="step-details column-10">
+
+                        <h6>Share Link</h6>
+                        <!-- <ul class="list--social">
+                            <li>
+                                <a class="link--no-style" href="#" ><span class="icon-twitter text-color-complement"></span></a>
+                            </li>
+                            <li>
+                                <a class="link--no-style" href="#"><span class="icon-facebook text-color-complement"></span></a>
+                            </li>
+                        </ul> -->
+
+                        <form>
+                            <textarea rows="3" type="text" "readonly" name="textplaceholder" value="" style="height:4rem;">
+https://cdn.knightlab.com/libs/timeline/latest/embed/?source=1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI&font=Bevan-PotanoSans&maptype=toner&width=600&height=600
+                            </textarea>
+                        </form>
+
+                        <h6>Embed</h6>
+                        <p class="small">Grab the embed code and paste it on your site where you want your storyline to appear (just like a YouTube video). <em>If you're embedding on Medium.com just paste the link from the right where you want your timeline to appear.</em></p>
+                        <form>
+                            <textarea rows="3" readonly="readonly" type="text" name="textplaceholder" value="" style="height:5rem;">
+&lt;iframe src=&apos;https://cdn.knightlab.com/libs/timeline/latest/embed/?source=1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI&amp;font=Bevan-PotanoSans&amp;maptype=toner&amp;width=600&amp;height=600&apos; width=&apos;600&apos; height=&apos;600&apos; frameborder=&apos;0&apos;&gt;&lt;/iframe&gt;
+                            </textarea>
+                        </form>
+                        <a class="button button-complement" href="#" target="_blank">Preview</a>&nbsp;
+                        <a class="button button-light" href="#" target="_blank">Open Preview in a new window  &nbsp;<span class="icon-new-tab"></span></a>
+
+
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <div id="preview-embed">
+            <div class="container">
+                <h3>Preview Embed</h3>
+            </div>
+            <section id="demo" class="container-fluid">
+                <div id="preview-embed-iframe" class="product-demo">
+                    <iframe src="http://storyline.knightlab.com/from-example.html" width="100%" height="650" frameborder="0"></iframe>
+                </div>
+
+            </section>
+        </div>
+    </section>
+  </article>
+  <section class="moth--product">
+    <h3>Storytelling Tools</h3>
+    <p class="product-tagline">We build easy-to-use tools that can help you tell better stories.</p>
+    <div class="grid grid-size-4 grid-size-2-tablet grid-size-1-phone">
+      <div class="grid-item">
+        <a href="http://timeline.knightlab.com/" class="button button-dark">
+          <img class="img-rounded" src="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-timeline.png">
+          <h4 class="product-logo product-logo-small">Timeline <span>JS</span></h4>
+          <p class="product-tagline">Easy-to-make, beautiful timelines.</p>
+        </a>
+      </div>
+      <div class="grid-item">
+        <a href="http://storymap.knightlab.com/" class="button button-dark">
+          <img class="img-rounded" src="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-storymap.png">
+          <h4 class="product-logo product-logo-small">StoryMap <span>JS</span></h4>
+          <p class="product-tagline">Maps that tell stories.</p>
+        </a>
+      </div>
+      <div class="grid-item">
+        <a href="http://juxtapose.knightlab.com/" class="button button-dark">
+          <img class="img-rounded" src="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-juxtapose.jpg">
+          <h4 class="product-logo product-logo-small">Juxtapose <span>JS</span></h4>
+          <p class="product-tagline">Easy-to-make frame comparisons.</p>
+        </a>
+      </div>
+      <div class="grid-item">
+        <a href="http://soundcite.knightlab.com/" class="button button-dark">
+          <img class="img-rounded" src="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-soundcite.png">
+          <h4 class="product-logo product-logo-small">Soundcite <span>JS</span></h4>
+          <p class="product-tagline">Seamless inline audio.</p>
+        </a>
+      </div>
+    </div>
+    <a href="http://knightlab.northwestern.edu/projects/" class="button button-dark" style="margin-top:1rem;z-index:22;">View More</a>
+  </section>
+  <footer class="footer-knightlab--dark">
+    <div class="container">
+      <div class='grid grid-center'>
+        <div class='column-2 column-4-phone column-4-tablet'>
+          <a href="http://knightlab.northwestern.edu" target="_blank">
+            <img src="https://cdn.knightlab.com/libs/orangeline/latest/assets/logo-knightlab-stacked-dark-small.png" style="margin-left:auto;">
+          </a>
+          <ul class="list--social text-align-center">
+            <li><a class="link--no-style" href="http://www.twitter.com/knightlab" target="_blank" title="Knight Lab on Twitter"><span class="icon-twitter"></span></a></li>
+            <li><a class="link--no-style" href="https://www.facebook.com/knightlab" target="_blank" title="Knight Lab on Facebook"><span class="icon-facebook"></span></a></li>
+            <li><a class="link--no-style" href="https://github.com/NUKnightLab/" target="_blank" title="Knight Lab on GitHub"><span class="icon-github"></span></a></li>
+          </ul>
+        </div>
+        <div class='column-4 column-5-tablet column-6-phone footer-description'>
+          <p>
+            The <a title="Northwestern University" href="http://www.northwestern.edu/" target="_blank">Northwestern University</a> Knight Lab is a team of technologists and journalists working at advancing news media innovation through exploration and experimentation.
+          </p>
+          <div class="grid-size-2 grid-size-2-phone">
+            <div class="grid-item">
+              <a title="Medill School of Journalism, Media, Integrated Marketing Communications" href="http://www.medill.northwestern.edu/" target="_blank">
+                <img src="https://cdn.knightlab.com/libs/orangeline/latest/assets/logo-medill-dark.png">
+              </a>
+            </div>
+            <div class="grid-item">
+              <a title="McCormick School of Engineering" href="http://www.mccormick.northwestern.edu/" target="_blank">
+                <img src="https://cdn.knightlab.com/libs/orangeline/latest/assets/logo-mccormick-dark.png">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-center">
+        <div class="grid-item">
+          <address itemscope="" itemtype="http://data-vocabulary.org/Organization">
+                <span style="display:none;" itemprop="name" title="Knight Lab | Advancing news media innovation through exploration and experimentation." class="address-name">Knight Lab</span>
+                <span itemprop="tel" class="tel">(847) 467-4971</span>
+                <span itemprop="address" itemscope="" itemtype="http://data-vocabulary.org/Address" class="address">
+                    <span itemprop="street-address" class="street-address">1845 Sheridan Road</span>
+                    <span class="room-num">Fisk #109 &amp; #111</span>
+                    <div class="address-group">
+                        <span itemprop="locality">Evanston,</span> <span itemprop="region">IL</span> <span itemprop="postal-code">60208 </span>
+                        <span style="display:none;" itemprop="geo" itemscope="" itemtype="http://www.data-vocabulary.org/Geo/" class="geo">Latitude: <span itemprop="latitude">42.056893</span><br>Longitude: <span itemprop="longitude">-87.676735</span>
+                        </span>
+                        <a style="display:none;" href="http://knightlab.northwestern.edu" itemprop="url" class="url">Northwesten University Knight Lab | Advancing media innovation through exploration and experimentation.</a>
+                    </div>
+                </span>
+            </address>
+          <span class="copyright">© Copyright 2016 Northwestern University</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-27829802-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+
+</html>
