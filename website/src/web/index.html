@@ -199,27 +199,23 @@
                                     <div class="column-4">
                                         <div class="flyout data-nav x-column">
                                             <label for="datetime_column_name">Select date/time column</label>
-                                            <select class="column-selector" handler="loadColumn" name="datetime_column_name" id="datetime_column_name">
+                                            <select class="column-selector" name="datetime_column_name" id="datetime_column_name">
                                                 <option value=""> -- select -- </option>
-                                                <option value="year">year</option>
-                                                <option value="annualtemp">annualtemp</option>
-                                                <option value="title">title</option>
-                                                <option value="text">text</option>
-                                                <option value="slideactive">slideactive</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav datetime-format-column">
                                             <label for="datetime_format">How are your dates formatted?</label>
-                                            <select class="column-selector" handler="loadColumn" name="datetime_format" id="datetime_format">
+                                            <select name="datetime_format" id="datetime_format">
                                                 <!-- Can we use actual dates/times from the spreadsheet here (makes it less abstract) -->
-                                                <option value="2017">2017</option>
-                                                <option value="2017-06-15">2017-06-15</option>
-                                                <option value="06/15/17">06/15/17</option>
-                                                <option value="06/15/2017">06/15/2017</option>
-                                                <option value="15/06/17">15/06/17</option>
-                                                <option value="15/06/2017">15/06/2017</option>
+                                                <option value=""> -- select -- </option>
+                                                <option value="YYYY">2017</option>
+                                                <option value="YYYY-MM-DD">2017-06-15</option>
+                                                <option value="MM/DD/YY">06/15/17</option>
+                                                <option value="MM/DD/YYYY">06/15/2017</option>
+                                                <option value="DD/MM/YY">15/06/17</option>
+                                                <option value="DD/MM/YYYY">15/06/2017</option>
                                             </select>
                                         </div>
                                     </div>
@@ -231,7 +227,7 @@
                                     <div class="column-8">
                                         <div class="flyout data-nav y-column">
                                             <label for="data_column_name">Select data column</label>
-                                            <select class="column-selector" handler="loadColumn" name="data_column_name" id="data_column_name">
+                                            <select class="column-selector" name="data_column_name" id="data_column_name">
                                                 <option value=""> -- select -- </option>
                                                 <option value="year">year</option>
                                                 <option value="annualtemp">annualtemp</option>
@@ -250,7 +246,7 @@
                                     <div class="column-4">
                                         <div class="flyout data-nav cards-title-column">
                                             <label for="title">Which column has the card titles?</label>
-                                            <select class="column-selector" handler="loadColumn" name="title" id="title">
+                                            <select class="column-selector" name="title" id="title">
                                                 <option value=""> -- select -- </option>
                                                 <option value="year">year</option>
                                                 <option value="annualtemp">annualtemp</option>
@@ -263,7 +259,7 @@
                                     <div class="column-4">
                                         <div class="flyout data-nav cards-text-column">
                                             <label for="text">Which column has the card text?</label>
-                                            <select style="border-color:red" class="column-selector" handler="loadColumn" name="text" id="text">
+                                            <select class="column-selector" name="text" id="text">
                                                 <option value=""> -- select -- </option>
                                                 <option value="year">year</option>
                                                 <option value="annualtemp">annualtemp</option>
@@ -272,7 +268,6 @@
                                                 <option value="slideactive">slideactive</option>
                                             </select>
                                         </div>
-                                        <p class="small text-color-primary">This is an example of an error for the text column for now until more work is done in Orangeline.</p>
                                     </div>
                                 </div>
 
@@ -292,26 +287,10 @@
                     </div>
                     <div class="step-details column-10">
 
-                        <h6>Share Link</h6>
-                        <!-- <ul class="list--social">
-                            <li>
-                                <a class="link--no-style" href="#" ><span class="icon-twitter text-color-complement"></span></a>
-                            </li>
-                            <li>
-                                <a class="link--no-style" href="#"><span class="icon-facebook text-color-complement"></span></a>
-                            </li>
-                        </ul> -->
-
-                        <form>
-                            <textarea rows="3" type="text" "readonly" name="textplaceholder" value="" style="height:4rem;">
-https://cdn.knightlab.com/libs/timeline/latest/embed/?source=1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI&font=Bevan-PotanoSans&maptype=toner&width=600&height=600
-                            </textarea>
-                        </form>
-
                         <h6>Embed</h6>
-                        <p class="small">Grab the embed code and paste it on your site where you want your storyline to appear (just like a YouTube video). <em>If you're embedding on Medium.com just paste the link from the right where you want your timeline to appear.</em></p>
+                        <p class="small">Grab the embed code and paste it on your site where you want your storyline to appear (just like a YouTube video).</p>
                         <form>
-                            <textarea rows="3" readonly="readonly" type="text" name="textplaceholder" value="" style="height:5rem;">
+                            <textarea rows="3" id="embed-code-textarea" readonly="readonly" type="text" name="textplaceholder" value="" style="height:5rem;">
 &lt;iframe src=&apos;https://cdn.knightlab.com/libs/timeline/latest/embed/?source=1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI&amp;font=Bevan-PotanoSans&amp;maptype=toner&amp;width=600&amp;height=600&apos; width=&apos;600&apos; height=&apos;600&apos; frameborder=&apos;0&apos;&gt;&lt;/iframe&gt;
                             </textarea>
                         </form>
