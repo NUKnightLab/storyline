@@ -1,4 +1,4 @@
-import { DataFactory, DataError } from '../src/js/data.js';
+import { DataFactory } from '../src/js/data.js';
 import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 import moment from 'moment'
@@ -157,7 +157,7 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(DataError, /invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(Error, /invalid/);
     })
     it('returns an error message when x column_name is incorrect', () => {
       config = {
@@ -172,7 +172,7 @@ describe('DataJS', () => {
         },
         "cards": []
       }
-      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(DataError, /invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(Error, /invalid/);
     })
     afterEach(() => {
     })
