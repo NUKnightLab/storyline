@@ -26,6 +26,42 @@ Chart.prototype = {
     this.drawAxes(d3);
     this.drawLine();
     this.drawMarkers();
+    this.redrawConnector();
+  },
+  redrawConnector: function() {
+    var self = this;
+    PubSub.subscribe('card moved', function(topic, data) {
+      //take note of direction of movement//
+      if(data.new != undefined && data.prev != undefined && data.new != data.prev) {
+        var newMarker = self.markers[data.new].querySelector('circle')
+        //forward movement//
+        var move = data.new > data.prev ? 1 : -1
+        if(data.new - move >= 0) {
+          for(var i=0; i<self.markers.length; i++) {
+            var marker = self.markers[i].querySelector('circle')
+            if(i != data.new) {
+            var diff = data.new - i
+            var marker = {
+              x: marker.getAttribute("cx"),
+              y: marker.getAttribute("cy")
+            }
+            self.connectors[i].classList.add('is-animating')
+            self.connectors[i].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX - (480*diff)) + " " + self.slidertopY);
+            clearTimeout(timer);
+            var timer = setTimeout(function() {
+              self.connectors[i].classList.remove('is-animating')
+            })
+            } else {
+              var marker = {
+                x: marker.getAttribute("cx"),
+                y: marker.getAttribute("cy")
+              }
+              self.connectors[i].setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + self.slidertopX + " " + self.slidertopY);
+            }
+          }
+        }
+      }
+    })
   },
   drawAxes: function(d3) {
     var self = this;
@@ -120,9 +156,11 @@ Chart.prototype = {
     var self = this,
         markersArray = this.aggregateMarkers();
 
-    self.textMarkers = [],
+    self.textMarkers = [];
     self.markers = [];
-    markersArray.map(function(marker) {
+    self.connectors = [];
+
+    markersArray.map(function(marker, index) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -133,10 +171,11 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
-      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30;
-      var slidertopY = self.height+self.margin.bottom+1;
-      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
+      self.slidertopX = (self.width+self.margin.right+self.margin.left)/2;
+      self.slidertopY = self.height+self.margin.bottom+1 // so line hides behind card//;
+      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + (self.slidertopX  + (480 * index)) + " " + self.slidertopY);
       connector.setAttribute('fill', '#FF1744');
+      connector.setAttribute('class', 'connector-' + self.connectors.length)
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
@@ -149,14 +188,15 @@ Chart.prototype = {
       markerElem.appendChild(circle);
       textElem.appendChild(text);
 
+    self.elem.appendChild(markerElem)
+
     self.textMarkers.push(textElem);
     self.markers.push(markerElem);
-    self.elem.appendChild(markerElem)
+    self.connectors.push(connector);
     })
     self.textMarkers.map(function(textItem) {
       self.elem.appendChild(textItem)
     })
-
   },
   /**
    * Collect data points as a string

@@ -72,6 +72,7 @@ Slider.prototype = {
     }
   },
   setActiveCard: function(currentActiveCard, pastActiveCard) {
+    PubSub.publish('card moved', {new: currentActiveCard, prev: pastActiveCard})
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('is-active');
@@ -121,6 +122,7 @@ Slider.prototype = {
   },
   goToCard: function(number) {
     //catches condition when number is not passed in//
+    PubSub.publish('card moved', {new: number, prev: this.activeCard})
     number = number!=undefined ? number : this.activeCard;
     var self = this;
     if(number < 0) {
