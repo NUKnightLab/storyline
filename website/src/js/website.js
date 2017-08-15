@@ -143,6 +143,12 @@ function enableLoadButton() {
   addClass(btn, 'button-secondary'); // yuk for hard-coding which kind of button it is
 }
 
+function setCSSProperty(selector, property, value) {
+  var elements = document.querySelectorAll(selector);
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].style[property] = value
+  }
+}
 
 function populateMenusAndShowForm(feed_response_str) {
   var spreadsheet_json = JSON.parse(feed_response_str);
@@ -155,27 +161,32 @@ function populateMenusAndShowForm(feed_response_str) {
   }
 
   enableLoadButton();
-  config_area.style.display = 'block';
-  document.getElementById('create-button-wrapper').style.display = 'block';
-  validateConfigForm();
+  setCSSProperty('.hide-without-data', 'display', 'block');
+  validateConfigForm(true);
   fetch_promise = null;
 }
 
-function validateSelectMenu() {
+function validateSelectMenu(el, quiet) {
   var valid = true;
-  clearSelectError(this);
-  if (this.value) {
+  if (!quiet) {
+    clearSelectError(el);
+  }
+  if (el.value) {
     // TODO: ensure unique?
     valid = true;
   } else {
-    showSelectError(this, 'required');
+    if (!quiet) {
+      showSelectError(el, 'required');
+    }
     valid = false;
   }
-  validateConfigForm();
   return valid;
 }
 
-function validateConfigForm() {
+function validateConfigForm(quiet) {
+  // trying to balance something which controls the state of the submit button
+  // without showing errors the moment the thing appears, which is annoying
+  quiet = (typeof(quiet) == 'boolean') // event handler passes event, not falsy
   var btn = document.getElementById('generate-storyline-btn');
   removeClass(btn, 'button-secondary'); // yuk for hard-coding which kind of button it is
   addClass(btn,'button-disabled');
@@ -184,7 +195,7 @@ function validateConfigForm() {
   var config_area = document.getElementById('storyline-config');
   var selects = config_area.querySelectorAll('select');
   for (var i = 0; i < selects.length; i++) {
-    valid = valid && selects[i].value.length > 0;
+    valid = valid && validateSelectMenu(selects[i], quiet);
   }
 
   if (valid) {
@@ -213,15 +224,18 @@ function fetchSpreadsheetURL() {
 
 function processSpreadsheetURL() {
   clearURLError();
+  setCSSProperty('.hide-without-data', 'display', 'none');
   disableLoadButton();
   fetchSpreadsheetURL();
 }
 
 function handleGenerateButtonClick() {
-  if (validateConfigForm()) {
+  var msg_el = document.getElementById('config-wrapper-message');
+  pruneChildren(msg_el, 'p.error-message');
+  if (validateConfigForm(false)) {
     console.log('valid, lets do it');
   } else {
-    console.log('not ready yet');
+    msg_el.append(createErrorParagraph("Please correct the errors on the form before submitting"));
   }
 }
 
@@ -237,7 +251,7 @@ document.addEventListener('DOMContentLoaded',function() {
 
   var selects = document.querySelectorAll('select');
   for (var i = 0; i < selects.length; i++) {
-    selects[i].addEventListener('change', validateSelectMenu);
+    selects[i].addEventListener('change', validateConfigForm);
   }
 
   document.getElementById('generate-storyline-btn').addEventListener('click', handleGenerateButtonClick);
@@ -271,6 +285,5 @@ function buildGoogleFeedURL(url) {
 }
 
 module.exports = {
-  showSelectError: showSelectError,
-   clearSelectError: clearSelectError
+  validateConfigForm: validateConfigForm
 }

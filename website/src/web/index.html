@@ -190,7 +190,7 @@
                                 <input type="text" id="spreadsheet_url" name="spreadsheet_url" placeholder="place link to spreadsheet here">
                                 <button id="load-btn" class="button button-secondary" style="margin-top:.9rem;">Load</button>
                             </div>
-                            <div id="storyline-config" class="panel">
+                            <div id="storyline-config" class="panel hide-without-data">
                                 <h3>Tell us more about how your spreadsheet is formatted.</h3>
                                 <div class="grid grid-left">
                                     <div class="column-4" style="text-align:right;">
@@ -270,10 +270,12 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div id='config-wrapper-message' class="grid">
+                                  
+                                </div>
                             </div>
 
-                            <div id="create-button-wrapper" class="grid">
+                            <div id="create-button-wrapper" class="grid hide-without-data">
                                 <button style="text-align:center" id="generate-storyline-btn" class="button button-secondary button-large" handler="generateStoryline">Create Storyline</button>
                             </div>
                         </form>
