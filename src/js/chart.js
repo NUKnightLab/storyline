@@ -10,6 +10,7 @@ var Chart = function(dataObj, width, height, margin) {
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
     this.markers = dataObj.markers;
+    this.activeMarker = dataObj.activeCard ? dataObj.activeCard : 0
     this.margin = margin || { 'top': 30, 'right': 20, 'bottom': 20, 'left': 30 };
     this.width = width - this.margin.right - this.margin.left;
     this.lineWidth = this.width - 40;
@@ -26,6 +27,7 @@ Chart.prototype = {
     this.drawAxes(d3);
     this.drawLine();
     this.drawMarkers();
+    this.setActiveChart();
   },
   drawAxes: function(d3) {
     var self = this;
@@ -122,7 +124,7 @@ Chart.prototype = {
 
     self.textMarkers = [],
     self.markers = [];
-    markersArray.map(function(marker) {
+    markersArray.map(function(marker, index) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -157,6 +159,17 @@ Chart.prototype = {
       self.elem.appendChild(textItem)
     })
 
+  },
+  setActiveChart: function() {
+    PubSub.subscribe('card moved', function(topic, data) {
+      var regex = new RegExp('\\b' + 'is-active' + '\\b', 'g')
+      if(regex.test(this.markers[data.pastActiveCard].classList)) {
+        this.markers[data.pastActiveCard].classList.remove('is-active')
+        this.textMarkers[data.pastActiveCard].classList.remove('is-active')
+      }
+      this.markers[data.currentActiveCard].classList.add('is-active')
+      this.textMarkers[data.currentActiveCard].classList.add('is-active')
+    }.bind(this))
   },
   /**
    * Collect data points as a string

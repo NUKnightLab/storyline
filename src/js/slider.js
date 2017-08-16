@@ -72,17 +72,19 @@ Slider.prototype = {
     }
   },
   setActiveCard: function(pastActiveCard, currentActiveCard) {
+    PubSub.publish('card moved', {
+      pastActiveCard: pastActiveCard,
+      currentActiveCard: currentActiveCard,
+      pastActiveCardElem: this.cardsElem.children[pastActiveCard],
+      currentActiveCardElem: this.cardsElem.children[currentActiveCard]
+    })
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('is-active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('is-active');
-      storyline.chart.markers[pastActiveCard].classList.remove('is-active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('is-active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('is-active');
     this.navElem.children[0].children[currentActiveCard].classList.add('is-active');
-    storyline.chart.markers[currentActiveCard].classList.add('is-active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('is-active')
   },
   /**
    * sets the width of the document
@@ -180,7 +182,6 @@ Slider.prototype = {
           }
         break;
         case 'swipe':
-          console.log('swipe')
           break;
         case 'panleft':
         case 'panright':
