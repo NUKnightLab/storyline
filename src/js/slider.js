@@ -1,6 +1,6 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(markers, cards, config, startIndex, height, width) {
+var Slider = function(cards, config, startIndex, height, width, markers) {
   this.activeCard = startIndex;
   this.config = config;
   this.cards = cards;
@@ -9,6 +9,7 @@ var Slider = function(markers, cards, config, startIndex, height, width) {
   this.height = height;
   this.width = width;
   this.createSlider();
+  this.attachMarkersToCards(markers);
   this.positionCards()
 }
 
@@ -60,22 +61,25 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
+  attachMarkersToCards: function(markers) {
+    this.attachClickHandler(markers)
+  },
   attachClickHandler: function(div) {
     var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
-      div[i].onclick = function(event, self) {
+      div[i].onclick = function(event) {
         var classes = event.target.classList;
         if(classes.length > 0) {
           for(var i in classes) {
             if(classes[i].indexOf("-") != -1) {
               var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-              var pastActiveCard = storyline.slider.activeCard
-              storyline.slider.goToCard(currentActiveCard)
+              var pastActiveCard = this.activeCard
+              this.goToCard(currentActiveCard)
               return false;
             }
           }
         }
-      }
+      }.bind(this)
     }
   },
   setActiveCard: function(pastActiveCard, currentActiveCard) {
@@ -203,6 +207,11 @@ Slider.prototype = {
           if(inBounds(transformPercentage)) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
             var left = self.cardsElem.children[self.activeCard].getBoundingClientRect().left
+            PubSub.publish('card move in progress', {
+              left: left + (self.cardWidth/2),
+              currentActiveCard: self.activeCard,
+              pastActiveCard: (self.activeCard + direction) > -1 ? self.activeCard+direction : 0
+            })
             var leftWithCard = left + self.cardWidth
             if(leftWithCard <= (self.width* 0.5) || left >= (self.width* 0.5)) {
               self.setActiveCard(self.activeCard, self.activeCard+direction)

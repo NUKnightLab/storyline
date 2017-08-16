@@ -122,6 +122,12 @@ Chart.prototype = {
     var self = this,
         markersArray = this.aggregateMarkers();
 
+    if(this.width <= 480) {
+      this.cardWidth = this.width - (10*2)
+    } else {
+      this.cardWidth = 500;
+    }
+
     self.textMarkers = [],
     self.markers = [];
     markersArray.map(function(marker, index) {
@@ -135,7 +141,7 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
-      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30;
+      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30 + (index * self.cardWidth);
       var slidertopY = self.height+self.margin.bottom+1;
       connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
       connector.setAttribute('fill', '#FF1744');
@@ -169,6 +175,12 @@ Chart.prototype = {
       }
       this.markers[data.currentActiveCard].classList.add('is-active')
       this.textMarkers[data.currentActiveCard].classList.add('is-active')
+    }.bind(this))
+    PubSub.subscribe('card move in progress', function(topic, data) {
+      var currentLine = this.markers[data.currentActiveCard].children[0],
+          d = currentLine.getAttribute('d'),
+      d = d.replace(d.substring(d.indexOf('L')).trim().split(" ")[0], "L"+data.left);
+      currentLine.setAttribute('d', d)
     }.bind(this))
   },
   /**
