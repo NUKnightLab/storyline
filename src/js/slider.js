@@ -9,6 +9,7 @@ var Slider = function(markers, cards, config, startIndex, height, width) {
   this.height = height;
   this.width = width;
   this.createSlider();
+  this.positionCards()
 }
 
 Slider.prototype = {
@@ -22,7 +23,6 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.attachClickHandler(this.navElem.children[0].children);
   },
   /**
    * creates the slider view and appends slides to it
@@ -38,7 +38,14 @@ Slider.prototype = {
     sliderView.appendChild(this.cardsElem);
     sliderView.appendChild(this.navElem);
 
+    sliderView.style.opacity = 1;
+
     return sliderView;
+  },
+  positionCards: function() {
+    this.setCardWidth(this.width)
+    this.goToCard();
+    this.slideCard();
   },
   getTemplate: function(templateId) {
     return MUSTACHE_TEMPLATES[templateId];
@@ -92,13 +99,13 @@ Slider.prototype = {
    * @param w
    * @returns {undefined}
    */
-  setWidth: function(w) {
+  setCardWidth: function(w) {
     if(w <= 480) {
       w = w - (this.MARGIN*2)
     } else {
       w = 500;
     }
-    this.viewportSize = this.cardsElem.parentElement.clientWidth;
+    this.viewportSize = this.width;
     var offset = this.viewportSize/2 - w/2;
     this.cardWidth = w
     this.sliderWidth = w * this.cards.length;

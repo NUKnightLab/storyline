@@ -129,10 +129,6 @@
   display: inline-block;
   background-color: $color-grey--lighter;
   margin-bottom: 2px;
-
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .nav li.is-active {
