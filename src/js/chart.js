@@ -133,7 +133,7 @@ Chart.prototype = {
     markersArray.map(function(marker, index) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var connector = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       circle.setAttribute('cx', marker.x);
@@ -141,10 +141,14 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
-      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30 + (index * self.cardWidth);
+      var slidertopX = (self.width+self.margin.right)/2 + (index * self.cardWidth);
       var slidertopY = self.height+self.margin.bottom+1;
-      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
-      connector.setAttribute('fill', '#FF1744');
+      connector.setAttribute('x1', marker.x)
+      connector.setAttribute('y1', marker.y)
+      connector.setAttribute('x2', slidertopX)
+      connector.setAttribute('y2', slidertopY)
+      connector.setAttribute('stroke', '#FF1744');
+      connector.setAttribute('stroke-width', '2px');
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
@@ -168,19 +172,25 @@ Chart.prototype = {
   },
   setActiveChart: function() {
     PubSub.subscribe('card moved', function(topic, data) {
+      var self = this;
       var regex = new RegExp('\\b' + 'is-active' + '\\b', 'g')
       if(regex.test(this.markers[data.pastActiveCard].classList)) {
         this.markers[data.pastActiveCard].classList.remove('is-active')
         this.textMarkers[data.pastActiveCard].classList.remove('is-active')
+        this.markers[data.pastActiveCard].classList.remove('is-active')
       }
       this.markers[data.currentActiveCard].classList.add('is-active')
       this.textMarkers[data.currentActiveCard].classList.add('is-active')
+      this.markers[data.currentActiveCard].children[0].setAttribute('x2', (this.width+this.margin.right)/2)
+      this.markers[data.currentActiveCard].children[0].classList.add('is-animating')
+      clearTimeout(time)
+      var time = setTimeout(function() {
+        storyline.chart.markers[data.currentActiveCard].children[0].classList.remove('is-animating')
+      }, 700);
     }.bind(this))
     PubSub.subscribe('card move in progress', function(topic, data) {
-      var currentLine = this.markers[data.currentActiveCard].children[0],
-          d = currentLine.getAttribute('d'),
-      d = d.replace(d.substring(d.indexOf('L')).trim().split(" ")[0], "L"+data.left);
-      currentLine.setAttribute('d', d)
+      var d1 = this.markers[data.currentActiveCard].children[0];
+      d1.setAttribute('x2', data.left)
     }.bind(this))
   },
   /**
