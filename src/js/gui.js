@@ -1,5 +1,5 @@
 import { Storyline } from './storyline'
-import { DataFactory, DataError } from './data'
+import { DataFactory } from './data'
 
 var GUI = function() {
   this.preLoaded = false;
@@ -164,7 +164,7 @@ GUI.prototype = {
         var value = allColumns[i].value;
         if(value.length === 0) {
           var errorMessage = 'Error, Please select an option for column ' + colname;
-          throw new DateError(errorMessage)
+          throw new Error(errorMessage)
           break;
         } else {
           self.extractColumnValue(colname, value)
@@ -178,7 +178,7 @@ GUI.prototype = {
       }
     } else {
       var errorMessage = 'Error, only one storyline allowed'
-      throw new DataError(errorMessage)
+      throw new Error(errorMessage)
     }
   },
   /**

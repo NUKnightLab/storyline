@@ -61,8 +61,8 @@ DataFactory.prototype = {
       if(!x || !y) {
         var errorMessage = "";
         // TODO: if both are wrong, report both instead of overriding one error with the other.
-        errorMessage = isNaN(parseInt(x)) ? "x axis is invalid, check that your x axis column name is correct" : errorMessage
-        errorMessage = isNaN(parseInt(y)) ? "y axis is invalid, check that your y axis column name is correct" : errorMessage
+        errorMessage = isNaN(parseInt(x)) ? "The date/time column is invalid, check that the column name matches your data" : errorMessage
+        errorMessage = isNaN(parseInt(y)) ? "The data column is invalid, check that the column name matches your data" : errorMessage
         throw new Error(errorMessage);
       }
       bounds.minY = this.getMin(y, bounds.minY)
