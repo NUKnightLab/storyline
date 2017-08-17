@@ -144,6 +144,12 @@ Slider.prototype = {
       this.setActiveCard(this.activeCard, number)
       this.activeCard = number;
     }
+    PubSub.publish('card moved', {
+      pastActiveCard: this.activeCard,
+      currentActiveCard: number,
+      pastActiveCardElem: this.cardsElem.children[this.activeCard],
+      currentActiveCardElem: this.cardsElem.children[number]
+    })
 
     this.cardsElem.classList.add('is-animating')
     var percentage = -(100 / this.cards.length) * this.activeCard;
