@@ -10,7 +10,7 @@ var Chart = function(dataObj, width, height, margin) {
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
     this.markers = dataObj.markers;
-    this.margin = margin || { 'top': 10, 'right': 30, 'bottom': 20, 'left': 30 };
+    this.margin = margin || { 'top': 30, 'right': 20, 'bottom': 20, 'left': 30 };
     this.width = width - this.margin.right - this.margin.left;
     this.lineWidth = this.width - 40;
     this.height = height - this.margin.top - this.margin.bottom - AXIS_HEIGHT;
@@ -76,7 +76,7 @@ Chart.prototype = {
     .append("text")
       .attr("fill", "rgb(184, 184, 184)")
       .attr("x", this.lineWidth + this.margin.right + this.margin.left)
-      .attr("y", -20)
+      .attr("y", -35)
       .attr("dy", "1.75em")
       .attr("text-anchor", "end")
       .text(this.axes.yLabel);

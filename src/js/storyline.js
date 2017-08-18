@@ -69,9 +69,9 @@ Storyline.prototype = {
     return data.fetchSheetData(this.dataConfig);
   },
   initSlider: function(lastActiveCard) {
-    var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeSlide ? this.data.activeSlide : 0
+    var activeCard = !!lastActiveCard ? lastActiveCard : !!this.data.activeCard ? this.data.activeCard : 0
     var sliderHeight = (0.4*this.height)
-    return new Slider(this.data.markers, this.dataConfig, activeCard, sliderHeight, this.width);
+    return new Slider(this.data.markers, this.data.cards, this.dataConfig, activeCard, sliderHeight, this.width);
   },
   initChart: function(dataObj) {
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
@@ -100,7 +100,7 @@ Storyline.prototype = {
     } else {
     const template =
       "<div class='error'>" +
-        "<h3><span class='error-message'>{{ msg }}</span></h3>" +
+        "<span class='error-message'>{{ msg }}</span>" +
       "</div>"
     var rendered = mustache.render(template, {msg: msg}),
         parser = new DOMParser(),
