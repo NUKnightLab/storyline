@@ -92,8 +92,6 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
-      if (!slideTitle) throw new Error("No slide title?")
-      if (!slideText) throw new Error("No slide text?")
       if(slideTitle.length > 0 && slideText.length > 0) {
         var displayDate = x
         var rowNumber = i
