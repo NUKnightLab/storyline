@@ -13,8 +13,9 @@
     "dist": "webpack -p && npm run compile && npm run sass",
     "clean": "rimraf dist/",
     "watch": "node tasks/watch.js",
-    "server": "http-server ./dist -c-1",
-    "compile": "npm run copy && npm run sass",
+    "server": "parallelshell 'http-server ./dist -c-1' 'http-server ../dist -c-1 -p 9090'",
+    "compile": "npm run copy && npm run sass && npm run templates",
+    "templates": "node tasks/compile-hbs.js",
     "copy": "mkdir -p dist && ncp src/web/ dist/ --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/"
   },
@@ -22,11 +23,13 @@
   "license": "ISC",
   "devDependencies": {
     "chokidar": "^1.7.0",
+    "handlebars": "^4.0.10",
     "http-server": "^0.10.0",
     "ncp": "^2.0.0",
     "node-sass": "^4.5.3",
     "parallelshell": "^3.0.1",
     "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.12.0"
+    "webpack-dev-middleware": "^1.12.0",
+    "yamljs": "^0.3.0"
   }
 }

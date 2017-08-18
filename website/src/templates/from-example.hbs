@@ -2,8 +2,8 @@
 <html>
 <head>
 	<title>From example</title>
-  <script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script>
-  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css">
+  <script src="{{cdn_url}}/js/storyline.js"></script>
+  <link rel="stylesheet" href="{{cdn_url}}/css/storyline.css">
 </head>
 <body>
 
@@ -20,10 +20,10 @@
 	    "datetime_format": "%Y",
 	    "y_axis_label": "Income"
 	  },
-	  "start_at_card": 1,
-		cards: {
-				title: 'title',
-				text: 'text'
+		"slider": {
+			"start_at_card": "1",
+			"title_column_name": 'title',
+			"text_column_name": 'text'
 		}
 	}
 
