@@ -64,7 +64,7 @@
     "watch": "node tasks/watch.js",
     "server": "http-server ./dist -c-1",
     "compile": "npm run copy && npm run sass",
-    "copy": "mkdir -p dist && ncp src/index.html dist/index.html --stopOnErr && ncp src/view.html dist/view.html && ncp src/assets dist/assets --stopOnErr",
+    "copy": "mkdir -p dist && ncp src/index.html dist/index.html --stopOnErr && ncp src/assets dist/assets --stopOnErr",
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
     "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/*-test.js'",
     "stage": "npm run clean && npm run dist && node tasks/stage.js",
