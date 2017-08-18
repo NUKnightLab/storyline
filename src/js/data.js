@@ -36,13 +36,32 @@ DataFactory.prototype = {
         var card = config.slider.cards[i];
         card_lookup[card.row_number] = card;
       }
+    } else {
+      var errorMsg = [];
+      if (!config.slider.title_column_name) {
+        errorMsg.push("No title column specified.");
+      }
+      if (!config.slider.text_column_name) {
+        errorMsg.push("No text column specified.");
+      }
+      if (errorMsg.length > 0) {
+        throw new Error(errorMsg.join('\n'));
+      }
     }
 
     for(var i=0; i<dataObj.length; i++) {
       var slideTitle = '', slideText = '', slideActive = false;
       if (!card_lookup) {
-        slideTitle = dataObj[i][config.slider.title].$t
-        slideText = dataObj[i][config.slider.text].$t
+        try {
+          slideTitle = dataObj[i][config.slider.title_column_name].$t
+        } catch(e) {
+          throw new Error("Invalid title column.")
+        }
+        try {
+          slideText = dataObj[i][config.slider.text_column_name].$t
+        } catch(e) {
+          throw new Error("Invalid text column.")
+        }
         slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card].$t : false;
       } else if (card_lookup[i]) {
         slideTitle = card_lookup[i].title;
@@ -73,6 +92,8 @@ DataFactory.prototype = {
       axes.timeFormat = config.chart.datetime_format;
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
+      if (!slideTitle) throw new Error("No slide title?")
+      if (!slideText) throw new Error("No slide text?")
       if(slideTitle.length > 0 && slideText.length > 0) {
         var displayDate = x
         var rowNumber = i
