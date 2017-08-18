@@ -46,7 +46,7 @@ describe('DataJS', () => {
         markers: []
       }
 
-      exampleData = "Date,US unemployment rate 1/31/80, 6.3 2/29/80 6.3, 3/31/80 6.3";
+      exampleData = "Date,us unemployment rate 1/31/80, 6.3 2/29/80 6.3, 3/31/80 6.3";
       callBack = sinon.stub(lib, 'get').returns(new Promise(function(resolve, reject) {
         resolve(exampleData);
       }))
@@ -81,10 +81,10 @@ describe('DataJS', () => {
     let dataInput, config, instance, results;
     beforeEach(() => {
       dataInput = [
-        {'date': '01/31/80', 'us unemployment rate': 1},
-        {'date': '02/29/80', 'us unemployment rate': 3},
-        {'date': '03/31/80', 'us unemployment rate': 2},
-        {'date': '04/30/80', 'us unemployment rate': 3}
+        {'date': '01/31/80', 'us unemployment rate': 1, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '02/29/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '03/31/80', 'us unemployment rate': 2, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '04/30/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}}
       ]
       config = {
         "data": {
@@ -96,7 +96,10 @@ describe('DataJS', () => {
           "datetime_format": "",
           "y_axis_label": ""
         },
-        "cards": []
+        "slider": {
+          'title_column_name': 'title',
+          'text_column_name': 'text'
+        }
       }
       results = dataFactoryInstance.createDataObj(dataInput, config)
     })
@@ -138,16 +141,16 @@ describe('DataJS', () => {
     let dataInput, config, stub;
     beforeEach(()=> {
       dataInput = [
-        {'date': '01/31/80', 'US Unemployment Rate': 1},
-        {'date': '02/29/80', 'US Unemployment Rate': 3},
-        {'date': '03/31/80', 'US Unemployment Rate': 2},
-        {'date': '04/30/80', 'US Unemployment Rate': 3}
+        {'date': '01/31/80', 'us unemployment rate': 1, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '02/29/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '03/31/80', 'us unemployment rate': 2, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '04/30/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}}
       ]
     })
-    it('returns an error message when y column_name is incorrect', () => {
+    it('throws an error message when data column_name is incorrect', () => {
       config = {
         "data": {
-          "data_column_name": "US Unemployment",
+          "data_column_name": "the wrong configuration",
           "datetime_format": "%m/%d/%Y",
           "datetime_column_name": "date"
         },
@@ -155,14 +158,17 @@ describe('DataJS', () => {
           "datetime_format": "",
           "y_axis_label": ""
         },
-        "cards": []
+        "slider": {
+          'title_column_name': 'title',
+          'text_column_name': 'text'
+        }
       }
-      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(Error, /invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config) }).to.throw();
     })
-    it('returns an error message when x column_name is incorrect', () => {
+    it('returns an error message when date column_name is incorrect', () => {
       config = {
         "data": {
-          "data_column_name": "US Unemployment Rate",
+          "data_column_name": "us unemployment rate",
           "datetime_format": "%m/%d/%Y",
           "datetime_column_name": "day"
         },
@@ -170,9 +176,12 @@ describe('DataJS', () => {
           "datetime_format": "",
           "y_axis_label": ""
         },
-        "cards": []
+        "slider": {
+          'title_column_name': 'title',
+          'text_column_name': 'text'
+        }
       }
-      expect(function() { dataFactoryInstance.createDataObj(dataInput, config)} ).to.throw(Error, /invalid/);
+      expect(function() { dataFactoryInstance.createDataObj(dataInput, config) }).to.throw();
     })
     afterEach(() => {
     })

@@ -23,13 +23,13 @@ describe('ChartJS', () => {
                  }, 500, 600)
     })
     it('should set a margin to default if given no input', () => {
-      expect(Chart1.margin).to.eql({ 'top': 10, 'right': 30, 'bottom': 20, 'left': 30 })
+      expect(Chart1.margin).to.eql({ 'top': 30, 'right': 20, 'bottom': 20, 'left': 30 })
     })
     it('should return the height of a new chart with margins accounted for', () => {
-      expect(Chart1.height).to.eql(545);
+      expect(Chart1.height).to.eql(525);
     })
     it('should return the width of a new chart with margins accounted for', () => {
-      expect(Chart1.width).to.eql(440);
+      expect(Chart1.width).to.eql(450);
     })
     afterEach(function() {
       init.restore();
@@ -69,23 +69,24 @@ describe('ChartJS', () => {
                        markers: markers
                      }, 500, 600)
     })
+    let expected_y = 262.5; // are there other recurring values we can extract for easier test maintenance?
     it('should set a range', () => {
       expect(Chart1.rangeX).to.eql(11228400000)
       expect(Chart1.rangeY).to.eql(2)
     })
     it('should set a scale', () => {
-      expect(Chart1.SCALEX).to.eql(3.562395354636458e-8)
-      expect(Chart1.SCALEY).to.eql(272.5);
+      expect(Chart1.SCALEX).to.eql(3.651455238502369e-8)
+      expect(Chart1.SCALEY).to.eql(expected_y);
     })
     it('should set a translation', () => {
-      expect(Chart1.translateX).to.eql(2124643.2831035587);
-      expect(Chart1.translateY).to.eql(-272.5);
+      expect(Chart1.translateX).to.eql(2177759.365181148);
+      expect(Chart1.translateY).to.eql(-1 * expected_y);
     })
     it('should aggregate markers when the aggregateMarkers is called', () => {
        var result = Chart1.aggregateMarkers()
          let markers = [
-           { x: 307.66271240776405, y: 0, label: 3, markerCount: 0 },
-           { x: 400, y: 272.5, label: 2, markerCount: 1 }
+           { x: 315.35428021801636, y: 0, label: 3, markerCount: 0 },
+           { x: 410, y: expected_y, label: 2, markerCount: 1 }
          ]
        assert.deepEqual(result, markers)
     })
