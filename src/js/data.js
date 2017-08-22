@@ -264,7 +264,7 @@ DataFactory.prototype = {
     for(var key in configSubset) {
       let formattedHeaders = {}
       Object.keys(configSubset[key]).map(function(header) {
-        if(header === 'url' || header === 'datetime_format') {
+        if(header === 'url' || header === 'datetime_format' || header === 'start_at_card') {
           formattedHeaders[header] = configSubset[key][header]
         } else {
           formattedHeaders[header] = "gsx$" + configSubset[key][header].replace(/\s/g, '').toLowerCase()
