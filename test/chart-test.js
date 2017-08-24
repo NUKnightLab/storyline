@@ -10,7 +10,7 @@ describe('ChartJS', () => {
     let init;
     beforeEach(() => {
       init = sinon.stub(Chart.prototype, 'createChart');
-      Chart1 = new Chart(
+      Chart1 = new Chart(null,
                  {
                    data: {},
                    bounds: {
@@ -59,7 +59,7 @@ describe('ChartJS', () => {
         {rowNumber: 3, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'},
         {rowNumber: 4, slideTitle: 'Pentagon Militarizes Police', slideText: 'Some text here'}
       ]
-      Chart1 = new Chart(
+      Chart1 = new Chart(null,
                      {
                        data: data,
                        bounds: {

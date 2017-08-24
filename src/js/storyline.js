@@ -69,7 +69,7 @@ Storyline.prototype = {
     }
   },
   resetWidth: function(newWidth, targetType) {
-    storyline.trackEvent('resize', targetType)
+    this.trackEvent('resize', targetType)
     this.width = newWidth;
     var oldSlider = this.slider.elem
     var lastActiveCard = this.slider.activeCard;
@@ -97,7 +97,7 @@ Storyline.prototype = {
   },
   initChart: function(dataObj) {
     var chartHeight = !!this.chartHeight ? this.chartHeight : (0.6*this.height);
-    return new Chart(dataObj, this.width, chartHeight, this.margin)
+    return new Chart(this, dataObj, this.width, chartHeight, this.margin)
   },
   /**
    * checks browser size and if mobile, overrides input dimensions
@@ -154,7 +154,7 @@ Storyline.prototype = {
     this.elem.appendChild(slider.elem);
   },
   attachClickHandler: function(div, targetType) {
-    storyline.trackEvent('click', targetType)
+    this.trackEvent('click', targetType)
     var self = this;
     for(var i=0; i < div.length; i++) {
       div[i].onclick = function(event) {
@@ -163,7 +163,7 @@ Storyline.prototype = {
     }
   },
   handleClick: function(event, targetType) {
-    storyline.trackEvent('click', targetType)
+    this.trackEvent('click', targetType)
     var classes = event.target.classList;
 
     for(var i in classes) {
