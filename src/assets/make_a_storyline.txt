@@ -1,0 +1,26 @@
+To make a storyline:
+
+* Import the CSV file "global_temp.csv" into Google Sheets.
+* Insert two columns, and set their headers to "title" and "text"
+* Add the story data to the timeline in the appropriate years (copy/paste)
+  * 1880
+    * Title: Global Temperature change
+    * Text: Based on NASA data, this chart shows average annual temperature difference from a baseline computed over the years 1951-1980. See https://climate.nasa.gov/vital-signs/global-temperature/ for more information.
+  * 1920
+    * Title: Car Manufacturing Takes Off
+    * Text: Here come the cars.
+  * 1998
+    * Title: A warning sign
+    * Text: 1998 was one of the warmest years on record.
+  * 2001
+    * Title: An upward trend
+    * Text: Sixteen of the 17 warmest years on record have occurred since 2001.
+
+Using the Google Sheets "File" menu, choose "Publish to the web…"
+(Don't worry about any of the settings, just click the blue "Publish" button.)
+When Google asks "are you sure?" click OK.
+After that, you will see a URL beginning with "https://docs.google.com/..." Copy that URL.
+
+Go to "http://storyline.knightlab.com/view.html"
+Paste the URL you copied into the form. A series of five menus will appear.
+Select the appropriate options from the menu and click "create storyline"
