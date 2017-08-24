@@ -10,6 +10,7 @@ var Chart = function(dataObj, width, height, margin) {
     this.bounds = dataObj.bounds;
     this.axes = dataObj.axes;
     this.markers = dataObj.markers;
+    this.activeMarker = dataObj.activeCard ? dataObj.activeCard : 0
     this.margin = margin || { 'top': 30, 'right': 20, 'bottom': 20, 'left': 30 };
     this.width = width - this.margin.right - this.margin.left;
     this.lineWidth = this.width - 40;
@@ -26,6 +27,7 @@ Chart.prototype = {
     this.drawAxes(d3);
     this.drawLine();
     this.drawMarkers();
+    this.setActiveChart();
   },
   drawAxes: function(d3) {
     var self = this;
@@ -120,12 +122,18 @@ Chart.prototype = {
     var self = this,
         markersArray = this.aggregateMarkers();
 
+    if(this.width <= 480) {
+      this.cardWidth = this.width - (10*2)
+    } else {
+      this.cardWidth = 500;
+    }
+
     self.textMarkers = [],
     self.markers = [];
-    markersArray.map(function(marker) {
+    markersArray.map(function(marker, index) {
       var markerElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       var textElem = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      var connector = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var connector = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       circle.setAttribute('cx', marker.x);
@@ -133,10 +141,14 @@ Chart.prototype = {
       circle.setAttribute('r', 5);
       circle.setAttribute('fill', 'grey');
       circle.setAttribute('class', 'marker-' + marker.markerCount);
-      var slidertopX = (self.width+self.margin.right+self.margin.left)/2 - 30;
+      var slidertopX = (self.width+self.margin.right)/2 + (index * self.cardWidth);
       var slidertopY = self.height+self.margin.bottom+1;
-      connector.setAttribute('d', 'M' + marker.x + " " + marker.y + " L" + slidertopX  + " " + slidertopY);
-      connector.setAttribute('fill', '#FF1744');
+      connector.setAttribute('x1', marker.x)
+      connector.setAttribute('y1', marker.y)
+      connector.setAttribute('x2', slidertopX)
+      connector.setAttribute('y2', slidertopY)
+      connector.setAttribute('stroke', '#FF1744');
+      connector.setAttribute('stroke-width', '2px');
       text.innerHTML = marker.label;
       text.setAttribute('x', marker.x + 15);
       text.setAttribute('y', marker.y);
@@ -157,6 +169,29 @@ Chart.prototype = {
       self.elem.appendChild(textItem)
     })
 
+  },
+  setActiveChart: function() {
+    PubSub.subscribe('card moved', function(topic, data) {
+      var self = this;
+      var regex = new RegExp('\\b' + 'is-active' + '\\b', 'g')
+      if(regex.test(this.markers[data.pastActiveCard].classList)) {
+        this.markers[data.pastActiveCard].classList.remove('is-active')
+        this.textMarkers[data.pastActiveCard].classList.remove('is-active')
+        this.markers[data.pastActiveCard].classList.remove('is-active')
+      }
+      this.markers[data.currentActiveCard].classList.add('is-active')
+      this.textMarkers[data.currentActiveCard].classList.add('is-active')
+      this.markers[data.currentActiveCard].children[0].setAttribute('x2', (this.width+this.margin.right)/2)
+      this.markers[data.currentActiveCard].children[0].classList.add('is-animating')
+      clearTimeout(time)
+      var time = setTimeout(function() {
+        storyline.chart.markers[data.currentActiveCard].children[0].classList.remove('is-animating')
+      }, 700);
+    }.bind(this))
+    PubSub.subscribe('card move in progress', function(topic, data) {
+      var d1 = this.markers[data.currentActiveCard].children[0];
+      d1.setAttribute('x2', data.left)
+    }.bind(this))
   },
   /**
    * Collect data points as a string

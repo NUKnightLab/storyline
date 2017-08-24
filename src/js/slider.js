@@ -1,6 +1,6 @@
 var Hammer = require('hammerjs');
 
-var Slider = function(markers, cards, config, startIndex, height, width) {
+var Slider = function(cards, config, startIndex, height, width, markers) {
   this.activeCard = startIndex;
   this.config = config;
   this.cards = cards;
@@ -9,6 +9,8 @@ var Slider = function(markers, cards, config, startIndex, height, width) {
   this.height = height;
   this.width = width;
   this.createSlider();
+  this.attachMarkersToCards(markers);
+  this.positionCards()
 }
 
 Slider.prototype = {
@@ -22,7 +24,6 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.attachClickHandler(this.navElem.children[0].children);
   },
   /**
    * creates the slider view and appends slides to it
@@ -38,7 +39,14 @@ Slider.prototype = {
     sliderView.appendChild(this.cardsElem);
     sliderView.appendChild(this.navElem);
 
+    sliderView.style.opacity = 1;
+
     return sliderView;
+  },
+  positionCards: function() {
+    this.setCardWidth(this.width)
+    this.goToCard();
+    this.slideCard();
   },
   getTemplate: function(templateId) {
     return MUSTACHE_TEMPLATES[templateId];
@@ -53,36 +61,41 @@ Slider.prototype = {
 
     return doc.body.children[0];
   },
+  attachMarkersToCards: function(markers) {
+    this.attachClickHandler(markers)
+  },
   attachClickHandler: function(div) {
     var pastActiveCard = this.activeCard;
     for(var i=0; i < div.length; i++) {
-      div[i].onclick = function(event, self) {
+      div[i].onclick = function(event) {
         var classes = event.target.classList;
         if(classes.length > 0) {
           for(var i in classes) {
             if(classes[i].indexOf("-") != -1) {
               var currentActiveCard = parseFloat(classes[i].split("-")[1]);
-              var pastActiveCard = storyline.slider.activeCard
-              storyline.slider.goToCard(currentActiveCard)
+              var pastActiveCard = this.activeCard
+              this.goToCard(currentActiveCard)
               return false;
             }
           }
         }
-      }
+      }.bind(this)
     }
   },
   setActiveCard: function(pastActiveCard, currentActiveCard) {
+    PubSub.publish('card moved', {
+      pastActiveCard: pastActiveCard,
+      currentActiveCard: currentActiveCard,
+      pastActiveCardElem: this.cardsElem.children[pastActiveCard],
+      currentActiveCardElem: this.cardsElem.children[currentActiveCard]
+    })
     this.activeCard = currentActiveCard;
     if(this.cardsElem.children[pastActiveCard].classList.contains('is-active')) {
       this.cardsElem.children[pastActiveCard].classList.remove('is-active');
       this.navElem.children[0].children[pastActiveCard].classList.remove('is-active');
-      storyline.chart.markers[pastActiveCard].classList.remove('is-active')
-      storyline.chart.textMarkers[pastActiveCard].classList.remove('is-active')
     }
     this.cardsElem.children[currentActiveCard].classList.add('is-active');
     this.navElem.children[0].children[currentActiveCard].classList.add('is-active');
-    storyline.chart.markers[currentActiveCard].classList.add('is-active')
-    storyline.chart.textMarkers[currentActiveCard].classList.add('is-active')
   },
   /**
    * sets the width of the document
@@ -90,13 +103,13 @@ Slider.prototype = {
    * @param w
    * @returns {undefined}
    */
-  setWidth: function(w) {
+  setCardWidth: function(w) {
     if(w <= 480) {
       w = w - (this.MARGIN*2)
     } else {
       w = 500;
     }
-    this.viewportSize = this.cardsElem.parentElement.clientWidth;
+    this.viewportSize = this.width;
     var offset = this.viewportSize/2 - w/2;
     this.cardWidth = w
     this.sliderWidth = w * this.cards.length;
@@ -131,6 +144,12 @@ Slider.prototype = {
       this.setActiveCard(this.activeCard, number)
       this.activeCard = number;
     }
+    PubSub.publish('card moved', {
+      pastActiveCard: this.activeCard,
+      currentActiveCard: number,
+      pastActiveCardElem: this.cardsElem.children[this.activeCard],
+      currentActiveCardElem: this.cardsElem.children[number]
+    })
 
     this.cardsElem.classList.add('is-animating')
     var percentage = -(100 / this.cards.length) * this.activeCard;
@@ -180,7 +199,6 @@ Slider.prototype = {
           }
         break;
         case 'swipe':
-          console.log('swipe')
           break;
         case 'panleft':
         case 'panright':
@@ -195,6 +213,11 @@ Slider.prototype = {
           if(inBounds(transformPercentage)) {
             self.cardsElem.style.transform = 'translateX(' + transformPercentage + '%)';
             var left = self.cardsElem.children[self.activeCard].getBoundingClientRect().left
+            PubSub.publish('card move in progress', {
+              left: left + (self.cardWidth/2),
+              currentActiveCard: self.activeCard,
+              pastActiveCard: (self.activeCard + direction) > -1 ? self.activeCard+direction : 0
+            })
             var leftWithCard = left + self.cardWidth
             if(leftWithCard <= (self.width* 0.5) || left >= (self.width* 0.5)) {
               self.setActiveCard(self.activeCard, self.activeCard+direction)
