@@ -70,6 +70,7 @@ DataFactory.prototype = {
           slideActive = (config.slider.start_at_card == i);
         }
       }
+      var datetime_format = config.data.datetime_format;
       var dateParse = d3Time.timeParse(config.data.datetime_format);
       var x = dataObj[i][config.data.datetime_column_name]
       var y = dataObj[i][config.data.data_column_name];
@@ -80,7 +81,9 @@ DataFactory.prototype = {
       if(!x || !y) {
         var errorMessage = "";
         // TODO: if both are wrong, report both instead of overriding one error with the other.
-        errorMessage = isNaN(parseInt(x)) ? "The date/time column is invalid, check that the column name matches your data" : errorMessage
+        errorMessage = isNaN(parseInt(x))
+          ? `The date/time column is invalid, check that the column name matches your data and that your date format is correct. [date string: ${x} format ${datetime_format}]`
+          : errorMessage
         errorMessage = isNaN(parseInt(y)) ? "The data column is invalid, check that the column name matches your data" : errorMessage
         throw new Error(errorMessage);
       }
@@ -264,7 +267,7 @@ DataFactory.prototype = {
     for(var key in configSubset) {
       let formattedHeaders = {}
       Object.keys(configSubset[key]).map(function(header) {
-        if(header === 'url' || header === 'datetime_format') {
+        if(header === 'url' || header === 'datetime_format' || header === 'start_at_card') {
           formattedHeaders[header] = configSubset[key][header]
         } else {
           formattedHeaders[header] = "gsx$" + configSubset[key][header].replace(/\s/g, '').toLowerCase()

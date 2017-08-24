@@ -50,10 +50,20 @@ Storyline.prototype = {
    * Perform any necessary data validation or cleanup ASAP so we can error out cleanly if things won't work.
    * @TODO There are almost definitely more checks to add here.
    */
-  validateConfig: function() {
+  validateConfig: function(config) {
+    var self = this
     // we need chart.datetime_format for the x axis and for cards so use input datetime format as a fallback.
-    if (!this.dataConfig.chart) { this.dataConfig.chart = {} }
-    if (!this.dataConfig.chart.datetime_format) { this.dataConfig.chart.datetime_format = this.dataConfig.data.datetime_format }
+    Object.keys(config).map(function(thing){
+      Object.keys(config[thing]).map(function(con) {
+        if(config[thing][con].indexOf('%25') > -1){
+          self.dataConfig[thing][con] = self.dataConfig[thing][con].replace(/%25/g, "%")
+        } else if(config[thing][con].indexOf('%20') > -1){
+          self.dataConfig[thing][con] = self.dataConfig[thing][con].replace(/%20/g, " ")
+        }
+      })
+    })
+    if (!config.chart) { this.dataConfig.chart = {} }
+    if (!config.chart.datetime_format) { this.dataConfig.chart.datetime_format = this.dataConfig.data.datetime_format }
 
   },
   initTracking: function() {

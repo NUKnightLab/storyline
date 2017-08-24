@@ -1,3 +1,4 @@
+var smoothScroll = require('smoothscroll');
 var fetch_promise = null;
 
 function valid_google_url(url) {
@@ -52,12 +53,12 @@ function showURLError(msg) {
   document.getElementById('storyline-config').display = 'block';
 }
 
-function clearSelectError(el) {
+function clearInputError(el) {
   removeClass(el, 'error-message');
   pruneChildren(el.parentElement, 'p.error-message');
 }
 
-function showSelectError(el, msg) {
+function showInputError(el, msg) {
   addClass(el, 'error-message');
   el.parentElement.appendChild(createErrorParagraph(msg));
 }
@@ -162,31 +163,24 @@ function populateMenusAndShowForm(feed_response_str) {
 
   enableLoadButton();
   setCSSProperty('.hide-without-data', 'display', 'block');
-  validateConfigForm(true);
+  validateConfigForm();
   fetch_promise = null;
 }
 
-function validateSelectMenu(el, quiet) {
+function validateRequiredInput(el) {
   var valid = true;
-  if (!quiet) {
-    clearSelectError(el);
-  }
+  clearInputError(el);
   if (el.value) {
     // TODO: ensure unique?
     valid = true;
   } else {
-    if (!quiet) {
-      showSelectError(el, 'required');
-    }
+    showInputError(el, 'required');
     valid = false;
   }
   return valid;
 }
 
-function validateConfigForm(quiet) {
-  // trying to balance something which controls the state of the submit button
-  // without showing errors the moment the thing appears, which is annoying
-  quiet = (typeof(quiet) == 'boolean') // event handler passes event, not falsy
+function validateConfigForm() {
   var btn = document.getElementById('generate-storyline-btn');
   removeClass(btn, 'button-secondary'); // yuk for hard-coding which kind of button it is
   addClass(btn,'button-disabled');
@@ -195,8 +189,10 @@ function validateConfigForm(quiet) {
   var config_area = document.getElementById('storyline-config');
   var selects = config_area.querySelectorAll('select');
   for (var i = 0; i < selects.length; i++) {
-    valid = valid && validateSelectMenu(selects[i], quiet);
+    valid = validateRequiredInput(selects[i]) && valid;
   }
+
+  valid = validateRequiredInput(document.getElementById('data_axis_label')) && valid;
 
   if (valid) {
     removeClass(btn, 'button-disabled');
@@ -204,59 +200,6 @@ function validateConfigForm(quiet) {
   }
   return valid;
 }
-
-function fetchSpreadsheetURL() {
-  if (fetch_promise) {
-    showURLError("Already working on it cool yr jets");
-    return;
-  }
-  var url = document.getElementById('spreadsheet_url').value;
-  var feed_url = buildGoogleFeedURL(url);
-  if (feed_url) {
-    fetch_promise = get(feed_url).then(populateMenusAndShowForm,function error(reason) {
-      showURLError(reason);
-      fetch_promise = null;
-    })
-  } else {
-    showURLError("Invalid Google Spreadsheet URL");
-  }
-}
-
-function processSpreadsheetURL() {
-  clearURLError();
-  setCSSProperty('.hide-without-data', 'display', 'none');
-  disableLoadButton();
-  fetchSpreadsheetURL();
-}
-
-function handleGenerateButtonClick() {
-  var msg_el = document.getElementById('config-wrapper-message');
-  pruneChildren(msg_el, 'p.error-message');
-  if (validateConfigForm(false)) {
-    console.log('valid, lets do it');
-  } else {
-    msg_el.append(createErrorParagraph("Please correct the errors on the form before submitting"));
-  }
-}
-
-document.addEventListener('DOMContentLoaded',function() {
-  document.getElementById('configure-form').onsubmit = function() {
-    console.log('submit cancelled');
-    return false;
-  }
-
-  document.getElementById('spreadsheet_url').addEventListener('change', processSpreadsheetURL);
-
-  document.getElementById('load-btn').addEventListener('click', processSpreadsheetURL);
-
-  var selects = document.querySelectorAll('select');
-  for (var i = 0; i < selects.length; i++) {
-    selects[i].addEventListener('change', validateConfigForm);
-  }
-
-  document.getElementById('generate-storyline-btn').addEventListener('click', handleGenerateButtonClick);
-
-})
 
 function buildGoogleFeedURL(url) {
     var key;
@@ -283,6 +226,85 @@ function buildGoogleFeedURL(url) {
     }
     return null;
 }
+
+function fetchSpreadsheetURL() {
+  if (fetch_promise) {
+    showURLError("Already working on it cool yr jets");
+    return;
+  }
+  var url = document.getElementById('spreadsheet_url').value;
+  var feed_url = buildGoogleFeedURL(url);
+  if (feed_url) {
+    fetch_promise = get(feed_url).then(populateMenusAndShowForm,function error(reason) {
+      showURLError(reason);
+      fetch_promise = null;
+    })
+  } else {
+    showURLError("Invalid Google Spreadsheet URL");
+  }
+}
+
+function processSpreadsheetURL() {
+  clearURLError();
+  setCSSProperty('.hide-without-data', 'display', 'none');
+  disableLoadButton();
+  fetchSpreadsheetURL();
+}
+
+function buildStorylineUrl() {
+  var paramMap = {
+      dataURL: document.getElementById('spreadsheet_url').value,
+      dataYCol:  document.getElementById('data_column_name').value,
+      dataXCol: document.getElementById('datetime_column_name').value,
+      dataDateFormat: document.getElementById('datetime_format').value,
+      chartDateFormat: document.getElementById('datetime_format').value,
+      chartYLabel: document.getElementById('data_axis_label').value,
+      // sliderStartCard: "start_at_card",
+      sliderCardTitleCol: document.getElementById('title').value,
+      sliderCardTextCol: document.getElementById('text').value
+  }
+  var params = []
+  Object.keys(paramMap).map(function(key) {
+    var value = paramMap[key];
+    params.push(`${key}=${encodeURIComponent(value)}`);
+    smoothScroll(document.getElementById('make-step-share'));
+  });
+  return `${EMBED_URL}?${params.join('&')}`;
+}
+
+function handleGenerateButtonClick() {
+  var msg_el = document.getElementById('config-wrapper-message');
+  pruneChildren(msg_el, 'p.error-message');
+  if (validateConfigForm()) {
+    var embed_url = buildStorylineUrl();
+    document.querySelector('#preview-embed-iframe iframe').src = embed_url;
+    var textarea = document.getElementById('embed-code-textarea');
+    textarea.value = document.getElementById('preview-embed-iframe').innerHTML.trim();
+  } else {
+    msg_el.append(createErrorParagraph("Please correct the errors on the form before submitting"));
+  }
+}
+
+document.addEventListener('DOMContentLoaded',function() {
+  document.getElementById('configure-form').onsubmit = function() {
+    console.log('submit cancelled');
+    return false;
+  }
+
+  document.getElementById('spreadsheet_url').addEventListener('change', processSpreadsheetURL);
+
+  document.getElementById('load-btn').addEventListener('click', processSpreadsheetURL);
+
+  var selects = document.querySelectorAll('select');
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].addEventListener('change', validateConfigForm);
+  }
+
+  document.getElementById('data_axis_label').addEventListener('change', validateConfigForm);
+
+  document.getElementById('generate-storyline-btn').addEventListener('click', handleGenerateButtonClick);
+
+})
 
 module.exports = {
   validateConfigForm: validateConfigForm
