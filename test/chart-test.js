@@ -39,12 +39,14 @@ describe('ChartJS', () => {
     let stubCanvas,
         stubAxes,
         stubLine,
-        stubMarkers
+        stubMarkers,
+        pubSub
     beforeEach(() => {
       stubCanvas = sinon.stub(Chart.prototype, 'createCanvas');
       stubAxes = sinon.stub(Chart.prototype, 'drawAxes');
       stubLine = sinon.stub(Chart.prototype, 'drawLine');
       stubMarkers = sinon.stub(Chart.prototype, 'drawMarkers');
+      pubSub = sinon.stub(Chart.prototype, 'setActiveChart');
 
       let data = [
         [d3Time.timeParse("%m/%d/%Y")("01/21/80"), 1],
@@ -95,6 +97,7 @@ describe('ChartJS', () => {
       stubAxes.restore();
       stubLine.restore();
       stubMarkers.restore();
+      pubSub.restore();
     })
   })
 })
