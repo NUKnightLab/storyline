@@ -224,12 +224,19 @@
                                     <div class="column-4" style="text-align:right;">
                                         <h5>Data</h5>
                                     </div>
-                                    <div class="column-8">
+                                    <div class="column-4">
                                         <div class="flyout data-nav y-column">
                                             <label for="data_column_name">Select data column</label>
                                             <select class="column-selector" name="data_column_name" id="data_column_name">
                                                 <option value=""> -- select -- </option>
                                             </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="column-4">
+                                        <div class="flyout data-nav y-label">
+                                            <label for="data_axis_label">Data axis label</label>
+                                            <input type="text" id="data_axis_label" name="data_axis_label" value="">
                                         </div>
 
                                     </div>
@@ -268,7 +275,7 @@
                     </div>
                 </li>
 
-                <li class="step grid">
+                <li id="make-step-share" class="step grid">
                     <div class="step-number column-2">
                         <h6>Share your Storyline</h6>
                     </div>
@@ -278,13 +285,9 @@
                         <p class="small">Grab the embed code and paste it on your site where you want your storyline to appear (just like a YouTube video).</p>
                         <form>
                             <textarea rows="3" id="embed-code-textarea" readonly="readonly" type="text" name="textplaceholder" value="" style="height:5rem;">
-&lt;iframe src=&apos;https://cdn.knightlab.com/libs/timeline/latest/embed/?source=1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI&amp;font=Bevan-PotanoSans&amp;maptype=toner&amp;width=600&amp;height=600&apos; width=&apos;600&apos; height=&apos;600&apos; frameborder=&apos;0&apos;&gt;&lt;/iframe&gt;
                             </textarea>
                         </form>
-                        <a class="button button-complement" href="#" target="_blank">Preview</a>&nbsp;
-                        <a class="button button-light" href="#" target="_blank">Open Preview in a new window  &nbsp;<span class="icon-new-tab"></span></a>
-
-
+                        <p class="small">Something not quite right? Just edit the form above and click "create storyline" again.</p>
                     </div>
                 </li>
             </ol>
@@ -295,8 +298,9 @@
                 <h3>Preview Embed</h3>
             </div>
             <section id="demo" class="container-fluid">
+                <!-- Don't put any other children in #preview-embed-iframe because we use it to get the embed code.-->
                 <div id="preview-embed-iframe" class="product-demo">
-                    <iframe src="http://storyline.knightlab.com/from-example.html" width="100%" height="650" frameborder="0"></iframe>
+                    <iframe src="" width="480" height="650" frameborder="0"></iframe>
                 </div>
 
             </section>
@@ -409,6 +413,9 @@
 
     ga('create', 'UA-27829802-1', 'auto');
     ga('send', 'pageview');
+  </script>
+  <script type="text/template" id='embed-iframe-template'>
+    <iframe src='{{ embed_url }}' width='480' height='650' allowfullscreen frameborder='0'></iframe>
   </script>
 </body>
 
