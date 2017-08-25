@@ -187,7 +187,7 @@ function validateConfigForm() {
   var valid = true;
   var selections = [];
   var config_area = document.getElementById('storyline-config');
-  var selects = config_area.querySelectorAll('select');
+  var selects = config_area.querySelectorAll('select.required');
   for (var i = 0; i < selects.length; i++) {
     valid = validateRequiredInput(selects[i]) && valid;
   }
@@ -257,7 +257,7 @@ function buildStorylineUrl() {
       dataYCol:  document.getElementById('data_column_name').value,
       dataXCol: document.getElementById('datetime_column_name').value,
       dataDateFormat: document.getElementById('datetime_format').value,
-      chartDateFormat: document.getElementById('datetime_format').value,
+      chartDateFormat: document.getElementById('card_date_format').value || document.getElementById('datetime_format').value,
       chartYLabel: document.getElementById('data_axis_label').value,
       // sliderStartCard: "start_at_card",
       sliderCardTitleCol: document.getElementById('title').value,
