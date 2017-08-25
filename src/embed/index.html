@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Storyline JS</title>
+  <script src="../js/storyline.js"></script>
+  <link rel="stylesheet" href="https://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css"/>
+  <link rel="stylesheet" href="../css/storyline.css">
+  <!-- Meta -->
+  <meta name="keywords" content="Keywords, separated, by, commas">
+  <meta name="description" content="DESCRIPTION OF PAGE CONTENT">
+  <!-- /Meta -->
+
+  <!-- FAVICONS -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/manifest.json">
+  <link rel="mask-icon" href="https://cdn.knightlab.com/libs/orangeline/latest/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
+  <!-- /FAVICONS -->
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="A StorylineJS Story" />
+  <meta property="og:description" content="Created using Knight Lab's StorylineJS tool" />
+  <meta property="og:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
+  <meta property="og:url" content="https://storyline.knightlab.com" />
+  <meta property="og:site_name" content="Storyline JS" />
+  <!-- /Open Graph -->
+
+  <!-- Twitter Card -->
+  <meta name="twitter:title" content="Storyline JS">
+  <meta property="twitter:description" content="Created using Knight Lab's StorylineJS tool" />
+  <meta property="twitter:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
+  <meta name="twitter:site" content="@knightlab">
+  <meta name="twitter:creator" content="@knightlab">
+  <!-- /Twitter Card -->
+</head>
+<body>
+  <div id="storyline" height="568" width="600"></div>
+  <script type="text/javascript">
+
+  var config = {
+    "data": {},
+    "chart": {},
+    "slider": {}
+  }
+  var mapURLParams = {
+    dataURL: "url",
+    dataYCol: "data_column_name",
+    dataXCol: "datetime_column_name",
+    dataDateFormat: "datetime_format",
+    chartDateFormat: "datetime_format",
+    chartYLabel: "y_axis_label",
+    sliderStartCard: "start_at_card",
+    sliderCardTitleCol: "title_column_name",
+    sliderCardTextCol: "text_column_name",
+  }
+
+  var url = window.location.href
+  var params = url.split('?')[1].split('&')
+  params.map(function(param) {
+    var value = param.split('=')
+    var configKey = Object.keys(config).indexOf(value[0].split(/(?=[A-Z])/)[0])
+    config[Object.keys(config)[configKey]][mapURLParams[value[0]]] = decodeURIComponent(value[1]);
+  })
+
+  window.storyline = new Storyline('storyline', config);
+  </script>
+</body>
+</html>

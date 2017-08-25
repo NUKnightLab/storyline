@@ -229,11 +229,33 @@ function processSpreadsheetURL() {
   fetchSpreadsheetURL();
 }
 
+function buildStorylineUrl() {
+  var paramMap = {
+      dataURL: document.getElementById('spreadsheet_url').value,
+      dataYCol:  document.getElementById("data_column_name").value,
+      dataXCol: document.getElementById("datetime_column_name").value,
+      dataDateFormat: document.getElementById("datetime_format").value,
+      chartDateFormat: document.getElementById("datetime_format").value,
+      // chartYLabel: "y_axis_label",
+      // sliderStartCard: "start_at_card",
+      sliderCardTitleCol: document.getElementById("title").value,
+      sliderCardTextCol: document.getElementById("text").value
+  }
+  var params = []
+  Object.keys(paramMap).map(function(key) {
+    var value = paramMap[key];
+    params.push(`${key}=${encodeURIComponent(value)}`);
+  });
+  return `${EMBED_URL}?${params.join('&')}`;
+}
+
 function handleGenerateButtonClick() {
   var msg_el = document.getElementById('config-wrapper-message');
   pruneChildren(msg_el, 'p.error-message');
   if (validateConfigForm(false)) {
     console.log('valid, lets do it');
+    var embed_url = buildStorylineUrl();
+    window.open(embed_url,'_blank');
   } else {
     msg_el.append(createErrorParagraph("Please correct the errors on the form before submitting"));
   }
@@ -285,5 +307,6 @@ function buildGoogleFeedURL(url) {
 }
 
 module.exports = {
-  validateConfigForm: validateConfigForm
+  validateConfigForm: validateConfigForm,
+  buildStorylineUrl: buildStorylineUrl,
 }
