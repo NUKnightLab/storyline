@@ -68,7 +68,8 @@
     "sass": "node-sass -o dist/css -q --output-style compact src/scss/",
     "test": "mocha --compilers js:babel-core/register --require babel-polyfill './test/*-test.js'",
     "stage": "npm run clean && npm run dist && node tasks/stage.js",
-    "stage_latest": "npm run clean && npm run dist && node tasks/stage.js latest"
+    "stage_latest": "npm run clean && npm run dist && node tasks/stage.js latest",
+    "stage_dev": "npm run clean && npm run dist && node tasks/stage.js dev"
   },
   "contributors": [
     {

@@ -24,9 +24,9 @@ function renderPage(template, context) {
  *
  * @returns {undefined}
  */
-function build() {
+function build(config_context) {
   var hbsviews = globby.sync('src/templates/**/*.hbs');
-  var config_context = process.argv[2] || 'dev';
+
   var context = yml.load(`src/data/${config_context}.yml`);
   _.forEach(hbsviews, function(file, i) {
     var filePattern = path.dirname(file).split('src/templates/')[1],
@@ -46,4 +46,6 @@ function build() {
   });
 }
 
-build();
+var config_context = process.env.CONFIG_CONTEXT || process.argv[2] || 'dev';
+
+build(config_context);
