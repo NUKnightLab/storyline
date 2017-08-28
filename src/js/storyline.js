@@ -28,7 +28,7 @@ Storyline.prototype = {
   init: function() {
     var self = this;
     this.initTracking();
-    this.validateConfig();
+    this.validateConfig(this.dataConfig);
     this.setDimensions();
     this.grabData(this.dataConfig).then(function(dataObj) {
       self.data = dataObj;

@@ -16,4 +16,4 @@ case $target in
   ;;
 esac
 
-aws s3 sync --acl public-read website s3://$BUCKET
+CONFIG_CONTEXT=$target npm run dist && aws s3 sync --acl public-read dist s3://$BUCKET
