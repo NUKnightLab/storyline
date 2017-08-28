@@ -11,7 +11,7 @@ var Hammer = require('hammerjs');
  * @param {number} width - the intended width in pixels for the chart
  * @returns {undefined}
  */
-var Slider = function(storyline, markers, cards, config, startIndex, height, width) {
+var Slider = function(storyline, cards, config, startIndex, height, width) {
   this.storyline = storyline;
   this.activeCard = startIndex;
   this.config = config;
