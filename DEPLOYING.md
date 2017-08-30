@@ -4,9 +4,9 @@ For library builds:
 
 |   Command   | Description |
 | ----------- | ----------- |   
-| `npm stage` | Run dist, and copy it to local CDN repository using a specified version number |
-| `npm stage_latest` | Same as above, but also copies the same build to the `latest` directory in the CDN.
-| `npm stage_dev` | Similar to above, but copies the code to the `dev` directory in the CDN for deployment with a staging site.
+| `npm run stage` | Run dist, and copy it to local CDN repository using a specified version number |
+| `npm run stage_latest` | Same as above, but also copies the same build to the `latest` directory in the CDN.
+| `npm run stage_dev` | Similar to above, but copies the code to the `dev` directory in the CDN for deployment with a staging site.
 
 **Note:** none of these actually copy the library to the public `cdn.knightlab.com` - that's a separate step independent of any library.
 
