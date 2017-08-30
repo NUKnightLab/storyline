@@ -1,6 +1,7 @@
 To deploy a build of the library:
 
 For library builds:
+
 |   Command   | Description |
 | ----------- | ----------- |   
 | `npm stage` | Run dist, and copy it to local CDN repository using a specified version number |
