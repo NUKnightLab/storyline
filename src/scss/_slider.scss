@@ -74,12 +74,11 @@
 
 .slider-content p {
   text-align: left;
-  padding: 0 10px 0 10px;
+  padding: 10px;
   color: $color-grey--light;
   font-size: 12px;
 
   @media(min-width: 30em) {
-    padding: 0 $spacing-default 0 $spacing-default;
     font-size: 15px;
   }
 }
