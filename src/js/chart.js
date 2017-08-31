@@ -4,7 +4,8 @@ d3.scale = require('d3-scale');
 d3.selection = require('d3-selection');
 d3.time = require('d3-time-format');
 
-var Chart = function(dataObj, width, height, margin) {
+var Chart = function(storyline, dataObj, width, height, margin) {
+    this.storyline = storyline;
     var AXIS_HEIGHT = 25;
     this.data = dataObj.data;
     this.bounds = dataObj.bounds;
@@ -185,7 +186,7 @@ Chart.prototype = {
       this.markers[data.currentActiveCard].children[0].classList.add('is-animating')
       clearTimeout(time)
       var time = setTimeout(function() {
-        storyline.chart.markers[data.currentActiveCard].children[0].classList.remove('is-animating')
+        this.storyline.chart.markers[data.currentActiveCard].children[0].classList.remove('is-animating')
       }, 700);
     }.bind(this))
     PubSub.subscribe('card move in progress', function(topic, data) {
