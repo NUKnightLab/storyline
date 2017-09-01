@@ -59,6 +59,8 @@ Storyline.prototype = {
           self.dataConfig[thing][con] = self.dataConfig[thing][con].replace(/%25/g, "%")
         } else if(config[thing][con].indexOf('%20') > -1){
           self.dataConfig[thing][con] = self.dataConfig[thing][con].replace(/%20/g, " ")
+        } else if(config[thing][con].indexOf('"') > -1){
+          self.dataConfig[thing][con] = self.dataConfig[thing][con].replace(/"/g, "")
         }
       })
     })

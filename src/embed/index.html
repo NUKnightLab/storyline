@@ -60,6 +60,7 @@
   }
 
   var url = window.location.href
+  url = url.replace(/&amp;/g, '&');
   var params = url.split('?')[1].split('&')
   params.map(function(param) {
     var value = param.split('=')
