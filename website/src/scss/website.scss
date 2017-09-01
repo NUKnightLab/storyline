@@ -11,3 +11,12 @@ p.error-message  {
   font-size: 80%;
   line-height: 1.2944 !important;
 }
+
+label.required::after {
+  content: "*";
+  font-size: smaller;
+  color: red;
+  position: relative;
+  top: -0.3em;
+  white-space: nowrap;
+}

@@ -188,6 +188,7 @@
                     <div class="step-details column-10">
                         <p>Copy/paste spreadsheet URL into the box below to generate your storyline.
                         <em>(Make sure you've published the spreadsheet.)</em></p>
+                        <p class="small">Just want to give it a try? <a id="prefill-spreadsheet-url" data-url="https://docs.google.com/spreadsheets/d/1Io856DYJmMrZrYgVAfxPdHRnTBrLlmGjJUKWbttp7Zs/pubhtml">Click to use our demo file.</a></p>
                         <form id="configure-form">
                             <div id="spreadsheet_url_wrapper" class="input-group-label">
                                 <label class="input-group-addon" for="spreadsheet_url">Google Spreadsheet URL</label>
@@ -202,7 +203,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav x-column">
-                                            <label for="datetime_column_name">Select date/time column</label>
+                                          <label class="required" for="datetime_column_name">Which column has date/time information?</label>
                                             <select class="column-selector required" name="datetime_column_name" id="datetime_column_name">
                                                 <option value=""> -- select -- </option>
                                             </select>
@@ -210,7 +211,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav datetime-format-column">
-                                            <label for="datetime_format">How are your dates formatted?</label>
+                                          <label class="required" for="datetime_format">How are your dates formatted?</label>
                                             <select class="required" name="datetime_format" id="datetime_format">
                                                 <!-- Can we use actual dates/times from the spreadsheet here (makes it less abstract) -->
                                                 <option value=""> -- select -- </option>
@@ -230,7 +231,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav y-column">
-                                            <label for="data_column_name">Select data column</label>
+                                          <label class="required" for="data_column_name">Which column has your data?</label>
                                             <select class="column-selector required" name="data_column_name" id="data_column_name">
                                                 <option value=""> -- select -- </option>
                                             </select>
@@ -239,7 +240,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav data_axis_label">
-                                            <label for="data_axis_label">Data axis label</label>
+                                          <label class="required" for="data_axis_label">How should your data be labeled? (y-axis)</label>
                                             <input type="text" id="data_axis_label" name="data_axis_label" value="">
                                         </div>
 
@@ -251,7 +252,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav cards-title-column">
-                                            <label for="title">Which column has the card titles?</label>
+                                          <label class="required" for="title">Which column has the card titles?</label>
                                             <select class="column-selector required" name="title" id="title">
                                                 <option value=""> -- select -- </option>
                                             </select>
@@ -259,7 +260,7 @@
                                     </div>
                                     <div class="column-4">
                                         <div class="flyout data-nav cards-text-column">
-                                            <label for="text">Which column has the card text?</label>
+                                          <label class="required" for="text">Which column has the card text?</label>
                                             <select class="column-selector required" name="text" id="text">
                                                 <option value=""> -- select -- </option>
                                             </select>
@@ -272,7 +273,7 @@
                                     </div>
                                     <div class="column-4">
                                       <div class="flyout data-nav card_date_format">
-                                          <label for="card_date_format">Card date format</label>
+                                        <label for="card_date_format">How should the date look in your story?</label>
                                           <select name="card_date_format" id="card_date_format">
                                               <!-- Can we use actual dates/times from the spreadsheet here (makes it less abstract) -->
                                               <option value=""> -- same as spreadsheet -- </option>
@@ -287,9 +288,7 @@
                                       </div>
                                     </div>
                                     <div class="column-4">
-                                        <p class="small">How should the date look in your story?
-                                        </p>
-                                        <p class="small">At this time, only English language month names are supported.</p>
+                                      <p class="small note">At this time, only English language month names are supported.</p>
                                     </div>
                                 </div>
                                 <div id='config-wrapper-message' class="grid">

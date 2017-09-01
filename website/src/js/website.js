@@ -174,7 +174,7 @@ function validateRequiredInput(el) {
     // TODO: ensure unique?
     valid = true;
   } else {
-    showInputError(el, 'required');
+    // showInputError(el, 'required');
     valid = false;
   }
   return valid;
@@ -281,7 +281,7 @@ function handleGenerateButtonClick() {
     var textarea = document.getElementById('embed-code-textarea');
     textarea.value = document.getElementById('preview-embed-iframe').innerHTML.trim();
   } else {
-    msg_el.append(createErrorParagraph("Please correct the errors on the form before submitting"));
+    msg_el.append(createErrorParagraph("Please fill in all required fields."));
   }
 }
 
@@ -303,6 +303,13 @@ document.addEventListener('DOMContentLoaded',function() {
   document.getElementById('data_axis_label').addEventListener('change', validateConfigForm);
 
   document.getElementById('generate-storyline-btn').addEventListener('click', handleGenerateButtonClick);
+
+  document.getElementById('prefill-spreadsheet-url').addEventListener('click', function() {
+    var url = this.dataset.url;
+    var field = document.getElementById('spreadsheet_url');
+    field.value = url;
+    processSpreadsheetURL();
+  })
 
 })
 
