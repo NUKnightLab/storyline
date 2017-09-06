@@ -2,7 +2,9 @@ const prompt = require('prompt'),
       simpleGit = require('simple-git'),
       fse = require('fs-extra'),
       path = require('path'),
-      AdmZip = require('adm-zip');
+      AdmZip = require('adm-zip'),
+      writeBanner = require('write-banner'), // note needs override of 'add-banner' dependency to git repo version
+      glob = require('glob');
 
 const CDN_ROOT = '../cdn.knightlab.com', // maybe parameterize later
       PROJECT_NAME = 'storyline'; // can we read this from package.json?
@@ -12,6 +14,16 @@ function makeCDNPath(version) {
 }
 
 function stageToCDN(version, latest) {
+  var banner_version = (version == 'dev') ? new Date().toISOString() : version;
+
+  var to_banner = glob.sync('dist/**/*.+(js|css)');
+  for (var i = 0; i < to_banner.length; i++) {
+    writeBanner(to_banner[i], {
+      banner: 'banner.tmpl',
+      version: banner_version,
+    })
+  }
+
   if (fse.existsSync(CDN_ROOT)) {
     var dest = makeCDNPath(version);
     var zip = new AdmZip();
@@ -35,7 +47,7 @@ function stageToCDN(version, latest) {
 if (process.argv[2] == 'dev') {
     stageToCDN('dev')
 } else {
-
+  // if not 'dev' then ask for a new tag, update package.json, and tag the git repository
   simpleGit().tags(function(_,tagList) {
     if (tagList.latest) {
       console.log("The last tag used was " + tagList.latest);
@@ -58,17 +70,21 @@ if (process.argv[2] == 'dev') {
 
     prompt.get(properties, function (err, result) {
       if (err) { return onErr(err); }
-      simpleGit().addTag(result.version, function() {
-        simpleGit().pushTags('origin', function() {
-          console.log('  Tagged with: ' + result.version);
-          var latest = ("latest" == process.argv[2]); // maybe later use a CLI arg parser
-          stageToCDN(result.version, latest);
-        })
-      });
-    });
 
+      var package_json = require('./package.json');
+      package_json.version = result.version;
+      fse.writeJsonSync('./package.json', package_json);
+      simpleGit.commit(`Update to ${result.version}`, ['package.json'])
+               .addTag(result.version)
+               .pushTags('origin', function() {
+                 console.log('  Tagged with: ' + result.version);
+                 var latest = ("latest" == process.argv[2]); // maybe later use a CLI arg parser
+                 stageToCDN(result.version, latest);
+               });
+    })
   })
 }
+
 function onErr(err) {
   console.log(err);
   return 1;
