@@ -36,7 +36,6 @@ Slider.prototype = {
     this.cardsElem = this.renderTemplate('slider-cards-template', this)
     this.navElem = this.renderTemplate('nav-template', this)
     this.elem = this.createSliderView();
-    this.storyline.attachClickHandler(this.navElem.children[0].children, 'nav');
   },
   /**
    * creates the slider view and appends slides to it
