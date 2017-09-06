@@ -6,17 +6,18 @@ var lib = (function() {
    * @returns {undefined}
   */
   function onResize() {
-    var currentWidth = window.innerWidth
+    var currentWidth = document.body.clientWidth
     if(prevWidth == undefined) {
       prevWidth = currentWidth;
     }
     else {
       PubSub.publish('window resized', currentWidth)
+      prevWidth = currentWidth
     }
   }
 
   function onLoad() {
-    prevWidth = window.innerWidth;
+    prevWidth = document.body.clientWidth;
   }
 
   function errorLog(context) {
