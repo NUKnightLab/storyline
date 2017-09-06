@@ -2,6 +2,10 @@
   display: none;
 }
 
+#demo-mode-message {
+  display: none;
+}
+
 select.error-message,.error-message select, .error-message input, .error-message label {
   border-color:red;
 }
