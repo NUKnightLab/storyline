@@ -33,6 +33,7 @@ function removeClass(el, className) {
   }
 }
 
+
 function clearURLError() {
   var el = document.getElementById('spreadsheet_url_wrapper');
   removeClass(el, 'error-message');
@@ -50,7 +51,7 @@ function showURLError(msg) {
   var el = document.getElementById('spreadsheet_url_wrapper');
   addClass(el, 'error-message');
   el.appendChild(createErrorParagraph(msg));
-  document.getElementById('storyline-config').display = 'block';
+  document.getElementById('storyline-config').style.display = 'block';
 }
 
 function clearInputError(el) {
@@ -151,6 +152,16 @@ function setCSSProperty(selector, property, value) {
   }
 }
 
+function usingDemoURL() {
+  var prefill = document.getElementById('prefill-spreadsheet-url');
+  var url_elem = document.getElementById('spreadsheet_url');
+  return (url_elem.value.trim() == prefill.dataset.url);
+}
+
+function setDemoModeMessageVisibility(style) {
+  document.getElementById('demo-mode-message').style.display = style;
+}
+
 function populateMenusAndShowForm(feed_response_str) {
   var spreadsheet_json = JSON.parse(feed_response_str);
   var columns = extractColumnHeaders(spreadsheet_json);
@@ -159,6 +170,15 @@ function populateMenusAndShowForm(feed_response_str) {
   var selects = config_area.querySelectorAll('select.column-selector');
   for (var i = 0; i < selects.length; i++) {
     addSelectOptions(selects[i], columns);
+  }
+
+  if (usingDemoURL()) {
+    // yaxis label
+    document.getElementById('data_column_name').value = 'temperaturechange';
+    document.getElementById('datetime_column_name').value = 'year';
+    document.getElementById('datetime_format').value = '%Y';
+    document.getElementById('data_axis_label').value = 'Annual Temp. Change';
+    setDemoModeMessageVisibility('block');
   }
 
   enableLoadButton();
@@ -246,6 +266,7 @@ function fetchSpreadsheetURL() {
 
 function processSpreadsheetURL() {
   clearURLError();
+  setDemoModeMessageVisibility('none');
   setCSSProperty('.hide-without-data', 'display', 'none');
   disableLoadButton();
   fetchSpreadsheetURL();
