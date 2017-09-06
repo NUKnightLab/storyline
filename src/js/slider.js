@@ -95,6 +95,9 @@ Slider.prototype = {
     }
   },
   setActiveCard: function(pastActiveCard, currentActiveCard) {
+    if(pastActiveCard <= -1 || currentActiveCard >= this.cards.length) {
+      return
+    }
     PubSub.publish('card moved', {
       pastActiveCard: pastActiveCard,
       currentActiveCard: currentActiveCard,
@@ -234,7 +237,9 @@ Slider.prototype = {
             var leftWithCard = left + self.cardWidth
             if(leftWithCard <= (self.width* 0.5) || left >= (self.width* 0.5)) {
               self.setActiveCard(self.activeCard, self.activeCard+direction)
+              return;
             }
+            return
           }
           break;
         case 'panend':
@@ -245,8 +250,8 @@ Slider.prototype = {
     }
 
     var inBounds = function(percentage) {
-      var notTooFarRight = percentage < self.offsets[0] + 10,
-          notTooFarLeft = percentage > self.offsets[self.offsets.length - 1] - 10;
+      var notTooFarRight = percentage < self.offsets[0] + self.offsetDiff,
+          notTooFarLeft = percentage > self.offsets[self.offsets.length - 1] - self.offsetDiff;
 
       return notTooFarRight && notTooFarLeft;
     }
