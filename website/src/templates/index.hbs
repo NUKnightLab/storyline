@@ -29,7 +29,7 @@
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Storyline" />
         <meta property="og:description" content="Tell the story behind the numbers." />
-        <meta property="og:image" content="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-timeline.png" />
+        <meta property="og:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
         <meta property="og:url" content="https://storyline.knightlab.com" />
         <meta property="og:site_name" content="Storyline JS" />
         <!-- /Open Graph -->
@@ -37,7 +37,7 @@
         <!-- Twitter Card -->
         <meta name="twitter:title" content="Storyline" />
         <meta name="twitter:description" content="Tell the story behind the numbers." />
-        <meta name="twitter:image" content="https://cdn.knightlab.com/libs/orangeline/latest/assets/screenshot-timeline.png" />
+        <meta name="twitter:image" content="https://storyline.knightlab.com/screenshot-storyline.png" />
         <meta name="twitter:site" content="@knightlab" />
         <meta name="twitter:creator" content="@knightlab" />
         <!-- /Twitter Card -->
@@ -108,7 +108,7 @@
             		<div class="grid-item">
 
             			<p>
-                            <strong>Storyline is an open-source tool that enables anyone to build an annotated, interactive line chart.</strong> 
+                            <strong>Storyline is an open-source tool that enables anyone to build an annotated, interactive line chart.</strong>
                             To make Storyline as flexible as possible, we've just included the chart, axis labels, and cards. Headlines, context, more specifics on the data sources and credits--we expect you'll include what you want outside of Storyline. We built the chart up top using <a href="https://fred.stlouisfed.org/series/MEHOINUSA672N" target="_blank">Real Median Household Income data from FRED</a>.
                         </p>
             		</div>
@@ -245,13 +245,14 @@
                         <button id="load-btn" class="button button-secondary" style="margin-top:.9rem;min-width:120px;">Load</button>
                     </div>
 										<div id="spreadsheet_url_message"></div>
-                    <p class="small text-color-grey--dark">Just want to give it a try? <a id="prefill-spreadsheet-url" data-url="https://docs.google.com/spreadsheets/d/1Io856DYJmMrZrYgVAfxPdHRnTBrLlmGjJUKWbttp7Zs/pubhtml">Click to use our demo file.</a></p>
+                    <p class="small text-color-grey--dark" ><em>Just want to give it a try? <a id="prefill-spreadsheet-url" data-url="https://docs.google.com/spreadsheets/d/1Io856DYJmMrZrYgVAfxPdHRnTBrLlmGjJUKWbttp7Zs/pubhtml">Click to use our demo file.</a></em></p>
 
                     <div id="storyline-config" class=" hide-without-data">
-                    	<h5>Tell us more about how your spreadsheet is formatted.</h5>
-                    	<p id="demo-mode-message" class="text-color-primary">
+                        <p id="demo-mode-message" class="small text-color-primary">
                             <em>We went ahead and filled in the form for you. Now just click 'Create Storyline'.</em>
                     	</p>
+                    	<h5>Tell us more about how your spreadsheet is formatted.</h5>
+
 
                     	<div class="grid grid-left">
                     		<div class="column-4" style="text-align:right;">
@@ -372,29 +373,34 @@
 
                     <div class="column-8">
                         <div id="preview-embed-iframe" class="product-demo" style="background:white;margin:0;border-radius: 8px;">
-                            <iframe src="" width="100%" height="650" frameborder="0" marginwidth="0" marginheight="0"  vspace="0" hspace="0"></iframe>
+                            <iframe src="" style="width:100%;height:650px;" frameborder="0" marginwidth="0" marginheight="0"  vspace="0" hspace="0"></iframe>
                         </div>
                     </div>
 
                     <div class="column-4">
-                        <p>
-                            Grab the embed code and paste it on your site where you want your storyline to appear <em>(just like a YouTube video)</em>.
-                        </p>
-                        <form>
-                            <textarea rows="6" id="embed-code-textarea" readonly="readonly" value="">
-                            </textarea>
-                        </form>
+                        <figure>
+                            <h6>Embed</h6>
+                            <form>
+                                <textarea id="embed-code-textarea" readonly="readonly" value="">
+                                </textarea>
+                            </form>
+                            <figcaption>
+                                Grab the embed code and paste it on your site where you want your storyline to appear <em>(just like a YouTube video)</em>.
+                            </figcaption>
+                        </figure>
+                        <figure>
+                            <h6>Link</h6>
+                            <form>
+                                <textarea rows="2" id="direct-link-textarea" readonly="readonly" value="">
+                                </textarea>
+                            </form>
+                            <figcaption>
+                                Use this to share a direct link to your storyline.
+                            </figcaption>
+                        </figure>
 
-												<p>
-                            Use this to share a direct link to your storyline.
-                        </p>
-                        <form>
-                            <textarea rows="1" id="direct-link-textarea" readonly="readonly" value="">
-                            </textarea>
-                        </form>
 
-
-                        <p class="small">Something not quite right? Just edit the form above and click <em>"create storyline"</em> again.</p>
+                        <p class="small"><em>Something not quite right? Just edit the form above and click <em>"Create Storyline"</em> again.</em></p>
                     </div>
 
                 </div>
