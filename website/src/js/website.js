@@ -34,12 +34,6 @@ function removeClass(el, className) {
 }
 
 
-function clearURLError() {
-  var el = document.getElementById('spreadsheet_url_wrapper');
-  removeClass(el, 'error-message');
-  pruneChildren(el, 'p.error-message');
-}
-
 function createErrorParagraph(msg) {
   var err = document.createElement('p');
   err.textContent = msg;
@@ -47,11 +41,19 @@ function createErrorParagraph(msg) {
   return err;
 }
 
+function clearURLError() {
+  var el = document.getElementById('spreadsheet_url_wrapper');
+  removeClass(el, 'error-message');
+  pruneChildren(el, 'p.error-message');
+  el = document.getElementById('spreadsheet_url_message')
+  pruneChildren(el, 'p.error-message');
+}
+
 function showURLError(msg) {
   var el = document.getElementById('spreadsheet_url_wrapper');
   addClass(el, 'error-message');
+  el = document.getElementById('spreadsheet_url_message')
   el.appendChild(createErrorParagraph(msg));
-  document.getElementById('storyline-config').style.display = 'block';
 }
 
 function clearInputError(el) {
@@ -152,14 +154,18 @@ function setCSSProperty(selector, property, value) {
   }
 }
 
+function setFormValue(selector, value) {
+  var elements = document.querySelectorAll(selector);
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].value = value
+  }
+}
+
+
 function usingDemoURL() {
   var prefill = document.getElementById('prefill-spreadsheet-url');
   var url_elem = document.getElementById('spreadsheet_url');
   return (url_elem.value.trim() == prefill.dataset.url);
-}
-
-function setDemoModeMessageVisibility(style) {
-  document.getElementById('demo-mode-message').style.display = style;
 }
 
 function populateMenusAndShowForm(feed_response_str) {
@@ -174,15 +180,17 @@ function populateMenusAndShowForm(feed_response_str) {
 
   if (usingDemoURL()) {
     // yaxis label
-    document.getElementById('data_column_name').value = 'temperaturechange';
-    document.getElementById('datetime_column_name').value = 'year';
-    document.getElementById('datetime_format').value = '%Y';
-    document.getElementById('data_axis_label').value = 'Annual Temp. Change';
-    setDemoModeMessageVisibility('block');
+
+    setFormValue('#data_column_name','temperaturechange');
+    setFormValue('#datetime_column_name','year');
+    setFormValue('#datetime_format','%Y');
+    setFormValue('#data_axis_label','Annual Temp. Change');
+    setCSSProperty('#demo-mode-message', 'display', 'block');
   }
 
   enableLoadButton();
-  setCSSProperty('.hide-without-data', 'display', 'block');
+  removeClass(document.querySelector('#storyline-config'), 'hide-without-data');
+  removeClass(document.querySelector('#create-button-wrapper'), 'hide-without-data');
   validateConfigForm();
   fetch_promise = null;
 }
@@ -249,7 +257,7 @@ function buildGoogleFeedURL(url) {
 
 function fetchSpreadsheetURL() {
   if (fetch_promise) {
-    showURLError("Already working on it cool yr jets");
+    console.log('Already fetching.')
     return;
   }
   var url = document.getElementById('spreadsheet_url').value;
@@ -266,8 +274,10 @@ function fetchSpreadsheetURL() {
 
 function processSpreadsheetURL() {
   clearURLError();
-  setDemoModeMessageVisibility('none');
-  setCSSProperty('.hide-without-data', 'display', 'none');
+  setCSSProperty('#demo-mode-message', 'display', 'none');
+  setCSSProperty('#preview-embed', 'display', 'none');
+  addClass(document.querySelector('#storyline-config'), 'hide-without-data');
+  addClass(document.querySelector('#create-button-wrapper'), 'hide-without-data');
   disableLoadButton();
   fetchSpreadsheetURL();
 }
@@ -288,7 +298,6 @@ function buildStorylineUrl() {
   Object.keys(paramMap).map(function(key) {
     var value = paramMap[key];
     params.push(`${key}=${encodeURIComponent(value)}`);
-    smoothScroll(document.getElementById('make-step-share'));
   });
   return `${EMBED_URL}?${params.join('&')}`;
 }
@@ -299,8 +308,12 @@ function handleGenerateButtonClick() {
   if (validateConfigForm()) {
     var embed_url = buildStorylineUrl();
     document.querySelector('#preview-embed-iframe iframe').src = embed_url;
-    var textarea = document.getElementById('embed-code-textarea');
-    textarea.value = document.getElementById('preview-embed-iframe').innerHTML.trim();
+
+    setFormValue('#embed-code-textarea', document.getElementById('preview-embed-iframe').innerHTML.trim());
+    setFormValue('#direct-link-textarea', embed_url);
+
+    setCSSProperty('#preview-embed', 'display', 'block');
+    smoothScroll(document.getElementById('preview-embed'));
   } else {
     msg_el.append(createErrorParagraph("Please fill in all required fields."));
   }
@@ -327,11 +340,11 @@ document.addEventListener('DOMContentLoaded',function() {
 
   document.getElementById('prefill-spreadsheet-url').addEventListener('click', function() {
     var url = this.dataset.url;
-    var field = document.getElementById('spreadsheet_url');
-    field.value = url;
+    setFormValue('#spreadsheet_url', url);
     processSpreadsheetURL();
   })
 
+  document.querySelectorAll('textarea[readonly]').forEach(function(el) { el.addEventListener('click', function() { this.select(); })})
 })
 
 module.exports = {
