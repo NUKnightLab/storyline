@@ -81,7 +81,7 @@ describe('DataJS', () => {
     let dataInput, config, instance, results;
     beforeEach(() => {
       dataInput = [
-        {'date': '01/31/80', 'us unemployment rate': 1, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
+        {'date': '01/31/80', 'us unemployment rate': 0, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
         {'date': '02/29/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
         {'date': '03/31/80', 'us unemployment rate': 2, 'title': { $t: 'title'}, 'text': { $t: 'text'}},
         {'date': '04/30/80', 'us unemployment rate': 3, 'title': { $t: 'title'}, 'text': { $t: 'text'}}
@@ -165,7 +165,7 @@ describe('DataJS', () => {
       }
       expect(function() { dataFactoryInstance.createDataObj(dataInput, config) }).to.throw();
     })
-    it('returns an error message when date column_name is incorrect', () => {
+    it('throws an error message when date column_name is incorrect', () => {
       config = {
         "data": {
           "data_column_name": "us unemployment rate",
