@@ -250,8 +250,9 @@ Slider.prototype = {
     }
 
     var inBounds = function(percentage) {
-      var notTooFarRight = percentage < self.offsets[0] + self.offsetDiff,
-          notTooFarLeft = percentage > self.offsets[self.offsets.length - 1] - self.offsetDiff;
+      var offsetBound = Math.abs(self.offsets[1] - self.offsets[0])/2
+      var notTooFarRight = percentage < self.offsets[0] + offsetBound,
+          notTooFarLeft = percentage > self.offsets[self.offsets.length - 1] - offsetBound;
 
       return notTooFarRight && notTooFarLeft;
     }
