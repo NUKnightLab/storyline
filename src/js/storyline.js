@@ -134,7 +134,7 @@ Storyline.prototype = {
     } else {
     const template =
       "<div class='error'>" +
-        "<span class='error-message'>{{ msg }}</span>" +
+        "<div class='error-message'>{{ msg }}</div>" +
       "</div>"
     var rendered = mustache.render(template, {msg: msg}),
         parser = new DOMParser(),
