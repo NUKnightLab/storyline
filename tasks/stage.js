@@ -71,10 +71,10 @@ if (process.argv[2] == 'dev') {
     prompt.get(properties, function (err, result) {
       if (err) { return onErr(err); }
 
-      var package_json = require('./package.json');
+      var package_json = require('../package.json');
       package_json.version = result.version;
-      fse.writeJsonSync('./package.json', package_json);
-      simpleGit.commit(`Update to ${result.version}`, ['package.json'])
+      fse.writeJsonSync('package.json', package_json);
+      simpleGit().commit(`Update to ${result.version}`, ['package.json'])
                .addTag(result.version)
                .pushTags('origin', function() {
                  console.log('  Tagged with: ' + result.version);
