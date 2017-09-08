@@ -463,6 +463,22 @@
 														The only exception is with the configuration question <em>How should the date look in your story?</em> One choice includes the month name, and for now, those month names are only available in English.
                         </div>
                     </li>
+										<li>
+                        <input type="checkbox" checked>
+                        <i></i>
+                        <h3>Why am I getting a message that says "The date/time column is invalid"?</h3>
+                        <div class="accordion-content">
+                            This message comes up when StorylineJS can't find the dates in your data. Check these things:
+														<ol>
+															<li>Did you select the correct column?</li>
+															<li>Did you specify the date format correctly?</li>
+														</ol>
+														<p>In some cases, it will look to you like you specified the date format correctly, but Google will actually send the date to use in a different format than what you see on your screen. If the end of the error message you see looks like this: <code>[date string: Tue Jul 06 1971 00:00:00 GMT-0500 (CDT) format %m/%d/%Y]</code> then that's what's happening.</p>
+														<p>To fix this, highlight your whole date column. Then, from the <strong>Format</strong> menu, choose <strong>Number > Plain text</strong>.
+															It may take a little while for the change to work. Clearing your browser cache or switching to a "private" or "incognito" browser window should help. 
+														</p>
+                        </div>
+                    </li>
             </ul>
         </div>
     </div>
