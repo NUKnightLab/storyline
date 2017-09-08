@@ -1,19 +1,15 @@
 .error {
-  width: 50em;
-  left: 25%;
-  top: 40%;
   padding: 10px;
   font-family: $fontFamily-sansSerif;
   font-weight: bold;
   font-size: $font-size-base + 2;
   line-height: $font-line-height;
-  position: absolute;
   color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .error-message {
-  position: absolute;
   text-align: center;
-  width: 100%;
-  bottom: 0;
 }
