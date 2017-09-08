@@ -1,6 +1,6 @@
 {
   "name": "storyline",
-  "version": "0.1.6",
+  "version": "1.0.0",
   "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
   "main": "index.js",
   "repository": {
