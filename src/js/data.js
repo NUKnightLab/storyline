@@ -78,7 +78,7 @@ DataFactory.prototype = {
       y = typeof y === typeof {} ? parseFloat(Object.values(y)[0]) : parseFloat(y);
       //check if x or y is undefined or null
 
-      if(!x || !y) {
+      if(x === undefined || y === undefined) {
         var errorMessage = "";
         // TODO: if both are wrong, report both instead of overriding one error with the other.
         errorMessage = isNaN(parseInt(x))
