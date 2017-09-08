@@ -119,8 +119,8 @@ Slider.prototype = {
    * @returns {undefined}
    */
   setCardWidth: function(w) {
-    if(w <= 480) {
-      w = w - (this.MARGIN*2)
+    if(w <= 600) {
+      w = w * .75;
     } else {
       w = 500;
     }
