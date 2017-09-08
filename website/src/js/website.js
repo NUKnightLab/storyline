@@ -161,6 +161,11 @@ function setFormValue(selector, value) {
   }
 }
 
+function getFormValue(selector) {
+  return document.querySelector(selector).value;
+}
+
+
 
 function usingDemoURL() {
   var prefill = document.getElementById('prefill-spreadsheet-url');
@@ -260,7 +265,11 @@ function fetchSpreadsheetURL() {
     console.log('Already fetching.')
     return;
   }
-  var url = document.getElementById('spreadsheet_url').value;
+  var url = getFormValue('#spreadsheet_url');
+  if (url.match(new RegExp('/spreadsheets/d/e/'))) {
+    showURLError("Invalid Google Spreadsheet URL. Be sure to copy the URL from your browser address bar, not the 'publish to the web' window.");
+    return;
+  }
   var feed_url = buildGoogleFeedURL(url);
   if (feed_url) {
     fetch_promise = get(feed_url).then(populateMenusAndShowForm,function error(reason) {
@@ -277,22 +286,29 @@ function processSpreadsheetURL() {
   setCSSProperty('#demo-mode-message', 'display', 'none');
   setCSSProperty('#preview-embed', 'display', 'none');
   addClass(document.querySelector('#storyline-config'), 'hide-without-data');
+  clearConfigForm();
   addClass(document.querySelector('#create-button-wrapper'), 'hide-without-data');
   disableLoadButton();
   fetchSpreadsheetURL();
 }
 
+function clearConfigForm() {
+  var form_field_ids = ['#datetime_format', '#data_axis_label', '#card_date_format', '#datetime_format',
+                        '#data_column_name', '#datetime_column_name'];
+  form_field_ids.forEach(function(fid) { setFormValue(fid, '')});
+}
+
 function buildStorylineUrl() {
   var paramMap = {
-      dataURL: document.getElementById('spreadsheet_url').value,
-      dataYCol:  document.getElementById('data_column_name').value,
-      dataXCol: document.getElementById('datetime_column_name').value,
-      dataDateFormat: document.getElementById('datetime_format').value,
-      chartDateFormat: document.getElementById('card_date_format').value || document.getElementById('datetime_format').value,
-      chartYLabel: document.getElementById('data_axis_label').value,
+      dataURL: getFormValue('#spreadsheet_url'),
+      dataYCol:  getFormValue('#data_column_name'),
+      dataXCol: getFormValue('#datetime_column_name'),
+      dataDateFormat: getFormValue('#datetime_format'),
+      chartDateFormat: getFormValue('#card_date_format') || getFormValue('#datetime_format'),
+      chartYLabel: getFormValue('#data_axis_label'),
       // sliderStartCard: "start_at_card",
-      sliderCardTitleCol: document.getElementById('title').value,
-      sliderCardTextCol: document.getElementById('text').value
+      sliderCardTitleCol: getFormValue('#title'),
+      sliderCardTextCol: getFormValue('#text')
   }
   var params = []
   Object.keys(paramMap).map(function(key) {
@@ -342,6 +358,12 @@ document.addEventListener('DOMContentLoaded',function() {
     var url = this.dataset.url;
     setFormValue('#spreadsheet_url', url);
     processSpreadsheetURL();
+  })
+
+  document.getElementById('data_column_name').addEventListener('change', function() {
+    if (getFormValue('#data_axis_label').trim() == '') {
+      setFormValue('#data_axis_label', getFormValue('#data_column_name'));
+    }
   })
 
   document.querySelectorAll('textarea[readonly]').forEach(function(el) { el.addEventListener('click', function() { this.select(); })})
