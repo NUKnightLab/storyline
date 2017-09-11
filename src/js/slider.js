@@ -141,10 +141,10 @@ Slider.prototype = {
     var d3Time = require('d3-time-format');
 
     if(!this.config.chart.datetime_format) {
-      card.displayDate
+      card["displayDate"] = card.date
     } else {
       var formatter = d3Time.timeFormat(this.config.chart.datetime_format);
-      card.displayDate = formatter(card.displayDate)
+      card["displayDate"] = formatter(card.date)
     }
   },
   goToCard: function(number) {

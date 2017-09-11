@@ -95,10 +95,10 @@ DataFactory.prototype = {
       axes.yLabel = config.chart.y_axis_label ? config.chart.y_axis_label : config.data.data_column_name;
 
       if(slideTitle.length > 0 && slideText.length > 0) {
-        var displayDate = x
+        var date = x
         var rowNumber = i
-        cards.push({displayDate, slideTitle, slideText, rowNumber})
-        markers.push({rowNumber, displayDate, slideTitle, slideText})
+        cards.push({date, slideTitle, slideText, rowNumber})
+        markers.push({rowNumber, date, slideTitle, slideText})
       }
     }
 
