@@ -1,43 +1,13 @@
-StorylineJS is a prototype tool to make it easy to tell the story behind time-series data.
-
-In its initial form, StorylineJS has some limitations--we're sharing this for testing and feedback. If you're a fan of our more finished, ready-to-use software, please be patient while we work through the next phase.
-
-Limitations:
-* StorylineJS works only with time series data. The x-axis should be string values parseable as dates. The y-axis can be any number.
-* For now, StorylineJS needs to read the data from a CSV file that it can load from a URL. We expect eventually to also support Google Sheets, and possibly other structured sources.
-* This means that for now, you need to run a local web server to experiment with StorylineJS.
+StorylineJS is a tool to make it easy to tell the story behind time-series data.
 
 ROADMAP
 -------
-In our current cycle (ending March 2017), we're aiming for a prototype that can be tested in a browser with a variety of datasets. We want to find edge cases that test the design concepts developed by students in the Fall 2016 Knight Lab Studio, and to identify any hard challenges in presentation.
-
-If this prototype proves promising, we'll consider developing an authoring tool to make it easier for people to create embeddable Storylines.
-
+As of September, 2017, StorylineJS is considered ready for general use. We don't have an active roadmap for further development at this time. However, we'd love to hear from you about what works and what could be better. In general, the best way to reach us is through our [online support system](https://knightlab.zendesk.com/hc/en-us).
 
 # Trying it out
-In this stage of StorylineJS's development, you must write your own configuration file (JSON), and you must run a local webserver to preview your work. Read on for more info.
+The easiest way to use StorylineJS is by creating embeds using the authoring tool at https://storyline.knightlab.com  Hopefully you can just copy the embed code into your CMS and publish a storyline that easily. More instructions on actually using the tool are on that page.
 
-## Running a local webserver
-
-This is the first potential barrier for beginners. If you don't clear this hurdle, it may be too early for you to do much with StorylineJS. Typically we use node's `http-server` or python's `python -m SimpleHTTPServer` or `python3 -m http.server`. Or you could try [MAMP](https://www.mamp.info/en/downloads/).
-
-## The simplest test
-
-
-Much like our other tools, you instantiate a Storyline with two arguments: the ID of a DOM element, which will contain the rendered storyline, and a configuration object which provides the details. If you prefer, you can use a URL in place of the configuration object. The URL should point to a JSON file, which will be retrieved. Details on the Config object/JSON file format are below.
-
-Here is the simplest possible Storyline you could create. Put this in an HTML file, run a local server, and load it. You should see a simple example based on a config file and data set that are on our servers.
-
-```
-<script src="https://cdn.knightlab.com/libs/storyline/latest/js/storyline.js"></script>
-<link rel="stylesheet" href="https://cdn.knightlab.com/libs/storyline/latest/css/storyline.css">
-
-<div id="my-storyline" height="500"></div>
-<script>
-  var config_url = 'https://cdn.knightlab.com/libs/storyline/latest/assets/example.json';
-  var storyline = new Storyline('my-storyline', config_url);
-</script>
-```
+If you're a more experienced developer, you can also include the StorylineJS and CSS in your web page and write a little javascript to instantiate the storyline and place it on your page. We'll update this page soon with more instructions on how to do that.
 
 ## Roll your own
 
