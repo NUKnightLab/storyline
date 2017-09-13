@@ -62,7 +62,8 @@ DataFactory.prototype = {
         } catch(e) {
           throw new Error("Invalid text column.")
         }
-        slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card].$t : false;
+        slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card].$t :
+          (typeof config.slider.start_at_card === typeof 0) ? config.slider.start_at_card : false;
       } else if (card_lookup[i]) {
         slideTitle = card_lookup[i].title;
         slideText = card_lookup[i].text;
@@ -266,10 +267,10 @@ DataFactory.prototype = {
     for(var key in configSubset) {
       let formattedHeaders = {}
       Object.keys(configSubset[key]).map(function(header) {
-        if(header === 'url' || header === 'datetime_format' || header === 'start_at_card') {
+        if(header === 'url' || header === 'datetime_format' || (header === 'start_at_card' && typeof configSubset[key][header] === typeof 0)) {
           formattedHeaders[header] = configSubset[key][header]
         } else {
-          formattedHeaders[header] = "gsx$" + configSubset[key][header].replace(/\s/g, '').toLowerCase()
+          formattedHeaders[header] = "gsx$" + (configSubset[key][header]).toString().replace(/\s/g, '').toLowerCase()
         }
       })
       config[key] = formattedHeaders
