@@ -61,7 +61,7 @@
     "xhr-stream": "^1.1.0"
   },
   "scripts": {
-    "start": "parallelshell 'webpack --watch' 'npm run watch' 'npm run server'",
+    "start": "parallelshell 'webpack --watch' 'npm run watch'",
     "prestart": "npm run clean && webpack && npm run compile",
     "dist": "webpack -p && npm run compile && npm run sass && node tasks/minify-css.js",
     "clean": "rimraf dist/",
