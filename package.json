@@ -25,12 +25,11 @@
   },
   "devDependencies": {
     "add-banner": "github:jonschlinkert/add-banner#b2a824c466413677264364042bb4c30df0de2ebe",
-    "adm-zip": "^0.4.7",
+    "adm-zip": "~> 0.4.11",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
-    "chokidar": "^1.6.0",
     "cssmin": "^0.4.3",
     "csv-parse": "^1.1.9",
     "d3-axis": "^1.0.5",
