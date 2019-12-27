@@ -23,7 +23,7 @@
   "license": "ISC",
   "devDependencies": {
     "chokidar": "^1.7.0",
-    "handlebars": "^4.0.10",
+    "handlebars": "^4.3.0",
     "http-server": "^0.10.0",
     "lodash": "^4.17.4",
     "ncp": "^2.0.0",
