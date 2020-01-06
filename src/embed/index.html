@@ -65,7 +65,9 @@
   params.map(function(param) {
     var value = param.split('=')
     var configKey = Object.keys(config).indexOf(value[0].split(/(?=[A-Z])/)[0])
-    config[Object.keys(config)[configKey]][mapURLParams[value[0]]] = decodeURIComponent(value[1]);
+    if (configKey != -1 && value[0] in mapURLParams) { // ignore unfamiliar params
+      config[Object.keys(config)[configKey]][mapURLParams[value[0]]] = decodeURIComponent(value[1]);
+    }
   })
 
   window.storyline = new Storyline('storyline', config);
