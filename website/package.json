@@ -1,40 +1,43 @@
 {
-  "name": "storylinejs-website",
-  "version": "1.0.0",
-  "description": "The website describing StorylineJS to the public, and helping them create embeddable storylines.",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NUKnightLab/storyline.git"
-  },
-  "scripts": {
-    "start": "parallelshell 'webpack --watch' 'npm run watch' 'npm run server'",
-    "prestart": "npm run clean && webpack && npm run compile",
-    "dist": "webpack -p && npm run compile && npm run sass",
-    "clean": "rimraf dist/",
-    "watch": "node tasks/watch.js",
-    "server": "parallelshell 'http-server ./dist -c-1' 'http-server ../dist -c-1 -p 9090'",
-    "compile": "npm run copy && npm run sass && npm run templates",
-    "templates": "node tasks/compile-hbs.js",
-    "copy": "mkdir -p dist && ncp src/web/ dist/ --stopOnErr",
-    "sass": "node-sass -o dist/css -q --output-style compact src/scss/"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "chokidar": "^1.7.0",
-    "handlebars": "^4.0.10",
-    "http-server": "^0.10.0",
-    "lodash": "^4.17.4",
-    "ncp": "^2.0.0",
-    "node-sass": "^4.5.3",
-    "parallelshell": "^3.0.1",
-    "rimraf": "^2.6.1",
-    "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.12.0",
-    "yamljs": "^0.3.0"
-  },
-  "dependencies": {
-    "smoothscroll": "^0.3.0"
-  }
+    "name": "storylinejs-website",
+    "version": "1.0.0",
+    "description": "The website describing StorylineJS to the public, and helping them create embeddable storylines.",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/NUKnightLab/storyline.git"
+    },
+    "scripts": {
+        "start": "npm-run-all -p webpack:watch watch server",
+        "webpack:watch": "webpack --mode=development --watch",
+        "prestart": "npm run clean && webpack && npm run compile",
+        "dist": "webpack --mode=production -p && npm run compile && npm run sass",
+        "clean": "rimraf dist/",
+        "watch": "node tasks/watch.js",
+        "server": "npm-run-all -p server:this server:parent",
+        "server:this": "http-server ./dist -c-1",
+        "server:parent": "http-server ../dist -c-1 -p 9090",
+        "compile": "npm run copy && npm run sass && npm run templates",
+        "templates": "node tasks/compile-hbs.js",
+        "copy": "mkdir -p dist && ncp src/web/ dist/ --stopOnErr",
+        "sass": "node-sass -o dist/css -q --output-style compact src/scss/"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "chokidar": "^3.4.2",
+        "handlebars": "^4.7.6",
+        "http-server": "^0.12.3",
+        "lodash": "^4.17.20",
+        "ncp": "^2.0.0",
+        "node-sass": "^4.14.1",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^2.6.1",
+        "watchpack": "^1.7.4",
+        "webpack": "^4.44.1",
+        "yamljs": "^0.3.0"
+    },
+    "dependencies": {
+        "smoothscroll": "^0.3.0"
+    }
 }
