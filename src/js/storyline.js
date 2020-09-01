@@ -11,6 +11,11 @@ import ua from 'universal-analytics'
  * @returns {undefined}
  */
 export class Storyline {
+
+    static fetchCSVHeaders(dataConfig) {
+        return DataFactory.fetchCSVHeaders(dataConfig)
+    }
+
     constructor(targetId, dataConfig) {
         this.elem = document.getElementById(targetId);
         this.elem.className += 'storyline-wrapper'

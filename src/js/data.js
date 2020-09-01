@@ -72,20 +72,30 @@ export class DataFactory {
             }
             var datetime_format = config.data.datetime_format;
             var dateParse = d3Time.timeParse(config.data.datetime_format);
-            var x = dataObj[i][config.data.datetime_column_name]
-            var y = dataObj[i][config.data.data_column_name];
-            x = typeof x === typeof {} ? dateParse(Object.values(x)[0]) : dateParse(x);
-            y = typeof y === typeof {} ? parseFloat(Object.values(y)[0]) : parseFloat(y);
+            var raw_x = dataObj[i][config.data.datetime_column_name]
+            var raw_y = dataObj[i][config.data.data_column_name];
+            var x = typeof raw_x === typeof {} ? dateParse(Object.values(raw_x)[0]) : dateParse(raw_x);
+            var y = typeof raw_y === typeof {} ? parseFloat(Object.values(raw_y)[0]) : parseFloat(raw_y);
             //check if x or y is undefined or null
-            if (x === undefined || y === undefined || isNaN(x) || isNaN(y)) {
-                var errorMessage = "";
-                // TODO: if both are wrong, report both instead of overriding one error with the other.
-                errorMessage = isNaN(parseInt(x)) ?
-                    `The date/time column is invalid, check that the column name matches your data and that your date format is correct. [date string: ${x} format ${datetime_format}]` :
-                    errorMessage
-                errorMessage = isNaN(parseInt(y)) ? "The data column is invalid, check that the column name matches your data" : errorMessage
-                throw new Error(errorMessage);
+            var errorMessages = [];
+            if (!(x instanceof Date)) {
+                raw_x = typeof raw_x === typeof {} ? Object.values(raw_x)[0] : raw_x;
+                errorMessages.push(
+                    `The date/time column is invalid, check that the column name ` +
+                    `matches your data and that your date format is correct. ` +
+                    `[date string: ${raw_x} ; format: ${datetime_format}]`)
             }
+            if (isNaN(parseInt(y))) {
+                var data_column_name = (config.data.data_column_name.indexOf('gsx$') == 0) ?
+                    config.data.data_column_name.substring(4) :
+                    config.data.data_column_name;
+                errorMessages.push(`At least one value in the data column (${data_column_name}) is not a number. check that the column name matches your data`)
+            }
+
+            if (errorMessages.length > 0) {
+                throw new Error(errorMessages.join('; '))
+            }
+
             bounds.minY = this.getMin(y, bounds.minY)
             bounds.maxY = this.getMax(y, bounds.maxY)
             bounds.minX = this.getMin(x, bounds.minX)
