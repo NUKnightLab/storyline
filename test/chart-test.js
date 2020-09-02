@@ -1,7 +1,7 @@
 import { Chart } from'../src/js/chart.js';
 import { expect, assert } from 'chai'
 import sinon from 'sinon'
-import moment from 'moment'
+
 const d3Time = require('d3-time-format');
 
 describe('ChartJS', () => {
