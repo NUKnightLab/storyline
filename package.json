@@ -19,7 +19,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "cssmin": "^0.4.3",
-    "csv-parse": "^1.1.9",
+    "csv-parse": "^4.4.6",
     "d3-axis": "^1.0.5",
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.4",
