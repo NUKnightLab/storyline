@@ -8,6 +8,10 @@ For library builds:
 | `npm run stage_latest` | Same as above, but also copies the same build to the `latest` directory in the CDN.
 | `npm run stage_dev` | Similar to above, but copies the code to the `dev` directory in the CDN for deployment with a staging site.
 
+Also, publish versioned releases to npm:
+
+`npm publish` -- must have permission to publish for `@knight-lab` organization on NPM.
+
 **Note:** none of these actually copy the library to the public `cdn.knightlab.com` - that's a separate step independent of any library.
 
 For website builds. Execute these from the `website` directory (that is, `cd website` first)

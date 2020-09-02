@@ -1,5 +1,5 @@
 {
-  "name": "storyline",
+  "name": "@knight-lab/storyline",
   "version": "1.0.3",
   "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
   "main": "index.js",
@@ -71,29 +71,14 @@
     "stage_dev": "npm run clean && npm run dist && node tasks/stage.js dev"
   },
   "contributors": [
-    {
-      "name": "Divya Sasidharan",
-      "email": "div@northwestern.edu",
-      "url": "https://github.com/shortdiv"
-    },
-    {
-      "name": "Zach Wise",
-      "email": "wise@northwestern.edu",
-      "url": "https://github.com/zachwise"
-    },
-    {
-      "name": "Joe Germuska",
-      "email": "joegermuska@northwestern.edu",
-      "url": "https://github.com/JoeGermuska"
-    },
-    {
-      "name": "Emily Withrow",
-      "email": "e-withrow@northwestern.edu",
-      "url": "https://github.com/emilywithrow"
-    },
-    {
-      "name": "Josh Shi",
-      "url": "https://github.com/thehandsomepanther"
-    }
-  ]
+    "Divya Sasidharan <div@northwestern.edu> (https://github.com/shortdiv)",
+    "Zach Wise <wise@northwestern.edu> (https://github.com/zachwise)",
+    "Joe Germuska <joegermuska@northwestern.edu> (https://github.com/JoeGermuska)",
+    "Emily Withrow <e-withrow@northwestern.edu> (https://github.com/emilywithrow)",
+    "Josh Shi (https://github.com/thehandsomepanther)"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {}
 }
