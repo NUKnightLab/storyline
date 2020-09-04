@@ -1,5 +1,6 @@
 var parse = require('csv-parse/lib/sync');
 import { lib } from './lib'
+const GOOGLE_SHEETS_URL_PATTERN = new RegExp('(https://docs.google.com/spreadsheets/.+/.+?)/.+', 'i')
 
 export class DataFactory {
 
@@ -53,16 +54,16 @@ export class DataFactory {
                 slideActive = false;
             if (!card_lookup) {
                 try {
-                    slideTitle = dataObj[i][config.slider.title_column_name].$t
+                    slideTitle = dataObj[i][config.slider.title_column_name]
                 } catch (e) {
                     throw new Error("Invalid title column.")
                 }
                 try {
-                    slideText = dataObj[i][config.slider.text_column_name].$t
+                    slideText = dataObj[i][config.slider.text_column_name]
                 } catch (e) {
                     throw new Error("Invalid text column.")
                 }
-                slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card].$t : false;
+                slideActive = (dataObj[i][config.slider.start_at_card]) ? dataObj[i][config.slider.start_at_card] : false;
             } else if (card_lookup[i]) {
                 slideTitle = card_lookup[i].title;
                 slideText = card_lookup[i].text;
@@ -86,10 +87,7 @@ export class DataFactory {
                     `[date string: ${raw_x} ; format: ${datetime_format}]`)
             }
             if (isNaN(parseInt(y))) {
-                var data_column_name = (config.data.data_column_name.indexOf('gsx$') == 0) ?
-                    config.data.data_column_name.substring(4) :
-                    config.data.data_column_name;
-                errorMessages.push(`At least one value in the data column (${data_column_name}) is not a number. check that the column name matches your data`)
+                errorMessages.push(`At least one value in the data column (${config.data.data_column_name}) is not a number. check that the column name matches your data`)
             }
 
             if (errorMessages.length > 0) {
@@ -153,20 +151,28 @@ export class DataFactory {
     }
 
     /**
-     * requests contents from a given csv file (@TODO or Google spreadsheet? only Google spreadsheet?)
+     * Return the URL for retrieving data as a CSV based on the values in `config`. If the URL 
+     * is for a Google Sheets document, it reformats it, if necessary, to retrieve a CSV for 
+     * the same logical document. Because it may not be possible to retrieve Google Sheets as CSVs 
+     * from browser-based JavaScript, if a `proxy` value is provided, it is prepended to the
+     * URL.  Otherwise, `data.url` is returned, trusting that it will return a CSV when used.
      *
-     * @param {string} file - name of the csv file to read
+     * @param {Object} config - a config object with a nested property, `data.url`, and possibly, a `proxy` property
      * @returns {string} the URL to a Google Spreadsheet or a CSV or undefined if various conditions aren't met
      */
-    getCSVPath(context) {
-        // this should throw an exception if context is undefined since the immediate next line would throw an error.
-        // also consider passing exactly the parameter which is needed for clarity instead of the whole context
-        let url = context ? context.data.url : undefined
-        if (url.substring(0, 4) == 'http') {
-            var parts = lib.parseSpreadsheetURL(url)
-            return "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json"
-        };
-        if (url.substring(url.length - 3) == 'csv') { return url }
+    static getCSVURL(config) {
+        if (config && config.data) {
+            let url = config.data.url
+            if (url && url.match(GOOGLE_SHEETS_URL_PATTERN)) {
+                let match = url.match(GOOGLE_SHEETS_URL_PATTERN)
+                url = `${match[1]}/pub?output=csv`
+                if (config.proxy) {
+                    url = `${config.proxy}${url}`
+                }
+            };
+            return url
+        }
+        return null;
     }
 
     /**
@@ -175,31 +181,20 @@ export class DataFactory {
      * @param {object} config - configuration object from json
      * @returns {undefined}
      */
-    fetchSheetHeaders(config, context) {
-        var self = context ? context : this;
+    static fetchHeaders(config) {
         return new Promise(function(resolve, reject) {
-            var url = self.getCSVPath(config) // url could be undefined. handle more deliberately.
+            var url = DataFactory.getCSVURL(config) // url could be undefined. handle more deliberately.
             lib.get(url)
                 .then(function(response) {
                     if (response) {
-                        var formattedResponse, headers;
-                        try {
-                            formattedResponse = JSON.parse(response).feed.entry
-                        } catch (e) {
-                            //downcase headers//
-                            response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
-                            formattedResponse = parse(response, { 'columns': true })
-                        } finally {
-                            try {
-                                headers = self.getAllColumnHeaders(formattedResponse[0])
-                                resolve({ headers, formattedResponse })
-                            } catch (e) {
-                                reject(e);
-                            }
+                        var rows = parse(response)
+                        if (rows && rows.length > 0) {
+                            resolve(rows[0])
                         }
                     }
+                    reject('No data returned')
                 }, function(reason) {
-                    reject(reason);
+                    reject(`fetchHeaders: ${reason}`);
                 })
         })
     }
@@ -207,100 +202,26 @@ export class DataFactory {
     fetchSheetData(config, context) {
         var self = context ? context : this;
         return new Promise(function(resolve, reject) {
-            var url = self.getCSVPath(config)
+            var url = DataFactory.getCSVURL(config)
             lib.get(url)
                 .then(function(response) {
                     if (response) {
-                        var formattedResponse, headers;
                         try {
-                            formattedResponse = JSON.parse(response).feed.entry
-                        } catch (e) {
-                            //downcase headers//
+                            var formattedResponse, headers;
                             response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
                             formattedResponse = parse(response, { 'columns': true })
-                        } finally {
-                            try {
-                                if (self.dataisinGSX(config, formattedResponse[0])) {
-                                    config = self.setColumnHeadersToGSX(config)
-                                }
-                                resolve(self.createDataObj(formattedResponse, config))
-                            } catch (e) {
-                                if (!e.message) {
-                                    e = { message: e };
-                                }
-                                reject(e) // leave error handling to promise caller
+                            resolve(self.createDataObj(formattedResponse, config))
+                        } catch (e) {
+                            if (!e.message) {
+                                e = { message: e };
                             }
+                            reject(e) // leave error handling to promise caller
                         }
                     }
                 }, function(reason) {
                     reject(reason); // leave error handling to promise caller
                 })
         })
-    }
-
-    /**
-     * checks that the headers match the response headers
-     *
-     * @param {Object} config
-     * @param {Object} response
-     * @returns {Boolean}
-     */
-    dataisinGSX(config, response) {
-        var isDatetimeColinGSX = !!response["gsx$" + config.data.datetime_column_name.replace(/\s+/g, '').toLowerCase()];
-        var isDataColinGSX = !!response["gsx$" + config.data.data_column_name.replace(/\s+/g, '').toLowerCase()]
-        return (isDatetimeColinGSX && isDataColinGSX)
-    }
-
-    /**
-     * Extract the available column headers to use in offering choices to users in the GUI.
-     * Currently assumes Google Spreadsheet.
-     * @param {object} config - not currently used
-     * @param {object} obj - a typical "row" from the Google Spreadsheet which has column names
-     */
-    getAllColumnHeaders(response) {
-        var formattedHeaders = [];
-        var reg = /gsx\$([^]+)/g
-        var all = Object.keys(response).join(" ");
-        var headers = all.match(reg)[0].split(" ")
-        return headers
-    }
-
-    setColumnHeadersToGSX(config) {
-        let configSubset = null;
-        if (config.slider.cards != undefined) {
-            //need to refactor//
-            configSubset = { data: config.data }
-        } else {
-            configSubset = { data: config.data, slider: config.slider }
-        }
-        let formattedConfig = {}
-        for (var key in configSubset) {
-            let formattedHeaders = {}
-            Object.keys(configSubset[key]).map(function(header) {
-                if (header === 'url' || header === 'datetime_format' || header === 'start_at_card') {
-                    formattedHeaders[header] = configSubset[key][header]
-                } else {
-                    formattedHeaders[header] = "gsx$" + configSubset[key][header].replace(/\s/g, '').toLowerCase()
-                }
-            })
-            config[key] = formattedHeaders
-        }
-        return config;
-    }
-
-    /**
-     * Simple function to convert a config value into a Google Spreadsheet row key,
-     * and verify that it's valid for given row before getting deeper into the data.
-     *
-     * @param {string} config_column_name - a value as specified in a storymap config
-     * @param {object} testRow - a row from reading the google spreadsheet which is expected to have this column
-     */
-    constructAndTestGSXColumn(config_column_name, testRow) {
-        var col_name = "gsx$" + config_column_name.replace(/\s/g, '').toLowerCase();
-        if (!testRow[col_name]) {
-            throw { message: "Missing column [" + config_column_name + "]" }
-        }
-        return col_name;
     }
 }
 

@@ -585,8 +585,9 @@
         </footer>
         <script src="https://cdn.knightlab.com/libs/orangeline/latest/js/orangeline.js"></script>
         <script type="text/javascript">
-          {{! This goes here instead of website.js so that we can use the configured value for cdn_url  }}
+          {{! Thes goes here instead of website.js so that we can switch values based on deployment  }}
           EMBED_URL = '{{cdn_url}}/embed/index.html';
+          PROXY_URL = '{{proxy_url}}';
         </script>
         <script>
           (function(i, s, o, g, r, a, m) {

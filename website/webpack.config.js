@@ -16,6 +16,8 @@ module.exports = {
     },
     node: {
         fs: "empty",
+        net: "empty",
+        tls: "empty",
         "child_process": "empty"
     },
     target: 'web'

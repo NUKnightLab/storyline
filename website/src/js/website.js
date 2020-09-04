@@ -1,4 +1,6 @@
 var smoothScroll = require('smoothscroll');
+const { DataFactory } = require('../../../src/js/data');
+const { Storyline } = require('../../../src/js/storyline');
 var fetch_promise = null;
 
 function hasClass(el, className) {
@@ -164,10 +166,11 @@ function usingDemoURL() {
     return (url_elem.value.trim() == prefill.dataset.url);
 }
 
-function populateMenusAndShowForm(feed_response_str) {
-    var spreadsheet_json = JSON.parse(feed_response_str);
-    var columns = extractColumnHeaders(spreadsheet_json);
-
+function populateMenusAndShowForm(columns) {
+    // var spreadsheet_json = JSON.parse(feed_response_str);
+    // var columns = extractColumnHeaders(spreadsheet_json);
+    console.log('populateMenusAndShowForm: enter')
+    console.log(columns)
     var config_area = document.getElementById('storyline-config');
     var selects = config_area.querySelectorAll('select.column-selector');
     for (var i = 0; i < selects.length; i++) {
@@ -252,24 +255,11 @@ function buildGoogleFeedURL(url) {
 }
 
 function fetchSpreadsheetURL() {
-    if (fetch_promise) {
-        console.log('Already fetching.')
-        return;
-    }
     var url = getFormValue('#spreadsheet_url');
-    if (url.match(new RegExp('/spreadsheets/d/e/'))) {
-        showURLError("Invalid Google Spreadsheet URL. Be sure to copy the URL from your browser address bar, not the 'publish to the web' window.");
-        return;
-    }
-    var feed_url = buildGoogleFeedURL(url);
-    if (feed_url) {
-        fetch_promise = get(feed_url).then(populateMenusAndShowForm, function error(reason) {
-            showURLError(reason);
-            fetch_promise = null;
-        })
-    } else {
-        showURLError("Invalid Google Spreadsheet URL");
-    }
+    var headers = Storyline.fetchHeaders({
+        proxy: PROXY_URL,
+        data: { url: url }
+    }).then(populateMenusAndShowForm)
 }
 
 function processSpreadsheetURL() {

@@ -12,8 +12,8 @@ import ua from 'universal-analytics'
  */
 export class Storyline {
 
-    static fetchCSVHeaders(dataConfig) {
-        return DataFactory.fetchCSVHeaders(dataConfig)
+    static fetchHeaders(dataConfig) {
+        return DataFactory.fetchHeaders(dataConfig)
     }
 
     constructor(targetId, dataConfig) {
@@ -42,7 +42,7 @@ export class Storyline {
                 },
                 function(reason) {
                     var msg = reason.message || "Something went wrong.";
-                    self.showMessage(msg)
+                    self.showMessage(`${msg} fetching data`)
                     console.log("Storyline init error", reason);
                 });
             PubSub.subscribe('window resized', function(topic, data) {
@@ -162,12 +162,15 @@ export class Storyline {
             this.margin = value;
         }
     }
+
     positionChart(chart) {
         this.elem.appendChild(chart.canvas);
     }
+
     positionSlider(slider) {
         this.elem.appendChild(slider.elem);
     }
+
     attachClickHandler(div, targetType) {
         this.trackEvent('click', targetType)
         var self = this;
