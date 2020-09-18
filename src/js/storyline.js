@@ -42,7 +42,7 @@ export class Storyline {
                 },
                 function(reason) {
                     var msg = reason.message || "Something went wrong.";
-                    self.showMessage(`${msg} fetching data`)
+                    self.showMessage(`${msg}`)
                     console.log("Storyline init error", reason);
                 });
             PubSub.subscribe('window resized', function(topic, data) {

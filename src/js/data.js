@@ -25,7 +25,7 @@ function transformHeaders(s, i) {
         }
         throw new Error(`Blank column headers are deprecated and not supported after column J`)
     }
-    return s.toLowerCase().replaceAll(/\s|\$|\(|\)/gi, '')
+    return s.toLowerCase().replaceAll(/\s|_|\$|\(|\)/gi, '')
 }
 
 /**
