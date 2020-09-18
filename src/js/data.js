@@ -2,6 +2,49 @@ var parse = require('csv-parse/lib/sync');
 import { lib } from './lib'
 const GOOGLE_SHEETS_URL_PATTERN = new RegExp('(https://docs.google.com/spreadsheets/.+/.+?)/.+', 'i')
 
+/**
+ * Google Feeds assigned virtual column names when the header cell was blank. At least one 
+ * existing storyline took advantage of this. This should preserve functionality.
+ */
+const SECRET_BLANK_HEADERS = ["_cn6ca", "_cokwr", "_cpzh4", "_cre1l", "_chk2m", "_ciyn3", "_ckd7g", "_clrrx", "_cyevm", "_cztg3"]
+
+/**
+ * Given a string, do whatever we do to headers. This needs to be used twice, in 
+ * fetchHeaders and in fetchSheetData. Mostly for compatibility with Google Sheets v3 API,
+ * which always transformed headers to lowercase, and stripped space. 
+ * Some punctuation stripped: 
+ *  $()
+ * Some passed:
+ * .
+ * @param {String} s 
+ */
+function transformHeaders(s, i) {
+    if (s == '') {
+        if (i < SECRET_BLANK_HEADERS.length) {
+            return SECRET_BLANK_HEADERS[i];
+        }
+        throw new Error(`Blank column headers are deprecated and not supported after column J`)
+    }
+    return s.toLowerCase().replaceAll(/\s|\$|\(|\)/gi, '')
+}
+
+/**
+ * Test to see if all values of the object are blank strings, as
+ * would be the case with a blank spreadsheet row. Legacy projects
+ * created using Google Sheets v3/Feeds counted on this behavior,
+ * so we need to stop reading when we find a blank row.
+ * Exported only for unit testing.
+ * @param {Object} obj 
+ */
+export function isBlankRow(obj) {
+    let blank = true
+    let values = Object.values(obj)
+    for (let i = 0; i < values.length; i++) {
+        blank = blank && values[i] == ''
+    }
+    return blank
+}
+
 export class DataFactory {
 
     /**
@@ -49,6 +92,7 @@ export class DataFactory {
         }
 
         for (var i = 0; i < dataObj.length; i++) {
+            if (isBlankRow(dataObj[i])) break;
             var slideTitle = '',
                 slideText = '',
                 slideActive = false;
@@ -189,7 +233,7 @@ export class DataFactory {
                     if (response) {
                         var rows = parse(response)
                         if (rows && rows.length > 0) {
-                            resolve(rows[0])
+                            resolve(rows[0].map(transformHeaders))
                         }
                     }
                     reject('No data returned')
@@ -207,9 +251,10 @@ export class DataFactory {
                 .then(function(response) {
                     if (response) {
                         try {
-                            var formattedResponse, headers;
-                            response = response.replace(response.split(/\n/)[0], response.split(/\n/)[0].toLowerCase())
-                            formattedResponse = parse(response, { 'columns': true })
+                            var formattedResponse
+                            formattedResponse = parse(response, {
+                                'columns': (header) => header.map(transformHeaders)
+                            })
                             resolve(self.createDataObj(formattedResponse, config))
                         } catch (e) {
                             if (!e.message) {

@@ -10,7 +10,7 @@
     "scripts": {
         "start": "npm-run-all -p webpack:watch watch server",
         "webpack:watch": "webpack --mode=development --watch",
-        "prestart": "npm run clean && webpack && npm run compile",
+        "prestart": "npm run clean && webpack --mode=development && npm run compile",
         "dist": "webpack --mode=production -p && npm run compile && npm run sass",
         "clean": "rimraf dist/",
         "watch": "node tasks/watch.js",

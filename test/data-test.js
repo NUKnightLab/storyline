@@ -1,4 +1,4 @@
-import { DataFactory } from '../src/js/data.js';
+import { DataFactory, isBlankRow } from '../src/js/data.js';
 import { lib } from '../src/js/lib.js';
 import { expect, assert } from 'chai';
 
@@ -224,4 +224,39 @@ describe('DataJS', () => {
         })
     })
 
+    describe('blank object testing', () => {
+        it('should return true if all values are empty string', () => {
+            let test = {
+                a: '',
+                b: '',
+                c: '',
+                d: ''
+            }
+            expect(isBlankRow(test)).to.be.true
+        })
+
+        it('should return false if any values are not empty string', () => {
+            let test = {
+                a: 'foo',
+                b: '',
+                c: '',
+                d: ''
+            }
+            expect(isBlankRow(test)).to.be.false
+        })
+
+
+    })
+
+    // describe('header testing', () => {
+    //     it('should strip junk from column headers', () => {
+    //         return dataFactoryInstance.fetchSheetData(config).then((result) => {
+    //             let first_row = result[0]
+    //             expect(first_row).to.eq({
+    //                 'Date': '1/31/80',
+    //                 'usunemploymentrate': '1'
+    //             })
+    //         })
+    //     })
+    // })
 })

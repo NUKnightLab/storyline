@@ -82,18 +82,6 @@ function get(url) {
     })
 }
 
-function extractColumnHeaders(spreadsheet_json) {
-    var e = spreadsheet_json.feed.entry[0];
-    var headers = [];
-    var entry_keys = Object.keys(e);
-    for (var i = 0; i < entry_keys.length; i++) {
-        if (entry_keys[i].indexOf('gsx$') == 0) {
-            headers.push(entry_keys[i].substr(4));
-        }
-    }
-    return headers;
-}
-
 /**
  * For any config menus we want to preselect, add the menu's id
  * paired with a regular expression. As column headers are added to the config menus,
