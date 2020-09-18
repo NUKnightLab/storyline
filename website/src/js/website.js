@@ -157,8 +157,6 @@ function usingDemoURL() {
 function populateMenusAndShowForm(columns) {
     // var spreadsheet_json = JSON.parse(feed_response_str);
     // var columns = extractColumnHeaders(spreadsheet_json);
-    console.log('populateMenusAndShowForm: enter')
-    console.log(columns)
     var config_area = document.getElementById('storyline-config');
     var selects = config_area.querySelectorAll('select.column-selector');
     for (var i = 0; i < selects.length; i++) {
@@ -184,62 +182,65 @@ function populateMenusAndShowForm(columns) {
 
 function validateRequiredInput(el) {
     var valid = true;
-    clearInputError(el);
     if (el.value) {
-        // TODO: ensure unique?
         valid = true;
     } else {
-        // showInputError(el, 'required');
         valid = false;
     }
     return valid;
 }
 
 function validateConfigForm() {
+
+    var msg_el = document.getElementById('config-wrapper-message');
+    pruneChildren(msg_el, 'p.error-message');
+
     var btn = document.getElementById('generate-storyline-btn');
     removeClass(btn, 'button-secondary'); // yuk for hard-coding which kind of button it is
     addClass(btn, 'button-disabled');
     var valid = true;
-    var selections = [];
+    var validations = {
+        required_error: false,
+        blank_pseudo_error: false,
+    }
     var config_area = document.getElementById('storyline-config');
     var selects = config_area.querySelectorAll('select.required');
     for (var i = 0; i < selects.length; i++) {
-        valid = validateRequiredInput(selects[i]) && valid;
+        let el = selects[i]
+        clearInputError(el);
+        if (!validateRequiredInput(el)) {
+            valid = false;
+            validations.required_error = true
+        }
+        // probably shouldn't just ride on select.required but 
+        // fact is all of those also need this
+        if (el.value.indexOf('_c') == 0) {
+            valid = false
+            validations.blank_pseudo_error = true
+            showInputError(el, 'invalid option');
+        }
     }
-
-    valid = validateRequiredInput(document.getElementById('data_axis_label')) && valid;
+    el = document.getElementById('data_axis_label')
+    clearInputError(el);
+    if (!validateRequiredInput(el)) {
+        valid = false;
+        validations.required_error = true
+    }
 
     if (valid) {
         removeClass(btn, 'button-disabled');
         addClass(btn, 'button-secondary'); // yuk for hard-coding which kind of button it is
     }
+
+    if (validations.required_error) {
+        // don't show this, it's annoying when this function is triggered on each field change
+        // msg_el.append(createErrorParagraph("Please fill in all required fields."));
+    }
+    if (validations.blank_pseudo_error) {
+        msg_el.append(createErrorParagraph("Invalid option: one or more of your choices is a place holder for a blank column header in your spreadsheet. All columns used for Storyline must have non-blank headers."));
+    }
+
     return valid;
-}
-
-function buildGoogleFeedURL(url) {
-    var key;
-    // key as url parameter (old-fashioned)
-    var key_pat = /\bkey=([-_A-Za-z0-9]+)&?/i;
-    var url_pat = /docs.google.com\/spreadsheets(.*?)\/d\//; // fixing issue of URLs with u/0/d
-
-    if (url.match(key_pat)) {
-        key = url.match(key_pat)[1];
-        // can we get a worksheet from this form?
-    } else if (url.match(url_pat)) {
-        var pos = url.search(url_pat) + url.match(url_pat)[0].length;
-        var tail = url.substr(pos);
-        key = tail.split('/')[0]
-        if (url.match(/\?gid=(\d+)/)) {
-            parts.worksheet = url.match(/\?gid=(\d+)/)[1];
-        }
-    } else if (url.match(/^\b[-_A-Za-z0-9]+$/)) {
-        key = url;
-    }
-
-    if (key) {
-        return `https://spreadsheets.google.com/feeds/list/${key}/1/public/values?alt=json`;
-    }
-    return null;
 }
 
 function fetchSpreadsheetURL() {
@@ -289,8 +290,6 @@ function buildStorylineUrl() {
 }
 
 function handleGenerateButtonClick() {
-    var msg_el = document.getElementById('config-wrapper-message');
-    pruneChildren(msg_el, 'p.error-message');
     if (validateConfigForm()) {
         var embed_url = buildStorylineUrl();
         document.querySelector('#preview-embed-iframe iframe').src = embed_url;
@@ -300,8 +299,6 @@ function handleGenerateButtonClick() {
 
         setCSSProperty('#preview-embed', 'display', 'block');
         smoothScroll(document.getElementById('preview-embed'));
-    } else {
-        msg_el.append(createErrorParagraph("Please fill in all required fields."));
     }
 }
 

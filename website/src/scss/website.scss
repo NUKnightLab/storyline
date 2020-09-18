@@ -1,47 +1,59 @@
 .hide-without-data {
-  display: none;
+    display: none;
 }
 
-#demo-mode-message,#preview-embed {
-  display: none;
+#demo-mode-message,
+#preview-embed {
+    display: none;
 }
 
-select.error-message,.error-message select, .error-message input, .error-message label {
-  border-color:red;
+select.error-message,
+.error-message select,
+.error-message input,
+.error-message label {
+    border-color: red;
 }
+
 .product-demo {
     border: 1px solid #d4d4d4;
-    margin-bottom:3rem;
-}
-p.error-message  {
-  color: #DF4E13;
-  font-size: 80%;
-  line-height: 1.2944 !important;
+    margin-bottom: 3rem;
 }
 
-#show-required-flag,label.required::after {
-  content: "*";
-  font-size: smaller;
-  color: red;
-  position: relative;
-  top: -0.3em;
-  white-space: nowrap;
+p.error-message {
+    color: #DF4E13;
+    font-size: 80%;
+    line-height: 1.2944 !important;
+    margin-top: .5em;
+    width: 50%;
 }
+
+#show-required-flag,
+label.required::after {
+    content: "*";
+    font-size: smaller;
+    color: red;
+    position: relative;
+    top: -0.3em;
+    white-space: nowrap;
+}
+
 #embed-code-textarea,
 #direct-link-textarea {
-    background:transparent;
+    background: transparent;
     //background-color: rgb(230, 248, 255);
-    color:#13a4df;
-    font-size:1rem;
+    color: #13a4df;
+    font-size: 1rem;
     border: 1px solid #063244;
     text-overflow: clip;
     overflow: hidden;
     white-space: normal;
     box-shadow: none;
 }
+
 #embed-code-textarea {
-  height:6.8rem;
+    height: 6.8rem;
 }
+
 #direct-link-textarea {
-    height:4.4rem;
+    height: 4.4rem;
 }
