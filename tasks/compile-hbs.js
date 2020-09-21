@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    yml = require('yamljs'),
+    yaml = require('yamljs'),
     fs = require('fs-extra'),
     path = require('path'),
     Handlebars = require('handlebars'),
@@ -14,9 +14,9 @@ var _ = require('lodash'),
  * @returns string html
  */
 function renderPage(template, context) {
-  var file = fs.readFileSync(template, 'utf8'),
-      page = Handlebars.compile(file);
-  return page(context);
+    var file = fs.readFileSync(template, 'utf8'),
+        page = Handlebars.compile(file);
+    return page(context);
 }
 
 /**
@@ -25,25 +25,25 @@ function renderPage(template, context) {
  * @returns {undefined}
  */
 function build(config_context) {
-  var hbsviews = globby.sync('src/templates/**/*.hbs');
+    var hbsviews = globby.sync('src/templates/**/*.hbs');
 
-  var context = yml.load(`src/data/${config_context}.yml`);
-  _.forEach(hbsviews, function(file, i) {
-    var filePattern = path.dirname(file).split('src/templates/')[1],
-        fileName = path.basename(file, '.hbs'),
-        outputPath = null;
+    var context = yaml.load(`src/data/${config_context}.yml`);
+    _.forEach(hbsviews, function(file, i) {
+        var filePattern = path.dirname(file).split('src/templates/')[1],
+            fileName = path.basename(file, '.hbs'),
+            outputPath = null;
 
-    if(filePattern === undefined) {
-      outputPath = `dist/${fileName}.html`;
-    } else {
-      outputPath = `dist/${filePattern}/${fileName}.html`;
-    }
+        if (filePattern === undefined) {
+            outputPath = `dist/${fileName}.html`;
+        } else {
+            outputPath = `dist/${filePattern}/${fileName}.html`;
+        }
 
-    var page = renderPage(file, context);
+        var page = renderPage(file, context);
 
-    fs.outputFileSync(outputPath, page, 'utf8')
+        fs.outputFileSync(outputPath, page, 'utf8')
 
-  });
+    });
 }
 
 var config_context = process.env.CONFIG_CONTEXT || process.argv[2] || 'dev';

@@ -1,6 +1,6 @@
 {
     "name": "@knight-lab/storyline",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
     "main": "index.js",
     "repository": {
@@ -64,7 +64,7 @@
         "start": "npm-run-all -p webpack:watch watch",
         "webpack:watch": "webpack --config webpack.dev.js  --watch",
         "prestart": "npm run clean && webpack --config webpack.dev.js && npm-run-all -s compile templates",
-        "dist": "webpack --config webpack.prod.js -p && npm run compile && npm run sass && node tasks/minify-css.js",
+        "dist": "npm run clean && webpack --config webpack.prod.js -p && npm-run-all -s compile 'templates prd' sass && node tasks/minify-css.js",
         "clean": "rimraf dist/",
         "watch": "node tasks/watch.js",
         "server": "http-server ./dist -c-1",

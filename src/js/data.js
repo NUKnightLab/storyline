@@ -23,7 +23,7 @@ function transformHeaders(s, i) {
         if (i < SECRET_BLANK_HEADERS.length) {
             return SECRET_BLANK_HEADERS[i];
         }
-        throw new Error(`Blank column headers are deprecated and not supported after column J`)
+        console.log(`Blank column headers are deprecated and not supported after column ${SECRET_BLANK_HEADERS.length}`)
     }
     return s.toLowerCase().replaceAll(/\s|_|\$|\(|\)/gi, '')
 }

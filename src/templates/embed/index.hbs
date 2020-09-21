@@ -70,7 +70,7 @@
                 config[Object.keys(config)[configKey]][mapURLParams[value[0]]] = decodeURIComponent(value[1]);
             }
         })
-        config['proxy'] = 'http://localhost:5000/proxy/'
+        config['proxy'] = '{{ proxy_url }}'
         window.storyline = new Storyline('storyline', config);
     </script>
 </body>

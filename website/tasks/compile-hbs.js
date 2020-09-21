@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    yml = require('yamljs'),
+    yaml = require('yamljs'),
     fs = require('fs-extra'),
     path = require('path'),
     Handlebars = require('handlebars'),
@@ -27,7 +27,7 @@ function renderPage(template, context) {
 function build(config_context) {
     var hbsviews = globby.sync('src/templates/**/*.hbs');
 
-    var context = yml.load(`../src/data/${config_context}.yml`);
+    var context = yaml.load(`../src/data/${config_context}.yml`);
     _.forEach(hbsviews, function(file, i) {
         var filePattern = path.dirname(file).split('src/templates/')[1],
             fileName = path.basename(file, '.hbs'),
