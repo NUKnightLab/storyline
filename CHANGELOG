@@ -1,0 +1,4 @@
+1.1.0 (2020-09-22)
+* Switch to reading data from Google as CSV in advance of shutoff of 
+    Google Sheets API v3. While efforts have been made for compatibility,
+    the differences in how data is provided may impact existing storylines.
