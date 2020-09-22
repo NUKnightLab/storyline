@@ -1,2 +1,3 @@
 cdn_url: http://localhost:9090
 proxy_url: https://stg-sheets-proxy.knightlab.com/proxy/
+#proxy_url: http://localhost:5000/proxy/
