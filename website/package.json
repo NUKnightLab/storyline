@@ -11,7 +11,7 @@
         "start": "npm-run-all -p webpack:watch watch server",
         "webpack:watch": "webpack --mode=development --watch",
         "prestart": "npm run clean && webpack --mode=development && npm run compile",
-        "dist": "webpack --mode=production -p && npm run compile && npm run sass",
+        "dist": "webpack --mode=production -p && npm run compile prd && npm run sass",
         "clean": "rimraf dist/",
         "watch": "node tasks/watch.js",
         "server": "npm-run-all -p server:this server:parent",
