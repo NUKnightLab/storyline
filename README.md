@@ -7,7 +7,9 @@ As of September, 2017, StorylineJS is considered ready for general use. We don't
 # Trying it out
 The easiest way to use StorylineJS is by creating embeds using the authoring tool at https://storyline.knightlab.com  Hopefully you can just copy the embed code into your CMS and publish a storyline that easily. More instructions on actually using the tool are on that page.
 
-If you're a more experienced developer, you can also include the StorylineJS and CSS in your web page and write a little javascript to instantiate the storyline and place it on your page. We'll update this page soon with more instructions on how to do that.
+If you're a more experienced developer, you can also include the StorylineJS and CSS in your web page and write a little javascript to instantiate the storyline and place it on your page. However, note that as of 30 September, 2020, this will be harder to do: Google is decommissioning the original API which allowed StorylineJS to read data from your Sheets documents. For somewhat complex technical reasons, the solution we implemented requires that Sheets documents be read through a proxy server. Knight Lab is not able to provide a general purpose proxy server; the one we have implemented only works with storylines built with our authoring tool and hosted on our systems. 
+
+If it's important to you to host a storyline without using our iframe embeds and you need more information about this, [open a GitHub issue](https://github.com/NUKnightLab/storyline/issues/new/choose).
 
 ## Roll your own
 
@@ -42,6 +44,8 @@ Here are more details about those:
 * `text`: the main paragraph of your annotation. Keep this under about 222 characters for optimal mobile presentation.
 * `row_number`: the row in your CSV file that this card explains. Note that if you're looking at your data in Excel or a text editor with line numbers, the correct value here will be 2 less than the row number your editor shows. This is because we start counting with 0 instead of 1, and because we don't count the header row. We know this is a pain. It's something we hope to change as StorylineJS evolves.
 * `display_date` *(optional)*: if this is specified, it will be displayed in the "date" portion of your card. If it is left out, the date value for the appropriate data row will be formatted using `chart.datetime_format` (specified above). You might want to override the default if you want different formats for your axis than for your cards, or if your datapoints are years, for example, but you want to specify a specific month or date in that year.
+
+
 
 
 DEVELOPING
