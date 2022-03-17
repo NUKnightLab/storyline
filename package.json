@@ -46,7 +46,7 @@
     "pubsub-js": "^1.5.4",
     "rimraf": "^2.5.3",
     "shelljs": "^0.7.0",
-    "simple-git": "^1.67.0",
+    "simple-git": "^3.3.0",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "stream-transform": "^0.1.1",
