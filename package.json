@@ -1,6 +1,6 @@
 {
   "name": "@knight-lab/storyline",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Storyline is a tool for journalists to provide narrative context to readable line charts in a form which is optimized for the mobile user experience.",
   "main": "index.js",
   "repository": {
