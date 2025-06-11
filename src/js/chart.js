@@ -3,6 +3,7 @@ d3.axis = require('d3-axis');
 d3.scale = require('d3-scale');
 d3.selection = require('d3-selection');
 d3.time = require('d3-time-format');
+d3.format = require('d3-format').format;
 
 var Chart = function(storyline, dataObj, width, height, margin) {
     this.storyline = storyline;
@@ -45,9 +46,11 @@ Chart.prototype = {
     var yAxis = d3.axis.axisRight(y)
       .tickSize(this.lineWidth + this.margin.right + this.margin.left)
       .tickFormat(function(d){
-        if(d > 1e6) {
-          d = d/1e6
-        }
+        // this seems like a big assumption, taking it out.
+        // if(d > 1e6) {
+        //   d = d/1e6
+        // }
+        d = d3.format(",")(d);
         return this.parentNode.nextSibling ? "\xa0" + d : d
       })
 

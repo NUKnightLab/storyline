@@ -61,7 +61,7 @@
     "yamljs": "^0.3.0"
   },
   "scripts": {
-    "start": "npm-run-all -p webpack:watch watch",
+    "start": "npm-run-all -s compile templates && npm-run-all -p webpack:watch watch",
     "webpack:watch": "webpack --config webpack.dev.js  --watch",
     "prestart": "npm run clean && webpack --config webpack.dev.js && npm-run-all -s compile templates",
     "dist": "npm run clean && webpack --config webpack.prod.js -p && npm-run-all -s compile 'templates prd' sass && node tasks/minify-css.js",

@@ -84,6 +84,7 @@ export class Storyline {
         }
     }
     resetWidth(newWidth, targetType) {
+        if (this.slider && this.slider.elem && this.chart && this.chart.canvas) {
             this.trackEvent('resize', targetType)
             this.width = newWidth;
             var oldSlider = this.slider.elem
@@ -96,11 +97,13 @@ export class Storyline {
             this.positionChart(this.chart)
             this.positionSlider(this.slider)
         }
-        /**
-         * Prepare a promise to fetch the data which will be used to draw the chart.
-         * @returns {Promise} a promise to deliver a 'dataObject' if successfully resolved. ]
-         * @TODO Better document the properties of a `dataObject`
-         */
+    }
+
+    /**
+     * Prepare a promise to fetch the data which will be used to draw the chart.
+     * @returns {Promise} a promise to deliver a 'dataObject' if successfully resolved. ]
+     * @TODO Better document the properties of a `dataObject`
+     */
     grabData() {
         var data = new DataFactory;
         return data.fetchSheetData(this.dataConfig);

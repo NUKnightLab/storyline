@@ -8,7 +8,7 @@
         "url": "git+https://github.com/NUKnightLab/storyline.git"
     },
     "scripts": {
-        "start": "npm-run-all -p webpack:watch watch server",
+        "start": "npm-run-all templates && npm-run-all -p webpack:watch watch server",
         "webpack:watch": "webpack --mode=development --watch",
         "prestart": "npm run clean && webpack --mode=development && npm run compile",
         "dist": "webpack --mode=production -p && npm run compile prd && npm run sass",
